@@ -1,0 +1,63 @@
+
+html{
+    font-size: 10px;
+}
+
+body{
+   background:  /*url("../img/user-login.png")  107% 280%  no-repeat fixed,url("../img/user-login2.png")  0% 0%  no-repeat fixed*/ white;
+
+}
+
+header{
+  background:rgb(235,238,239);;
+}
+
+.header .btn{
+    margin:2% 2% 2% 2%;
+    height: 50px;
+    width: 100%;
+    border-radius: 25px;
+}
+.header a{
+    width: 10%;
+    margin:2% 2% 2% 2%;
+
+}
+
+
+
+
+
+/*-----------------------------------------------------------custom-colours-------------------------------------------------------------------------------*/
+
+
+
+/*------------------------------classes of custom heights-------------------------------------*/
+
+
+/*------------------------------classes of custom width-------------------------------------*/
+
+
+
+/*------------------------------classes of custom font-size-------------------------------------*/
+
+
+
+
+
+/*------------------------------------test-border------------------------------------------------*/
+
+.tb{
+    border:1px solid black;
+}
+.tb-red{
+    border:1px solid red;
+}
+.tb-blue{
+    border:1px solid blue;
+}
+
+
+
+
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#content},~{::#footer})">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/product.css}">
+</head>
+<body>
+    <section id="content">
+        <div class="row d-flex ">
+            <div class="col-md-1 tb-red ">
+                    <h1>HELLO</h1>
+            </div>
+            <div class="col-md-4 tb-blue t">
+                <img th:src="@{${product.productImgId}}"  class="img-fluid img-thumbnail">
+            </div>
+            <div class="col-md-6 tb ">
+                <div th:object="${product}">
+                    <h1>product name:<span th:text="${product.productName}"></span></h1>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+<footer id="footer"></footer>
+</body>
+</html>

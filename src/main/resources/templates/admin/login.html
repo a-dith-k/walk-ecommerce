@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" th:href="@{../css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{../css/main.css}">
+
+</head>
+<body class=" admin-login-body">
+<header>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12  w-100  head1 bg-nav">
+
+            </div>
+        </div>
+    </div>
+</header>
+<section class="row d-flex justify-content-center">
+    <div class="col-7 d-flex align-items-center justify-content-center ">
+    </div>
+    <div class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3  p-5 ">
+        <div class="w-100 h-100 admin-form-section d-flex align-items-center flex-column mt-5">
+            <svg class="admin-icon" width="100" height="100" viewBox="0 0 100 100" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="41.6667" r="12.5" stroke="#222222" stroke-linecap="round"/>
+                <circle cx="50" cy="50" r="37.5" stroke="#222222"/>
+                <path d="M75 77.9413C73.5254 73.5114 70.276 69.597 65.7559 66.8051C61.2358 64.0133 55.6975 62.5 50 62.5C44.3025 62.5 38.7642 64.0133 34.2441 66.8051C29.724 69.597 26.4746 73.5114 25 77.9413"
+                      stroke="#222222" stroke-linecap="round"/>
+            </svg>
+            <form th:action="@{/admin/login}"  method="post" class="d-flex  flex-column">
+                <input type="text" class="text-end" placeholder="username" name="username">
+                <input type="text" class="text-end" placeholder="password" name="password">
+                <button>SignIn</button>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

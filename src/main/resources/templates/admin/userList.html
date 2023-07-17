@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/admin-userList.css}">
+</head>
+<body>
+<section id="content">
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">UserID</th>
+          <th scope="col">firstname</th>
+          <th scope="col">lastname</th>
+          <th scope="col">mobile</th>
+          <th scope="col">email</th>
+          <th scope="col">gender</th>
+          <th scope="col">account_status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <form action="">
+            <tr th:each="user: ${users}">
+                <th class="fs-3"><input th:value="${user.userId}"       type="text"  class="input-id"></th>
+                <td class="fs-3"><input th:value="${user.firstname}"    type="text" ></td>
+                <td class="fs-3"><input th:value="${user.lastname}"     type="text" ></td>
+                <td class="fs-3"><input th:value="${user.mobileNumber}" type="text" ></td>
+                <td class="fs-3"><input th:value="${user.email}"        type="text" ></td>
+                <td class="fs-3"><input th:value="${user.gender}"       type="text"  class="w-80px"></td>
+                <td class="fs-3"><input th:value="${user.accountStatus}"type="text" id="sts" readonly="readonly" ></td>
+
+                <td class="fs-3"><button class="btn btn-success" id="edit">EDIT</button></td>
+                <td class="fs-3"><button class="btn btn-primary">UPDATE</button> </td>
+                <td class="fs-3"><button class="btn btn-danger">DELETE</button></td>
+            </tr>
+        </form>
+
+        </tbody>
+      </table>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item ">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{/admin/users/1}">1</a></li>
+            <li class="page-item" aria-current="page">
+                <a class="page-link"  th:href="@{/admin/users/2}">2</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"  th:href="@{/admin/users/3}">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+</section>
+
+
+
+</body>
+</html>

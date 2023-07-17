@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"  th:replace="base/base::layout(~{::#style},~{::#content},~{::#footer})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  <link id="style"  rel="stylesheet" th:href="@{/css/product.css}">
+</head>
+<body>
+<section id="content" class="container-fluid d-flex  ">
+    <div class="filters"></div>
+    <div  class="row tb-blue w-80  ">
+        <div th:each="product: ${products}" class="col-sm-12 col-md-3 product-card "  >
+            <div class="pro">
+                <a th:href="@{'/products/'+${product.productId}}">  <img th:src="@{${product.productImgId}}"   alt=""   class="img-fluid img-thumbnail   ">   </a>
+                <div class="detai ">
+                    <h1 th:text="${product.productName}"  class="z-3"></h1>
+                    <h1 th:text="${product.brand}"></h1>
+
+                    <h1 th:text="${product.productMrp}"></h1>
+                </div>
+
+            </div>
+<!--                <img th:src="@{${product.productImgId}}" alt="he" class="img-fluid img-thumbnail">-->
+<!--                <h2 th:text="${product.productName}"></h2>-->
+<!--                <h1 th:text="${product.brand}"></h1>-->
+<!--                <h1 th:text="${product.productMrp}"></h1>-->
+
+        </div>
+        </div>
+</section>
+
+</section>
+
+
+<footer id="footer"></footer>
+</body>
+</html>

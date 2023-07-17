@@ -1,0 +1,47 @@
+.product-card{
+   height: 300px;
+
+
+}
+
+.w-80{
+    width:80% !important;
+}
+
+.filters{
+    width: 20%;
+    height: 600px;
+}
+
+
+.row>*{
+    padding: 0;
+}
+
+.zoom {
+
+    background-color: #899689;
+    transition: transform .2s; /* Animation */
+
+}
+
+.pro{
+    background-color: rgb(235,238,239);
+}
+
+
+.pro:hover {
+    transform: scale(1.01); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    border:2px solid black;
+
+
+}
+
+.pro:hover .detai{
+    display: block;
+    height: 20%;
+}
+
+.pro:hover .pro img{
+    height: 80%;
+}
