@@ -2,23 +2,39 @@ package com.adith.walk.repositories;
 
 
 import com.adith.walk.Entities.Customer;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
+        Customer findCustomerByUserId(Long id);
         Customer findCustomerByEmail(String email);
 
         Customer findCustomerByMobileNumber(String mobile);
 
-        Customer findCustomerByOtp(String otp);
+
 
         List<Customer> findCustomerByUserIdBetween(Integer start,Integer end);
 
-        List<Customer> findFirstByFirstnameOrderByFirstname(String limit);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE Customer c " +
+            "SET c.enabled = TRUE WHERE c.mobileNumber = ?1")
+    int enableCustomer(String mobile);
+
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Customer c " +
+            "SET c.enabled = FALSE WHERE c.userId = ?1")
+    int disableCustomer(Integer userId);
 
 }

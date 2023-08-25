@@ -3,9 +3,13 @@ package com.adith.walk.Entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -15,6 +19,7 @@ public class Wishlist {
 
     @Id
     private Integer wishlistId;
-    private Integer ProductId;
-    private Integer customerId;
+
+    @OneToMany
+    private List<Product> products;
 }

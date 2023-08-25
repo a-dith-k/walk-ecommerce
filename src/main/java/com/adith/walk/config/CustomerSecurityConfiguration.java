@@ -2,7 +2,7 @@ package com.adith.walk.config;
 
 
 import com.adith.walk.service.CustomerCustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,45 +16,56 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class CustomerSecurityConfiguration {
 
-    @Bean
-    UserDetailsService userDetailsService1(){
-
-        return new CustomerCustomUserDetailsService();
-    }
-
-    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-
     @Bean
-    public SecurityFilterChain securityFilterUser(HttpSecurity http) throws Exception {
+    UserDetailsService userDetailsServiceCustomer(){
 
-        http.authenticationProvider(authenticationProviderCustomer());
-
-        http
-                .securityMatcher("/user/**")
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/**","/user/","**`/user/**")
-                        .hasRole("USER")
-
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form->form.loginPage("/user/login").permitAll().defaultSuccessUrl("/").failureForwardUrl("/otp-login"))
-                .logout((logout) -> logout.logoutUrl("/user/logout").permitAll().logoutSuccessUrl("/"));
-        return http.build();
+        return new CustomerCustomUserDetailsService();
     }
 
 
     @Bean
     AuthenticationProvider authenticationProviderCustomer(){
-        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
 
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService1());
+        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsServiceCustomer());
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return daoAuthenticationProvider;
+
     }
+
+
+    @Bean
+    public SecurityFilterChain securityFilterUser(HttpSecurity http) throws Exception {
+
+        http
+                .authenticationProvider(authenticationProviderCustomer());
+
+        http    .csrf(c->c.disable())
+                .cors(cors->cors.disable())
+                .securityMatcher("/user/**","/","/products/**")
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/products/**").permitAll()
+                        .requestMatchers("/user/**")
+                        .hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form->form
+                        .loginPage("/user/login").permitAll()
+                        .defaultSuccessUrl("/").permitAll())
+                .logout((logout) -> logout
+                        .logoutUrl("/user/logout").permitAll()
+                        .logoutSuccessUrl("/user/login?logout"));
+        return http.build();
+    }
+
+
+
 
 }

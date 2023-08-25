@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title th:text="confirmation-page"></title>
+
+<link id="style" rel="stylesheet" th:href="@{/css/registration/registration-page.css}">
+</head>
+<body class="">
+<!-----------------------------------------add dynamic content here---------------------------------------->
+<section id="content" class="row  align-items-center flex-column" style="height: 75vh">
+
+
+  <div class="col-md-3 ">
+    <form th:action="@{/register/confirm}" class="p-5 m-5 mb-0"  method="post" th:object="${token}" >
+      <div class="alert text-center" role="alert" th:if="${message}" th:classappend="${message.type}" th:text="${message.content}">
+
+      </div>
+      <div class="d-flex justify-content-center">
+        <h1>VERIFY</h1>
+      </div>
+
+      <div class="my-4">
+        <label for="mobile" class="form-label">MOBILE</label>
+        <input type="text"
+               class="form-control fs-3 mb-3"
+               id="mobile"
+               name="mobile"
+               th:value="${request.mobileNumber}"
+               placeholder="enter your mobile number">
+
+        <div class="invalid-feedback">
+
+        </div>
+      </div>
+
+      <div class="my-4">
+        <label for="otp" class="form-label">OTP</label>
+        <input type="text"
+               class="form-control fs-3 mb-3"
+               id="otp"
+               name="token"
+               placeholder="enter the otp here"
+        >
+        <div class="invalid-feedback">
+        </div>
+      </div>
+
+      <button class="btn btn-dark w-100 fs-1">VERIFY</button>
+    </form>
+  </div>
+
+</section>
+
+<!----------------------------------------------end----------------------------------------------------- -->
+<script id="script" th:src="@{/js/home.js}">
+
+
+</script>
+
+
+</body>
+</html>

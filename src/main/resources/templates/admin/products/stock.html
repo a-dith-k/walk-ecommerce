@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" >
+</head>
+<body>
+<section id="content">
+
+    <table class="table table-bordered text-center fs-3 fw-normal">
+        <thead>
+        <tr>
+            <th scope="col" rowspan="2">ID</th>
+            <th scope="col" rowspan="2">Product Name</th>
+            <th scope="col" colspan="11">SIZE</th>
+
+        </tr>
+        <tr>
+
+            <th scope="col">12</th>
+            <th scope="col">11</th>
+            <th scope="col">10</th>
+            <th scope="col">9</th>
+            <th scope="col">8</th>
+            <th scope="col">7</th>
+            <th scope="col">6</th>
+            <th scope="col">5</th>
+            <th scope="col">4</th>
+            <th scope="col">3</th>
+            <th scope="col">2</th>
+            <th scope="col">UPDATE</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="productStock:${stock}">
+
+        <tr>
+            <th scope="row"  th:text="${productStock.id}">1</th>
+            <td th:text="${productStock.product.productName}"></td>
+            <td th:if="${productStock.size_12>0}" th:classappend="${productStock.size_12<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_12}"></td>
+            <td th:unless="${productStock.size_12>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_11>0}" th:classappend="${productStock.size_11<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_11}"></td>
+            <td th:unless="${productStock.size_11>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_10>0}" th:classappend="${productStock.size_10<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_10}"></td>
+            <td th:unless="${productStock.size_10>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_9>0}" th:classappend="${productStock.size_9<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_9}"></td>
+            <td th:unless="${productStock.size_9>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_8>0}" th:classappend="${productStock.size_8<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_8}"></td>
+            <td th:unless="${productStock.size_8>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_7>0}" th:classappend="${productStock.size_7<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_7}"></td>
+            <td th:unless="${productStock.size_7>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_6>0}" th:classappend="${productStock.size_6<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_6}"></td>
+            <td th:unless="${productStock.size_6>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_5>0}" th:classappend="${productStock.size_5<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_5}"></td>
+            <td th:unless="${productStock.size_5>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_4>0}" th:classappend="${productStock.size_4<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_4}"></td>
+            <td th:unless="${productStock.size_4>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_3>0}" th:classappend="${productStock.size_3<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_3}"></td>
+            <td th:unless="${productStock.size_3>0}" class="bg-dark"></td>
+            <td th:if="${productStock.size_2>0}" th:classappend="${productStock.size_2<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_2}"></td>
+            <td th:unless="${productStock.size_2>0}" class="bg-dark"></td>
+                <td><a th:href="@{'/admin/products/update/'+${productStock.product.productId}}" class="btn btn-primary rounded-0">UPDATE</a></td>
+        </tr>
+        </th:block>
+
+        </tbody>
+    </table>
+</section>
+
+</body>
+</html>

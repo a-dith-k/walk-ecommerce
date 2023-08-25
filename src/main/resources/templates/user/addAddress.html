@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="user/base::layout(~{::#style},~{::#content},~{::#script})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="loginpage"></title>
+    <link id="style"  rel="stylesheet">
+</head>
+<body class="">
+<!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
+
+<section id="content" class=" mt-4 col-md-10 row">
+    <div class="col-md-7">
+
+        <form class="row g-3 bg-secondary-subtle m-3 p-3 " th:object="${newAddress}" method="post" th:action="@{/user/addresses/add}">
+            <div th:if="${message}"  th:text="${message.content}" class="text-danger fs-2 text-center"  th:classappend="${message.type}">
+            </div>
+            <div class="col-md-5 m-3">
+                <label for="inputName" class="form-label">Full Name</label>
+                <input
+                        type="text"
+                        class="fs-3 form-control"
+                        id="inputName"
+                        name="name"
+                        th:value="${newAddress.name}" required>
+            </div>
+            <div class="col-md-5 m-3">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input
+                        type="text"
+                        class="fs-3 form-control"
+                        id="mobile"
+                        name="mobile"
+                        th:value="${newAddress.mobile}" required>
+            </div>
+            <div class="col-md-5 m-3">
+                <label for="building" class="form-label">Building Name</label>
+                <input
+                        type="text"
+                        class="fs-3 form-control"
+                        id="building"
+                        name="building"
+                        th:value="${newAddress.building}" required>
+            </div>
+            <div class="col-5 m-3">
+                <label for="alterPhone" class="form-label">Alternative Phone</label>
+                <input
+                        type="text"
+                        class="form-control fs-3"
+                        id="alterPhone"
+                        name="alternativeMobile"
+                        placeholder="1234 Main St"
+                        th:value="${newAddress.alternativeMobile}" >
+            </div>
+            <div class="col-md-5 m-3 ">
+                <label for="street" class="form-label">Street</label>
+                <input
+                        type="text"
+                        class="form-control fs-3 "
+                        id="street"
+                        name="street"
+                        th:value="${newAddress.street}" required>
+            </div>
+
+            <div class="col-5  m-3">
+                <label for="landMark" class="form-label">LandMark</label>
+                <input
+                        type="text"
+                        class="form-control fs-3"
+                        id="landMark"
+                        name="landmark"
+                        placeholder="Apartment, studio, or floor"
+                        th:value="${newAddress.landmark}">
+            </div>
+            <div class="col-md-5  m-3">
+                <label for="inputCity" class="form-label">City</label>
+                <input
+                        type="text"
+                        class="form-control fs-3"
+                        id="inputCity"
+                        name="city"
+                        th:value="${newAddress.city}" required>
+            </div>
+            <div class="col-md-3  m-3 me-1">
+                <label for="inputState" class="form-label">State</label>
+                <select
+                        id="inputState"
+                        name="state"
+                        class="form-select fs-3"required
+                >
+                    <option selected th:value="${newAddress.state}" th:text="${newAddress.state}"></option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Kerala">Goa</option>
+                </select>
+            </div>
+            <div class="col-md-2 m-3 ms-0  ">
+                <label for="inputZip" class="form-label">Zip</label>
+                <input
+                        type="text"
+                        class="form-control fs-3"
+                        id="inputZip"
+                        name="zipCode"
+                        th:value="${newAddress.zipCode}"
+                        required>
+            </div>
+
+            <div class="col-md-2 m-3 " >
+                <button type="submit" class="btn btn-dark form-control">Save</button>
+            </div>
+        </form>
+    </div>
+
+</section>
+<script id="script" th:src="@{/js/user/reset-password.js}">
+
+</script>
+</body>
+</html>

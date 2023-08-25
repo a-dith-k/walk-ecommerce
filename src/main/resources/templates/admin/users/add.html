@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title>this is for adding user</title>
+    <link th:href="@{/css/admin-user-add.css}" id="style" type="text/css" rel="stylesheet">
+</head>
+<body>
+<section id="content" class="container-fluid ">
+    <div class="row  d-flex   justify-content-center align-items-center ">
+        <div class="col-md-5 bg-secondary  m-5 ">
+            <h1 class="text-center m-5">ADD USER</h1>
+            <div class="alert text-center" role="alert" th:if="${message}" th:classappend="${message.type}" th:text="${message.content}">
+
+            </div>
+
+            <form  th:action="@{/admin/users/add}" method="post"  th:object="${customer}" class="input-group-lg d-flex bg-secondary flex-column ">
+                <input
+                        th:value="${customer.mobileNumber}"
+                        class="input-group-text mb-5 fs-3" type="text"
+                        name="mobileNumber"
+                        placeholder="mobile">
+                <div th:if="${#fields.hasErrors()}"  th:each="e: ${#fields.errors('mobileNumber')}">
+                    <p th:text="${e}"></p>
+                </div>
+
+
+
+                <input
+                        th:value="${customer.email}"
+                        class="input-group-text mb-5 fs-3"
+                        type="text"
+                        name="email"
+                        placeholder="email">
+                <div th:if="${#fields.hasErrors()}"  th:each="e: ${#fields.errors('email')}">
+                    <p th:text="${e}"></p>
+                </div>
+
+                <input
+                        th:value="${customer.firstName}"
+                        class="input-group-text mb-5 fs-3"
+                        type="text"
+                        name="firstName"
+                        placeholder="firstname">
+                <div th:if="${#fields.hasErrors()}"  th:each="e: ${#fields.errors('firstName')}">
+                    <p th:text="${e}"></p>
+                </div>
+
+                <input
+                        th:value="${customer.lastName}"
+                        class="input-group-text mb-5 fs-3"
+                        type="text"
+                        name="lastName"
+                        placeholder="lastname">
+                <div th:if="${#fields.hasErrors()}"  th:each="e: ${#fields.errors('lastName')}">
+                    <p th:text="${e}"></p>
+                </div>
+
+
+<!--                <div class="input-group">-->
+<!--                    <div class="input-group-prepend">-->
+<!--                        <div class="input-group-text mb-5 fs-3">Gender</div>-->
+<!--                    </div>-->
+<!--                    <select th:value="${customer.}" name="gender" class="form-select input-group-text mb-5 fs-3">-->
+<!--                        <option th:value="Male" selected>Male</option>-->
+<!--                        <option th:value="Female">Female</option>-->
+<!--                        <option th:value="Others">Others</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+<!--                <div th:if="${#fields.hasErrors()}"  th:each="e: ${#fields.errors('gender')}">-->
+<!--                    <p th:text="${e}"></p>-->
+<!--                </div>-->
+
+                <button class="btn  btn-dark input-group-text mb-5 fs-3 " type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+</section>
+
+
+
+</body>
+</html>

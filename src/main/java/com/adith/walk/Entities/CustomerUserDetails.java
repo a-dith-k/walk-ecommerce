@@ -1,5 +1,6 @@
 package com.adith.walk.Entities;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@Data
 public class CustomerUserDetails implements UserDetails {
 
     private Customer customer;
@@ -17,20 +19,19 @@ public class CustomerUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return Collections.singleton(new SimpleGrantedAuthority(customer.getRole()));
-//        SimpleGrantedAuthority simpleGrantedAuthority=new SimpleGrantedAuthority(customer.getRole());
-//
-//        return List.of(simpleGrantedAuthority);
+        SimpleGrantedAuthority simpleGrantedAuthority=new SimpleGrantedAuthority(customer.getUserRole().name());
+        return Collections.singleton(simpleGrantedAuthority);
+
     }
 
     @Override
     public String getPassword() {
-        return customer.getOtp().toString();
+        return customer.getPassword();
     }
 
     @Override
     public String getUsername() {
-       return customer.getMobileNumber().toString();
+       return customer.getMobileNumber();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !customer.isLocked();
     }
 
     @Override
@@ -50,6 +51,10 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+
+        return  customer.isEnabled();
+
     }
+
+
 }

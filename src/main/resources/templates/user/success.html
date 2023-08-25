@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
 <head>
     <meta charset="UTF-8">
-    <title>this is success page</title>
+    <title>Title</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
-<body>
+<body >
+<section id="content">
+    <section class="row  justify-content-center align-items-center " style="--bs-gutter-x:0">
+        <div class="col-md-4">
+            <h1>Order Successful</h1>
+            <h2><span>orderId:</span><span></span></h2>
+            <a th:href="@{/user/orders}">click to track your order</a>
+        </div>
 
+    </section>
+</section>
+
+<script id="script">
+
+</script>
 </body>
 </html>

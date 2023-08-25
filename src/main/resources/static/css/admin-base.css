@@ -8,8 +8,8 @@ body{
 
 }
 
-header{
-    background:rgb(235,238,239);;
+.bg-common{
+    background:rgb(235,238,239);
 }
 
 .header .btn{

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/admin-product.css}">
+</head>
+<body>
+<section id="content">
+    <div class="row">
+        <div class="col-md-2 menu-bar d-flex justify-content-center mt-0  m-4 shadow">
+            <a th:href="@{/admin/products/add}">
+                <button type="button" class="btn  btn-secondary fs-2">ADD PRODUCTS</button>
+            </a>
+
+        </div>
+        <div class="col-md-9 p-5">
+            <table class="table ">
+                <div class="d-flex justify-content-between row">
+                    <thead class="">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">NAME</th>
+                        <th scope="col">BRAND</th>
+                        <th scope="col">MRP</th>
+                        <th scope="col">PRICE</th>
+                        <th scope="col">CATEGORY</th>
+                        <th scope="col">STOCK</th>
+                        <th scope="col">RATING</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+
+                    </tr>
+                    </thead>
+                </div>
+                <div class="d-flex justify-content-between row">
+                    <tbody class="">
+
+                    <tr th:each="product : ${productPageResponse.products}" id="inputs">
+                        <td class="fs-3" th:text="${product.productId}"       type="text" ></td>
+                        <td class="fs-3" th:text="${product.productName}"    type="text" ></td>
+                        <td class="fs-3" th:text="${product.brand}"     type="text" r></td>
+                        <td class="fs-3" th:text="${product.productMrp}" type="text"></td>
+                        <td class="fs-3" th:text="${product.offerPrice}"        type="text" ></td>
+                        <td class="fs-3"><button class="btn btn-outline-secondary border-0 " >view</button></td>
+                        <td class="fs-3"><a class="btn btn-outline-secondary border-0 " th:href="@{'/admin/products/stock/'+${product.productId}}">view</a></td>
+                        <td class="fs-3" th:text="${product.productRating}"type="text"  ></td>
+
+                        <td>
+                            <a class="border-0 btn btn-outline-info"  th:href="@{'/admin/products/update/'+${product.productId}}">
+                                  <img th:src="@{/img/admin/img.png}" alt="" class="img-fluid ">
+                                </a>
+                        </td>
+                        <td>
+                            <form th:action="@{'/admin/products/delete/'+${product.productId}}" th:method="delete">
+                                <button  type="submit" class="btn btn-outline-danger border-0">
+                                    <img th:src="@{/img/admin/delete.png}" alt="" class="img-fluid ">
+                                </button>
+                            </form>
+                            </td>
+                    </tr>
+
+
+                    </tbody>
+                </div>
+
+
+            </table>
+            <nav aria-label="...">
+                <ul class="pagination" th:if="${productPageResponse.totalPages!=0}">
+                    <li class="page-item " th:if="${productPageResponse.currentPageNumber!=0}">
+                        <a class="page-link" th:href="@{'/admin/products/page/'+*{productPageResponse.currentPageNumber+-1}}" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+
+
+                    <li th:if="${pageNumber}<${productPageResponse.totalPages}"  th:classappend="${productPageResponse.currentPageNumber==pageNumber+-1}?'active':''" class="page-item" th:each="pageNumber:${#numbers.sequence(productPageResponse.currentPageNumber+1,productPageResponse.currentPageNumber+5)}" >
+                        <a class="page-link" th:href="@{'/admin/products/page/'+*{pageNumber+-1}}"   ><span th:text="${pageNumber}"></span></a>
+                    </li>
+                    <li class="page-item" th:if="${productPageResponse.currentPageNumber!=productPageResponse.totalPages+-1}">
+                        <a class="page-link" th:href="@{'/admin/products/page/'+*{productPageResponse.currentPageNumber+1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+
+    <!--    <script-->
+    <!--            src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">-->
+    <!--    </script>-->
+
+    <!--<script>-->
+    <!--    $('#post-user').submit(-->
+    <!--        function(event) {-->
+    <!--            let user_id = $('#user-id').val();-->
+    <!--            let data = 'firstname='-->
+    <!--                + encodeURIComponent(user_id);-->
+    <!--            $.ajax({-->
+    <!--                type : "DELETE",-->
+    <!--                dataType: "json",-->
+    <!--                url : 'http://localhost:2021/admin/users/'+user_id,-->
+    <!--                contentType: "application/json; charset=utf-8",-->
+    <!--                data : data,-->
+    <!--                success : function(response) {-->
+    <!--                    alert( response );-->
+    <!--                },-->
+    <!--                error : function() {-->
+    <!--                    alert("not working");-->
+    <!--                }-->
+    <!--            });-->
+    <!--            return false;-->
+    <!--        });-->
+
+    <!--</script>-->
+
+</section>
+
+
+
+</body>
+</html>

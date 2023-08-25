@@ -1,0 +1,156 @@
+    <!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/admin-userList.css}">
+</head>
+<body>
+<section id="content">
+    <div class="row " style="--bs-gutter-x: 0">
+        <div class="col-md-2 menu-bar d-flex justify-content-center shadow m-4 mt-0">
+            <a th:href="@{/admin/users/add}">
+                <button type="button" class="btn  btn-secondary fs-2">ADD USERS</button>
+            </a>
+        </div>
+        <div class="col-md-9 p-0 m-5 ">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">FIRSTNAME</th>
+                    <th scope="col">LASTNAME</th>
+                    <th scope="col">MOBILE</th>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">GENDER</th>
+                    <th scope="col">STATUS</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="user: ${userResponse.customers}" id="inputs">
+                    <th class="fs-3"><input th:value="${user.userId}"       type="text" name="id"  class="input-id" id="user-id" readonly></th>
+                    <td class="fs-3"><input th:value="${user.firstName}"    type="text" readonly="readonly" id="customer-firstname"></td>
+                    <td class="fs-3"><input th:value="${user.lastName}"     type="text" readonly="readonly"  id="customer-lastname"></td>
+                    <td class="fs-3"><input th:value="${user.mobileNumber}" type="text" readonly="readonly"  id="customer-mobile"></td>
+                    <td class="fs-3"><input th:value="${user.email}"        type="text" readonly="readonly"  id="customer-email"></td>
+                    <td class="fs-3"><input th:value="${user.gender}"       type="text" readonly="readonly"  id="customer-gender" class="w-80px"></td>
+                    <td class="">
+                        <form  th:if="${user.enabled}" th:action="@{'/admin/users/disable/'+${user.userId}}" th:method="put">
+                            <button type="submit"   class="btn btn-danger fw-bold fs-4">DISABLE</button>
+                        </form>
+
+                        <form th:unless="${user.enabled}"  th:action="@{'/admin/users/enable/'+${user.userId}}" th:method="put">
+                            <button type="submit"  class="btn btn-success fw-bold fs-4">ENABLE</button>
+                        </form>
+
+                    </td>
+
+
+                    <td class="">
+                        <a  th:href="@{'/admin/users/update/'+*{user.userId}}" class="btn btn-outline-info border-0 ">
+                            <img th:src="@{/img/admin/img.png}" alt="" class="img-fluid w-25">
+                        </a>
+                    </td>
+                    <td class="fs-3">
+                      <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                          <img th:src="@{/img/admin/delete.png}" alt="" class="img-fluid w-25   ">
+                      </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-2 text-danger" id="exampleModalLabel">Warning</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        do you really want to delete the user?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning fs-2" data-bs-dismiss="modal">Cancel</button>
+                                        <form th:action="@{'/admin/users/delete/'+${user.userId}}" th:method="delete" >
+                                            <button type="submit" class="btn btn-danger border-0 fs-2"  >
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+
+
+                </tr>
+
+
+                </tbody>
+            </table>
+
+            <!-----------------------------------modal---------------------------------------->
+
+
+
+
+
+            <!------------------------------------pagination--------------------------------------------------->
+            <nav aria-label="...">
+                <ul class="pagination" >
+                    <li class="page-item " th:if="${userResponse.currentPageNumber!=0}">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" th:href="@{'/admin/users/page/'+*{userResponse.currentPageNumber+-1}}">Previous</a>
+                    </li>
+
+                    <li th:if="${number}<${userResponse.totalPages}"  th:each="number:${#numbers.sequence(userResponse.currentPageNumber+1,userResponse.currentPageNumber+5)}"  class="page-item" >
+                        <a th:if="${number}<5"  th:classappend="${userResponse.currentPageNumber==number+-1?'active':''}"   class="page-link" th:href="@{'/admin/users/page/'+*{number+-1}}"   ><span th:text="*{number}"></span></a>
+                    </li>
+
+
+
+
+                    <li th:if="${userResponse.currentPageNumber+1!=userResponse.totalPages}" class="page-item">
+                        <a class="page-link" href="#" th:href="@{'/admin/users/page/'+*{userResponse.currentPageNumber+1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+<!--    <script-->
+<!--            src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">-->
+<!--    </script>-->`
+
+<!--<script>-->
+<!--    $('#post-user').submit(-->
+<!--        function(event) {-->
+<!--            let user_id = $('#user-id').val();-->
+<!--            let data = 'firstname='-->
+<!--                + encodeURIComponent(user_id);-->
+<!--            $.ajax({-->
+<!--                type : "DELETE",-->
+<!--                dataType: "json",-->
+<!--                url : 'http://localhost:2021/admin/users/'+user_id,-->
+<!--                contentType: "application/json; charset=utf-8",-->
+<!--                data : data,-->
+<!--                success : function(response) {-->
+<!--                    alert( response );-->
+<!--                },-->
+<!--                error : function() {-->
+<!--                    alert("not working");-->
+<!--                }-->
+<!--            });-->
+<!--            return false;-->
+<!--        });-->
+
+<!--</script>-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</section>
+
+
+
+</body>
+</html>

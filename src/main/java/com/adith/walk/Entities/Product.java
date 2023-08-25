@@ -1,35 +1,53 @@
 package com.adith.walk.Entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 public class Product {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY )
     private Integer productId;
 
+    @NotBlank(message = "required")
+    @Column(unique = true)
     private String productName;
 
-    private String productMrp;
+    @NotNull(message = "required")
+    private Long productMrp;
 
-    private String offerPrice;
+    @NotNull(message = "required")
+    private Long offerPrice;
 
+    @NotBlank(message = "required")
     private String brand;
 
     private String productRating;
 
+    @NotBlank(message = "required")
     private String productDescription;
 
-    private String productImgId;
+    @OneToMany(mappedBy = "product" ,orphanRemoval = true,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    List<Images>list=new ArrayList<>();
 
-    private String productSizeId;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Category category;
 
-    private String categoryId;
+    @OneToOne(cascade = CascadeType.ALL)
+    private  Stock stock;
+
+
+
+
 }

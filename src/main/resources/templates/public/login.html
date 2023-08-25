@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#signup},~{::#footer})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#signup},~{::#script})">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title th:text="${title}"></title>
-    <link id="style"  rel="stylesheet" th:href="@{../css/main.css}">
+    <title th:text="loginpage"></title>
+    <link id="style"  rel="stylesheet" >
 </head>
 <body class="">
 
@@ -15,22 +15,72 @@
 <!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
 
 <!------------------------------------------------------signup  section---------------------------------------->
-<section id="signup" class="d-flex align-items-center justify-content-center row signup-section">
+<section id="signup" class=" justify-content-center row ">
 
-    <div class="col-md-3  d-flex flex-column justify-content-center align-items-center vh-80 lg-lite">
-        <h1 class="h1">Login</h1>
-        <p class="p1 ">to access your account</p>
-        <form  th:action="@{/user/login}" method="post" class=" d-flex align-items-center flex-column ">
-            <input th:value="${session.request.username}" type="text" placeholder="your mobile number" class="align-bottom " name="username" readonly>
-            <input type="text" placeholder="Password" class="align-bottom " name="password">
-            <button type="submit" class="btn btn-outline-secondary ">Login</button>
+    <div class="col-11 col-sm-11  col-md-6 col-lg-4 col-xl-4  col-xxl-3   d-flex flex-column vh-80 bg-dark-subtle rounded-5 p-5 m-5">
+            <h1 class="h1 text-center m-5">LOGIN</h1>
+
+
+        <!-------------login-form--------------------------------------------------------------------------->
+
+            <form th:action="@{/user/login}"
+                  method="post"
+                  class="d-flex flex-column needs-validation p-5 "
+                  novalidate>
+
+        <!--------------serverside validation--------------------------------------------------------------------------->
+            <div th:if="${param.error}" class="text-center fs-3 text-danger-emphasis">
+                Invalid username and password.</div>
+            <div th:if="${param.logout}" class="text-center fs-3 text-danger-emphasis">
+                You have been logged out.</div>
+          <!-------------serverside validation------end--------------------------->
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <div class="input-group">
+
+                    <span class="input-group-text bg-white fs-3 rounded-start-5" id="inputGroupPrepend">+91</span>
+                    <input
+                            id="username"
+                            type="text"
+                            class="text-center form-control fs-3 rounded-end-5"
+                            placeholder="username"
+                            name="username"
+                            required>
+                    <div class="invalid-feedback fs-4 text-center text-danger" >
+                        enter valid username
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                        id="password"
+                        type="password"
+                        class="text-center form-control fs-3 rounded-5"
+                        placeholder="password"
+                        name="password"
+                        required>
+                <div class="invalid-feedback fs-4 text-center text-danger">
+                    enter valid password
+                </div>
+            </div>
+         <button class=" btn btn-outline-dark fs-2 my-5 rounded-5">SignIn</button>
+
         </form>
+        <div class="w-100 p-5 ">
+            <h1 class="fs-4 text-center">new User?</h1>
+            <a th:href="@{/register}" class="btn btn-dark rounded-5 fs-2 w-100">REGISTER</a>
+            <h1 class="fs-4">Not confirmed Your Mobile Number? <a th:href="@{/send-otp}">Click here</a></h1>
+        </div>
+
+
 
 
     </div>
 </section>
 
 
-<footer id="footer"></footer>
+<script id="script" th:src="@{/js/public/login.js}"></script>
 </body>
 </html>

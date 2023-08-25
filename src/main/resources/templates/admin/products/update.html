@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+  <meta charset="UTF-8">
+  <title>this is for adding user</title>
+  <link th:href="@{/css/admin-user-add.css}" id="style" type="text/css" rel="stylesheet">
+</head>
+<body>
+<section id="content" class="container-fluid vh-85 ">
+  <div class="row  d-flex   justify-content-center align-items-center    h-100">
+    <div class="col-md-4  m-5 ">
+      <h1 class="text-center m-5">UPDATE PRODUCT</h1>
+                  <div class="alert text-center" role="alert" th:if="${message}" th:classappend="${message.type}" th:text="${message.content}">
+
+                  </div>
+
+      <form  th:action="@{'/admin/products/update/'+*{productId}}"
+             th:method="put"  th:object="${productUpdateRequest}"
+             class="d-flex bg-secondary-subtle flex-column  rounded-5 m-5 p-5"
+             enctype="multipart/form-data">
+
+
+        <!------------------------------- image upload- field----------------------------------------------------->
+        <div class="m-4 ">
+          <label for="files" class="fs-3">Images</label>
+          <input
+                  class="form-control fs-4 "
+                  type="file"
+                  name="files"
+                  id="files"
+                  placeholder="Upload Your Images"
+                  accept="image/*"
+                  multiple="multiple"
+                  value="files">
+
+        </div>
+
+
+        <!------------------------------- product-name- field----------------------------------------------------->
+        <div class="m-4 mt-0">
+          <label for="productName" class="fs-3">Name of the Product</label>
+          <input
+                  th:value="${productUpdateRequest.productName}"
+                  class="form-control  fs-4 text-center" type="text"
+                  name="productName"
+                  id="productName"
+                  placeholder="Name of the product">
+          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('productName')}">
+            <p th:text="${e}"></p>
+          </div>
+        </div>
+
+
+        <!------------------------------- product-mrp- field----------------------------------------------------->
+        <div class="m-4 mt-0">
+          <label for="productMRP" class="fs-3">MRP of the Product</label>
+          <input
+                  th:value="${productUpdateRequest.productMrp}"
+                  class="form-control fs-4 text-center"
+                  id="productMRP"
+                  type="text"
+                  name="productMrp"
+                  placeholder="MRP of the product">
+          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('productMrp')}">
+            <p th:text="${e}"></p>
+          </div>
+        </div>
+
+        <!------------------------------- product-selling-price field----------------------------------------------------->
+        <div class="m-4 mt-0">
+          <label for="productOfferPrice" class="fs-3">Price of the Product</label>
+          <input
+                  th:value="${productUpdateRequest.offerPrice}"
+                  class="form-control  fs-4 text-center"
+                  type="text"
+                  id="productOfferPrice"
+                  name="offerPrice"
+                  placeholder="price of the product">
+          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('offerPrice')}">
+            <p th:text="${e}"></p>
+          </div>
+        </div>
+
+
+
+
+        <!------------------------------- product-brand field----------------------------------------------------->
+        <div class="m-4 mt-0">
+          <label for="productOfferPrice" class="fs-3">Brand of the Product</label>
+          <input
+                  th:value="${productUpdateRequest.brand}"
+                  class="form-control  fs-4 text-center"
+                  type="text"
+                  name="brand"
+                  placeholder="brand">
+          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('brand')}">
+            <p th:text="${e}"></p>
+          </div>
+        </div>
+
+
+
+        <!------------------------------- category field----------------------------------------------------->
+
+        <div class="row m-4 mt-0">
+          <div class="col-6">
+            <div class="form-check form-switch fs-3">
+              <input class="form-check-input "
+                     type="checkbox"
+                     id="flexSwitchCheckDefault1"
+
+                     th:field="*{category.casual}">
+              <label class="form-check-label"
+                     for="flexSwitchCheckDefault1">
+                Casual
+              </label>
+            </div>
+            <div class="form-check form-switch fs-3">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexSwitchCheckDefault2"
+                     th:value="${productUpdateRequest.category.kids}"
+                     th:field="*{category.kids}">
+              <label class="form-check-label"
+                     for="flexSwitchCheckDefault2">
+                Kids
+              </label>
+            </div>
+            <div class="form-check form-switch fs-3">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexSwitchCheckDefault3"
+                     th:value="${productUpdateRequest.category.sports}"
+                     th:field="*{category.sports}">
+              <label class="form-check-label"
+                     for="flexSwitchCheckDefault3">
+                Sports
+              </label>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-check form-switch fs-3">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexSwitchCheckDefault4"
+                     th:value="${productUpdateRequest.category.formal}"
+                     th:field="*{category.formal}">
+              <label class="form-check-label"
+                     for="flexSwitchCheckDefault4">
+                Formal
+              </label>
+            </div>
+            <div class="form-check form-switch fs-3">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexSwitchCheckDefault5"
+                     th:value="${productUpdateRequest.category.men}"
+                     th:field="*{category.men}">
+              <label class="form-check-label"
+                     for="flexSwitchCheckDefault5">
+                Men
+              </label>
+            </div>
+            <div class="form-check form-switch fs-3">
+              <input class="form-check-input"
+                     type="checkbox"
+                     id="flexSwitchCheckDefault6"
+                     th:value="${productUpdateRequest.category.women}"
+                     th:field="*{category.women}">
+              <label class="form-check-label"
+                     for="flexSwitchCheckDefault6">
+                Women
+              </label>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('category')}">
+          <p th:text="${e}"></p>
+        </div>
+
+        <!------------------------------- product-stock- field----------------------------------------------------->
+
+        <div class="m-4 mt-0 row">
+          <label class="fs-3">Stock of the Product</label>
+          <div class="col-md-2">
+            <label for="size2" class="fs-3">2</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_2}"
+                    id="size2"
+                    placeholder="size2">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size3" class="fs-3">3</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_3}"
+                    id="size3"
+                    placeholder="size3">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size4" class="fs-3">4</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_4}"
+                    id="size4"
+                    placeholder="size4">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size5" class="fs-3">5</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_5}"
+                    id="size5"
+                    placeholder="size5">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size6" class="fs-3">6</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_6}"
+                    id="size6"
+                    placeholder="size6">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size7" class="fs-3">7</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_7}"
+                    id="size7"
+                    placeholder="size7">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size8" class="fs-3">8</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_8}"
+                    id="size8"
+                    placeholder="size8">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size9" class="fs-3">9</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_9}"
+                    id="size9"
+                    placeholder="size9">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size10" class="fs-3">10</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_10}"
+                    id="size10"
+                    placeholder="size10">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size11" class="fs-3">11</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_11}"
+                    id="size11"
+                    placeholder="size11">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label for="size12" class="fs-3">12</label>
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.size_12}"
+                    id="size12"
+                    placeholder="size12">
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
+
+            <input type="text" hidden
+            th:field="*{stock.id}">
+          </div>
+
+
+
+
+        </div>
+
+        <!------------------------------- product-description- field----------------------------------------------------->
+        <div class="m-4 mt-0">
+          <label for="productDescription" class="fs-3">ProductDescription</label>
+          <textarea
+                  th:field="${productUpdateRequest.productDescription}"
+                  th:text="${productUpdateRequest.productDescription}"
+                  class="form-control  fs-4"
+                  type="text"
+                  name="productDescription"
+                  id="productDescription"
+                  placeholder="Enter the description for the product">
+
+                </textarea>
+          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('productDescription')}">
+            <p th:text="${e}"></p>
+          </div>
+        </div>
+
+
+
+        <button class="btn  btn-dark input-group-text mb-5 fs-3 " type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+
+
+</section>
+
+</body>
+</html>

@@ -13,9 +13,5 @@ public class WishlistService {
     @Autowired
     WishlistRepository wishlistRepository;
 
-    public List<Wishlist> getAllWisListItems(Integer userId) {
-
-        return wishlistRepository.findAllByCustomerId(userId);
-    }
 
 }

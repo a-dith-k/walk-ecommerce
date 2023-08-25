@@ -1,25 +1,28 @@
 package com.adith.walk.service;
 
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactoryFriend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.Random;
 
 @Service
-@EnableScheduling
 public class TwilioOtpService {
 
-    @Autowired
-    CustomerService customerService;
+    Logger logger= LoggerFactory.getLogger(TwilioOtpService.class);
 
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public static final String ACCOUNT_SID = "AC285623d3f62fcb00a32803fea8086450";
-    public static final String AUTH_TOKEN = "75058d294298a1bea3d924f03f308eb2";
+
+    public static final String ACCOUNT_SID = "AC1ae4e5f1a786d672af76fc0596bc2092";
+    public static final String AUTH_TOKEN = "e1ed71eec4671abe340765e7b2bbeba7";
     String OTP=null;
 
 
@@ -27,25 +30,20 @@ public class TwilioOtpService {
         public String sendOTP(){
 
              OTP=generateOTP();
+            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+           Message message = Message.creator(
+                    new com.twilio.type.PhoneNumber("+919746959749"),
+                    new com.twilio.type.PhoneNumber("+16672708505"),
+                    "Your OTP for verification is"+OTP
 
-//            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-//            Message message = Message.creator(
-//                    new com.twilio.type.PhoneNumber("+917025845839"),
-//                    new com.twilio.type.PhoneNumber("+12344373506"),
-//                    OTP
-//
-//            ).create();
-//
-//
+            ).create();
+
+
 //            System.out.println(message.getSid());
+            logger.info(OTP);
 
             return  OTP;
         }
-//    @Scheduled(initialDelay =1000*10000, fixedRate = 1000*60)
-//    public void deleteOTP(){
-//        customerService.deleteOTPByOTP(bCryptPasswordEncoder.encode(OTP));
-//    }
-
 
     //6digit otp
 

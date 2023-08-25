@@ -4,3 +4,31 @@
 .w-80px{
     width: 80px;
 }
+
+#inputs input{
+    border: none;
+    outline: none;
+
+}
+
+thead th{
+ font-size: 20px;
+}
+
+.menu-bar{
+    background:rgb(235,238,239);
+
+
+}
+
+.menu-bar .btn{
+    margin:2% 2% 2% 2%;
+    height: 50px;
+    width: 100%;
+
+}
+.menu-bar a{
+    width: 80%;
+    margin:2% 2% 2% 2%;
+
+}

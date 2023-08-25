@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title>this is for adding user</title>
+    <link th:href="@{/css/admin-user-add.css}" id="style" type="text/css" rel="stylesheet">
+</head>
+<body>
+<section id="content" class="container-fluid vh-85 ">
+    <div class="row  d-flex   justify-content-center align-items-center    h-100">
+        <div class="col-md-4 offset-4 bg-secondary  m-5 ">
+            <h1 class="text-center">ADD BANNER</h1>
+
+            <div>
+                <p th:text="${message}" class="text-center display-6" ></p>
+            </div>
+
+            <form
+                    th:action="@{/admin/banners/add}"
+                    method="post"
+                    class="d-flex bg-secondary flex-column align-items-center fs-3"
+                    enctype="multipart/form-data"
+                    >
+
+
+                <!------------------------------- image upload- field----------------------------------------------------->
+                <input
+                        class="input-group-text fs-3 form-control mb-3  "
+                        type="file"
+                        name="file"
+                        placeholder="file"
+                        accept="image/*"
+                        >
+
+
+                <!------------------------------- heading- field----------------------------------------------------->
+                <input
+                        class="input-group-text fs-3 form-control  mb-3 "
+                        type="text"
+                        name="heading"
+                        placeholder="Heading"
+                        >
+
+                <!------------------------------- description-field----------------------------------------------------->
+                <input
+                        class="input-group-text fs-3 form-control  mb-3  "
+                        type="text"
+                        name="description"
+                        placeholder="Description"
+                        >
+                <!------------------------------- status-field----------------------------------------------------->
+                <input
+                        class="input-group-text fs-3 form-control  mb-3 "
+                        type="text"
+                        name="status"
+                        placeholder="status"
+                >
+
+
+
+
+                <button class="btn  btn-dark input-group-text form-control  mb-3 fs-2" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+
+</section>
+
+</body>
+</html>

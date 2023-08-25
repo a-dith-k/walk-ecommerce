@@ -1,10 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="user/base::layout(~{::#style},~{::#content},~{::#script})">
 <head>
     <meta charset="UTF-8">
-    <title>this is your addresses</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="loginpage"></title>
+    <link id="style"  rel="stylesheet">
 </head>
-<body>
+<body class="">
+<!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
+
+<section id="content" class=" mt-3 col-md-10 row">
+    <div class="row ">
+        <div class="col-md-8" >
+            <div class="card mb-4" th:each="address,n : ${userAddressList}" >
+                <div class="card-header row"> <h5 class="col-md-6">Address <span th:text="${n.count}"></span></h5>
+                        <h1 th:if="${address.isDefault}" class="text-end col-md-6">     <button type="submit" class="btn btn-dark ">Default</button></h1>
+
+                    <form th:unless="${address.isDefault}" class="col-md-6" th:action="@{'/user/address/set-default/'+${address.id}}" th:method="put">
+                        <h1 class="text-end">     <button class="btn bg-dark-subtle " type="button" data-bs-toggle="modal" th:data-bs-target="'#'+${address.id}">set as Default</button></h1>
+
+                        <div class="modal fade" th:id="${address.id}"  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-2 text-danger" id="exampleModalLabel">Warning</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        do you really want to Update the default address?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning fs-2" data-bs-dismiss="modal">Cancel</button>
+
+                                            <button type="submit" class="btn btn-danger border-0 fs-2"  >
+                                                yes
+                                            </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title fw-bold fs-4" th:text="${address.name}+', '+${address.mobile}"></h5>
+
+                    <p><span class="card-text fs-3" th:text="${address.building}+','+${address.street}+','+${address.city}+','+${address.state}+'-'"></span><b class="fs-3" th:text="${address.zipCode}"></b></p>
+                    <h1 class="text-end">     <a th:href="@{'/user/address/update/'+${address.id}}" class="btn btn-primary ">edit</a></h1>
+                    <form th:action="@{'/user/address/delete/'+${address.id}}" th:method="delete">
+                        <h1 class="text-end">     <button type="submit" class="btn btn-danger ">delete</button></h1>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2  text-end ">
+            <a th:href="@{/user/addresses/add}" class="btn btn-dark fs-3 border-0">Add address</a>
+        </div>
+    </div>
+
+</section>
+
+
+<script id="script" th:src="@{/js/user/reset-password.js}">
+
+</script>
+
+
 
 </body>
 </html>

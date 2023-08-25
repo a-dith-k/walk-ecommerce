@@ -6,34 +6,68 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-  <link id="style"  rel="stylesheet" th:href="@{/css/product.css}">
+  <link id="style"  rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
-<section id="content" class="container-fluid d-flex  ">
-    <div class="filters"></div>
-    <div  class="row tb-blue w-80  ">
-        <div th:each="product: ${products}" class="col-sm-12 col-md-3 product-card "  >
-            <div class="pro">
-                <a th:href="@{'/products/'+${product.productId}}">  <img th:src="@{${product.productImgId}}"   alt=""   class="img-fluid img-thumbnail   ">   </a>
-                <div class="detai ">
-                    <h1 th:text="${product.productName}"  class="z-3"></h1>
-                    <h1 th:text="${product.brand}"></h1>
+<section id="content" class="container-fluid   ">
+    <div class="row ">
+        <div class="filters col-3">
 
-                    <h1 th:text="${product.productMrp}"></h1>
+        </div>
+        <section class="bg-white row  d-flex justify-content-center">
+            <div class="col-md-10  d-flex   flex-wrap">
+
+                <div class="col-sm-12 col-md-3 product position-relative" th:each="product: ${productPageResponseDTO.products}">
+                    <div>
+                        <div class="pr-img ">
+                            <a th:href="@{'/products/'+${product.productId}}"><img
+                                    th:src="@{'/img/productImages/'+${product.list[0].name}}" alt=""
+                                    class="img-fluid img-thumbnail  ">
+                            </a>
+                        </div>
+
+                        <div class="details-product position-absolute top-0 d-flex row w-100 p-5 m-0">
+                            <div class="col-6 d-flex  flex-column align-items-start ">
+                                <h1 th:text="${product.productName}" class="text-dark fw-light fs-4"></h1>
+                                <h1 th:text="${product.brand}" class="text-secondary fw-bold fs-3 "></h1>
+                            </div>
+                            <div class="col-6 d-flex justify-content-center flex-column align-items-center">
+                                <h1 th:text="'&#8377'+${product.productMrp}"
+                                    class="display-6 text-decoration-line-through text-secondary"></h1>
+                                <h1 th:text="'&#8377'+${product.offerPrice}"
+                                    class="display-5 fs-1 fst-italic border-black m-1"></h1>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
-<!--                <img th:src="@{${product.productImgId}}" alt="he" class="img-fluid img-thumbnail">-->
-<!--                <h2 th:text="${product.productName}"></h2>-->
-<!--                <h1 th:text="${product.brand}"></h1>-->
-<!--                <h1 th:text="${product.productMrp}"></h1>-->
+            <div class="col-md-10 d-flex justify-content-end">
+                <nav aria-label="...">
+                    <ul class="pagination" th:if="${productPageResponseDTO.totalPages!=0}">
+                        <li class="page-item " th:if="${productPageResponseDTO.currentPageNumber!=0}">
+                            <a class="page-link" th:href="@{'/products/men/'+*{productPageResponseDTO.currentPageNumber+-1}}" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
 
-        </div>
-        </div>
+
+                        <li  th:classappend="${productPageResponseDTO.currentPageNumber==pageNumber+-1}?'active':''" class="page-item" th:each="pageNumber:${#numbers.sequence(1,productPageResponseDTO.totalPages)}" >
+                            <a class="page-link" th:href="@{'/products/men/'+*{pageNumber+-1}}"   ><span th:text="${pageNumber}"></span></a>
+                        </li>
+                        <li class="page-item" th:if="${productPageResponseDTO.currentPageNumber!=productPageResponseDTO.totalPages+-1}">
+                            <a class="page-link" th:href="@{'/products/men/'+*{productPageResponseDTO.currentPageNumber+1}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </section>
+    </div>
+
+
+
 </section>
-
-</section>
-
 
 <footer id="footer"></footer>
 </body>

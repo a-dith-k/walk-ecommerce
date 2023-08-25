@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/admin-product.css}">
+</head>
+<body>
+<section id="content">
+    <div class="row">
+        <div class="col-md-2 menu-bar d-flex justify-content-center mt-0  m-4 shadow">
+            <a th:href="@{/admin/banners/add}">
+                <button type="button" class="btn  btn-secondary fs-2">ADD BANNER</button>
+            </a>
+
+        </div>
+        <div th:if="${message}" th:text="${message.content}" th:classappend="${message.type}" class="alert">
+
+        </div>
+        <div class="col-md-9 p-5">
+            <div class="row m-5" th:each="banner : ${bannerList}" >
+                <div class="col-md-3">
+                    <img th:src="@{'/img/banner/'+${banner.name}}" alt=""class="img-fluid">
+                </div>
+                <div class="col-md-5">
+                    <h1 th:text="${banner.heading}"></h1>
+                    <h3 th:text="${banner.description}"></h3>
+
+                    <form th:action="@{'/admin/banners/delete/'+${banner.id}}" method="post">
+                        <button type="button" class="btn btn-danger fw-bold " data-bs-toggle="modal" data-bs-target="#exampleModal">DELETE</button>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-2 text-danger" id="exampleModalLabel">Warning</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        do you really want to delete the banner?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning fw-bold" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger fw-bold"  >DELETE</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+</body>
+</html>

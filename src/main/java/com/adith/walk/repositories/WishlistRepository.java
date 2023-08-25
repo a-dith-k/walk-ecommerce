@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist,Integer> {
 
-    List<Wishlist> findAllByCustomerId(Integer id);
 }

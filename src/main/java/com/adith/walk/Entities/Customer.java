@@ -1,47 +1,79 @@
 package com.adith.walk.Entities;
 
+import com.adith.walk.enums.UserRole;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.antlr.v4.runtime.Token;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
 
+    @SequenceGenerator(
+            name = "customer_sequence",
+            sequenceName = "customer_sequence",
+            allocationSize = 1
+    )
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    private Integer userId;
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "customer_sequence"
+    )
+    private Long userId;
 
     @Column(unique = true, nullable = false)
     private String mobileNumber;
 
+    @Column(unique = true, nullable = false)
     private String password;
 
+    @Column(unique = true, nullable = false)
+    @Email
     private String email;
 
-    private String firstname;
 
-    private String lastname;
+    private String firstName;
+
+    private String lastName;
 
     private String gender;
 
-    private String role;
+    @DateTimeFormat
+    private LocalDate dob;
 
-    private String accountStatus;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
-    private String otp;
+    private boolean enabled=false;
 
-    @Column(length = 50)
-    private Date otpSendTime;
+    private boolean locked= false;
 
-    @OneToMany
-    private List<Wishlist> wishlist;
+    @OneToOne
+    private Wishlist wishlist;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    ConfirmToken confirmToken;
+
+
+    @OneToMany(mappedBy = "customer" ,cascade = CascadeType.ALL)
+    List<Address>addresses=new ArrayList<>();
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
 
 
 }

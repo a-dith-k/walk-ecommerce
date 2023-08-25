@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="registration-page"></title>
+
+    <link id="style" rel="stylesheet" th:href="@{/css/registration/registration-page.css}">
+</head>
+<body class="">
+<!-----------------------------------------add dynamic content here---------------------------------------->
+<section id="content" class="justify-content-center row container-fluid">
+    <div class="col-11 col-sm-11  col-md-6 col-lg-4 col-xl-4  col-xxl-3   d-flex flex-column vh-80 bg-dark-subtle rounded-5 p-5 m-5">
+        <form th:action="@{/register}" class=" p-5  custom-validation" method="post" th:object="${request}" novalidate >
+
+
+            <div class="alert text-center" role="alert" th:if="${message}" th:classappend="${message.type}" th:text="${message.content}">
+
+            </div>
+            <h1 class="text-center">REGISTER HERE</h1>
+            <div class="my-4">
+                <label  for="firstName" class="form-label">Firstname</label>
+                <input  type="text"
+                        class="form-control fs-3 text-center rounded-5  "
+                        id="firstName"
+                        name="firstName"
+                        placeholder="Firstname"
+                        th:value="${request.firstName}"
+                        required>
+                <div class=" fs-4 invalid-feedback  text-center text-danger">
+                    firstname is required
+                </div>
+                <div th:if="${#fields.hasErrors()}" class="text-danger-emphasis" th:each="e: ${#fields.errors('firstName')}" >
+                    <p th:text="${e}"></p>
+                </div>
+            </div>
+
+
+            <div class="my-4">
+                <label  for="lastName" class="form-label">Lastname</label>
+                <input  type="text"
+                        class="form-control fs-3 text-center rounded-5"
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Lastname"
+                        th:value="*{lastName}"
+                        required>
+                <div class=" fs-4 invalid-feedback  text-center text-danger">
+                    lastname is required
+                </div>
+                <div class="text-danger-emphasis" th:each="e: ${#fields.errors('lastName')}" th:text="${e}">
+                </div>
+            </div>
+
+            <div class="my-4">
+                <label for="email" class="form-label">Email</label>
+                <input  type="text"
+                        class="form-control  fs-3 text-center  rounded-5"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        th:value="*{email}"
+                        required>
+                <div class=" fs-4 invalid-feedback  text-center text-danger">
+                    email is required
+                </div>
+                <div class="text-danger-emphasis" th:each="e: ${#fields.errors('email')}" th:text="${e}">
+                </div>
+            </div>
+
+<!--            <div class="my-4">-->
+<!--                <label for="gender" class="form-label">gender</label>-->
+<!--                <input  type="text"-->
+<!--                        class="form-control fs-3 text-center rounded-5"-->
+<!--                        id="gender"-->
+<!--                        name="gender"-->
+<!--                        placeholder="Gender"-->
+<!--                        th:value="*{gender}"-->
+<!--                        required>-->
+<!--                <div class="invalid-feedback fs-5">-->
+<!--                    gender is required-->
+<!--                </div>-->
+<!--                <div class="text-danger-emphasis" th:each="e: ${#fields.errors('gender')}" th:text="${e}">-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="my-4">
+                <label for="mobileNumber" class="form-label">Mobile number</label>
+                <input  type="text"
+                        class="form-control fs-3 text-center rounded-5"
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        placeholder="Mobile number"
+                        th:value="${request.mobileNumber}"
+                        required>
+
+                <div class=" fs-4 invalid-feedback  text-center text-danger">
+                        mobile is required
+                </div>
+                <div class="text-danger-emphasis" th:each="e: ${#fields.errors('mobileNumber')}" th:text="${e}">
+                </div>
+            </div>
+
+            <div class="my-4">
+                <label for="password" class="form-label">Password</label>
+                <input  type="password"
+                        class="form-control fs-3 text-center rounded-5"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        th:value="*{password}"
+                        required
+                >
+                <div class=" fs-4 invalid-feedback  text-center text-danger">
+                    password  is required
+                </div>
+                <div class="text-danger-emphasis" th:each="e: ${#fields.errors('password')}" th:text="${e}">
+                </div>
+            </div>
+            <div class="my-4">
+            <label for="password" class="form-label">Confirm password</label>
+            <input  type="password"
+                    class="form-control fs-3 text-center rounded-5"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="confirm password"
+                    th:value="*{password}"
+                    required
+            >
+            <div class=" fs-4 invalid-feedback  text-center text-danger">
+                confirm your password
+            </div>
+
+            </div>
+
+            <button class="btn btn-dark w-100 fs-1 my-5  rounded-5"  >REGISTER</button>
+            <a th:href="@{/user/login}" class=" w-100 fs-3 mb-5  rounded-5 text-decoration-none"> already registered? click here </a>
+        </form>
+    </div>
+
+</section>
+<!----------------------------------------------end----------------------------------------------------- -->
+<script id="script" th:src="@{/js/public/registration.js}">
+
+
+</script>
+
+
+</body>
+</html>

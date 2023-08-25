@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
-    <link rel="stylesheet" th:href="@{../css/bootstrap.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{../css/main.css}">
 
 </head>
@@ -16,7 +16,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12  w-100  head1 bg-nav">
-
+                    <h1 CLASS="text-center text-white mt-5 display-3">ADMIN LOGIN</h1>
             </div>
         </div>
     </div>
@@ -34,8 +34,18 @@
                       stroke="#222222" stroke-linecap="round"/>
             </svg>
             <form th:action="@{/admin/login}"  method="post" class="d-flex  flex-column">
+
+                <div th:if="${param.error}" class="text-center fs-3 text-danger-emphasis">
+                    Invalid username and password.</div>
+                <div th:if="${param.logout}" class="text-center fs-3 text-danger-emphasis">
+                    You have been logged out.</div>
+
+
                 <input type="text" class="text-end" placeholder="username" name="username">
-                <input type="text" class="text-end" placeholder="password" name="password">
+                <input type="text" class="text-end" placeholder="password" name="password" th:type="password">
+<!--                <div th:if="${#fields.hasErrors('password')}" th:each="e: ${#fields.errors('password')}">-->
+<!--                    <span th:text="${e}"></span>-->
+<!--                </div>-->
                 <button>SignIn</button>
             </form>
 

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link id="style" rel="stylesheet" th:href="@{/css/admin-dash.css}">
+</head>
+<body>
+<section id="content">
+  <div class="row justify-content-center">
+    <div class="col-md-10 row">
+      <div class="col-md-5 m-2 border bg-common">
+        <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">ORDER DETAILS</h1>
+        <h5 class="mt-2 fs-2 fw-normal" ><span>ORDER ID :</span><span class="text-primary-emphasis" th:text="${order.orderId}"> </span></h5>
+        <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Name :</span><span class="text-primary-emphasis" th:text="${order.customer.firstName}"> </span></h5>
+        <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Mobile :</span><span class="text-primary-emphasis" th:text="${order.customer.mobileNumber}"> </span></h5>
+
+          <form th:action="@{'/admin/orders/'+${order.orderId}+'/status'}" method="post" class=" mt-2 ">
+              <div class="input-group" th:if="${order.status}!='Cancelled'">
+                  <span class="input-group-text fs-3 text-primary">ORDER STATUS</span>
+                  <select id="orderStatus"  name="orderStatus" class= "form-control fs-3">
+                      <option th:selected="${order.status}=='Placed'" value="Placed">Order Placed</option>
+                      <option th:selected="${order.status}=='Confirmed'"  value="Confirmed">Order Confirmed</option>
+                      <option  th:selected="${order.status}=='Packed'" value="Packed">Order Packed</option>
+                      <option   th:selected="${order.status}=='Shipping'" value="Shipping">Order Shipping</option>
+                      <option  th:selected="${order.status}=='Out for Delivery'"  value="Out for Delivery">Order Out for Delivery</option>
+                      <option   th:selected="${order.status}=='Delivered'" value="Delivered">Order Delivered</option>
+                  </select>
+                  <button type="submit" class=" btn btn-primary fs-3">Update Status</button>
+              </div>
+              <div class="input-group" th:unless="${order.status}!='Cancelled'">
+                  <h1 class="text-center display-4 text-danger">Order Cancelled</h1>
+              </div>
+
+
+
+          </form>
+
+
+      </div>
+      <div class="col-md-5 m-2 border bg-common">
+            <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">PAYMENT DETAILS</h1>
+          <h3 class="m-3 p-1 fs-3 fw-normal"><span>Total Amount :</span><span th:text="${order.payment.totalAmount}"></span></h3>
+          <h3 class="m-3 p-1 fs-3 fw-normal"><span>Payment Method :</span><span th:text="${order.payment.method}"></span></h3>
+          <h3 class="m-3 p-1 fs-3 fw-normal"><span>Time Of Payment :</span><span th:text="${order.payment.dateTime.dayOfMonth}"></span></h3>
+          <h3 class="m-3 p-1 fs-3 fw-normal"><span>Payment Status :</span><span th:text="${order.payment.status}"></span></h3>
+      </div>
+      <div class="col-md-5 m-2 border bg-common">
+          <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">DELIVERY ADDRESS</h1>
+          <h2 class="col-12 m-3" th:if="${order.deliveryAddress}!=null">
+              <span th:text="${order.deliveryAddress.name}+', '"></span>
+              <span th:text="${order.deliveryAddress.mobile}+', '"></span>
+              <span th:text="${order.deliveryAddress.building}+', '"></span>
+              <span th:text="${order.deliveryAddress.street}+', '"></span>
+              <span th:text="${order.deliveryAddress.city}+', '"></span>
+              <span th:text="${order.deliveryAddress.zipCode}+',  '"></span>
+              <span class="h3" th:text="${order.deliveryAddress.state}"> </span>
+          </h2>
+      </div>
+
+        <div class="col-md-5 m-2 border bg-common">
+            <h1  class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">BILLING ADDRESS</h1>
+            <h2 class="col-12 m-3" th:if="${order.deliveryAddress}!=null">
+                <span th:text="${order.billingAddress.name}+', '"></span>
+                <span th:text="${order.billingAddress.mobile}+', '"></span>
+                <span th:text="${order.billingAddress.building}+', '"></span>
+                <span th:text="${order.billingAddress.street}+', '"></span>
+                <span th:text="${order.billingAddress.city}+', '"></span>
+                <span th:text="${order.billingAddress.zipCode}+',  '"></span>
+                <span class="h3" th:text="${order.billingAddress.state}"> </span>
+            </h2>
+        </div>
+        <div class="col-md-10 row m-2 border bg-common">
+            <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">PRODUCT DETAILS</h1>
+            <th:block th:each="item :${order.cart.items}">
+            <div class="card mb-3 col-md-6 me-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        <img th:src="@{'/img/productImages/'+${item.product.list[0].name}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h2 class="card-title fs-3 display-6"><span th:text="${item.product.productName}"></span></h2>
+                            <h3 class="card-text fs-3 display-6" >Quantity: <span class="text-primary-emphasis fw-bold" th:text="${item.quantity}"></span></h3>
+                            <h3 class="card-text fs-3 display-6" >Unit Price: &#8377;<span class="text-primary-emphasis fw-bold" th:text="${item.product.offerPrice}"></span></h3>
+                            <h3 class="card-text fs-3 display-6" >Total Price: &#8377;<span class="text-primary-emphasis fw-bold" th:text="${item.totalPrice}"></span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            </th:block>
+            <div class="col-md-9">
+
+            </div>
+            <div class="col-md-3">
+                <h1 class=" display-6 text-end bg-white">TOTAL AMOUNT: &#8377<span class="fw-bold" th:text="${order.cart.totalPrice}"></span></h1>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
