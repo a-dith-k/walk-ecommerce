@@ -34,4 +34,9 @@ public class StockServiceImplementation implements StockService{
     public void removeStock(Product product, Long quantity, String size) {
 
     }
+
+    @Override
+    public Stock save(Stock stock) {
+           return stockRepository.save(stock);
+    }
 }

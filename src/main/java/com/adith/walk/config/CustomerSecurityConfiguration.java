@@ -22,6 +22,8 @@ public class CustomerSecurityConfiguration {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
+
+
     @Bean
     UserDetailsService userDetailsServiceCustomer(){
 
@@ -42,6 +44,9 @@ public class CustomerSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterUser(HttpSecurity http) throws Exception {
+//
+//        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+//        requestCache.setMatchingRequestParameterName("c");
 
         http
                 .authenticationProvider(authenticationProviderCustomer());
@@ -58,7 +63,9 @@ public class CustomerSecurityConfiguration {
                 )
                 .formLogin(form->form
                         .loginPage("/user/login").permitAll()
-                        .defaultSuccessUrl("/").permitAll())
+                        .defaultSuccessUrl("/").permitAll()
+                        .successHandler(new CustomerCustomAuthenticationSuccessHandler()).permitAll())
+
                 .logout((logout) -> logout
                         .logoutUrl("/user/logout").permitAll()
                         .logoutSuccessUrl("/user/login?logout"));

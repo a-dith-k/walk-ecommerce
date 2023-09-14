@@ -3,26 +3,22 @@ package com.adith.walk.service;
 
 import com.adith.walk.Entities.Images;
 import com.adith.walk.Entities.Product;
+import com.adith.walk.Entities.Size;
 import com.adith.walk.Entities.Stock;
 import com.adith.walk.dto.ProductDTO;
 import com.adith.walk.dto.ProductPageDTO;
-import com.adith.walk.helper.Message;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.repositories.ProductRepo;
 import com.adith.walk.repositories.ProductRepository;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.InvalidFileNameException;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.LimitExceededException;
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,13 +69,42 @@ public class ProductService {
     }
 
 
-    public void saveProduct(Product product) {
+    public Product saveProduct(Product product) {
+       return productRepository.save(product);
+
+    }
+
+    public void addStock(Integer productId,String size){
+
+        Product product =getProductById(productId);
+
+
+        getStockOfProduct(product,size);
+
         productRepository.save(product);
 
     }
 
+    public static void getStockOfProduct(Product product,String size) {
 
-    public void addProduct(ProductDTO addProductRequest, MultipartFile[] images) throws IOException, AlreadyUsedException {
+        Stock stock = product.getStock();
+
+
+        Size newSize=new Size();
+        newSize.setSizeNumber(Short.parseShort(size));
+        newSize.setSizeLength((short) 0);
+        newSize.setSizeWidth((short) 0);
+        newSize.setTotalCount(0);
+
+        List<Size> sizeList = stock.getSizeList();
+        sizeList.add(newSize);
+        stock.setSizeList(sizeList);
+
+        product.setStock(stock);
+    }
+
+
+    public Product addProduct(ProductDTO addProductRequest, MultipartFile[] images) throws IOException, AlreadyUsedException {
         Product product
                 = modelMapper
                         .map(addProductRequest,Product.class);
@@ -89,7 +114,7 @@ public class ProductService {
                         .getProductDescription()
                             .trim());
 
-        Stock stock=new Stock(0);
+        Stock stock=new Stock();
         modelMapper.map(product.getStock(),stock);
         product.setStock(stock);
 
@@ -114,7 +139,9 @@ public class ProductService {
             imageList.add(imageNew);
         }
         product.setList(imageList);
-        productRepository.save(product);
+        return   productRepository.save(product);
+
+
 
     }
 
@@ -139,19 +166,25 @@ public class ProductService {
 
     public void deleteProduct(Integer productId){
 
-        Product product = productRepository.findById(productId).get();
+        if(productRepository.findById(productId).isPresent()){
+            Product product = productRepository.findById(productId).get();
+            List<Images> images = product.getList();
+            images.forEach(i->{
+                Path path= Paths.get("src/main/resources/static/img/productImages/"+i.getName());
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    throw new RuntimeException("images were not deleted");
+                }
+            });
+            productRepository.delete( product);
+        }
 
-        List<Images> images = product.getList();
-        images.stream().forEach(i->{
-            Path path= Paths.get("src/main/resources/static/img/productImages/"+i.getName());
-            try {
-                Files.delete(path);
-            } catch (IOException e) {
-                throw new RuntimeException("images were not deleted");
-            }
-        });
 
-        productRepository.delete( product);
+
+
+
+
     }
 
     public Product removeProduct(Integer productId) {

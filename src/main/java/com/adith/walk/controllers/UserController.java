@@ -2,16 +2,14 @@ package com.adith.walk.controllers;
 
 import com.adith.walk.Entities.*;
 import com.adith.walk.dto.AddressRequest;
-import com.adith.walk.dto.CustomerDTO;
 import com.adith.walk.dto.CustomerProfileUpdateRequest;
 import com.adith.walk.dto.PasswordResetRequest;
+import com.adith.walk.enums.OrderStatus;
 import com.adith.walk.helper.Message;
 import com.adith.walk.service.*;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @SessionAttributes({"activeUser"})
@@ -189,13 +185,14 @@ public class UserController {
 
 
         model.addAttribute("order",orderService.getOrderById(orderId));
+        model.addAttribute("orderStatus",orderService.getOrderStatus(orderId));
         return "user/order";
     }
 
     @PutMapping("orders/{orderId}/cancel")
     public String cancelOrder(@PathVariable Long orderId){
 
-        orderService.updateOrderStatus(orderId,"Cancelled");
+        orderService.updateOrderStatus(orderId, OrderStatus.CANCELLED);
 
         return "redirect:/user/orders";
     }
@@ -254,18 +251,26 @@ public class UserController {
     }
 
 
-    @GetMapping("wishlist/{userId}")
-    public String getUserWishList(@PathVariable Integer userId){
+    @GetMapping("wishlist")
+    public String getUserWishList(Principal principal,Model model){
+
+      model.addAttribute("wishlist",  wishlistService.getWishlist(customerService.getCustomerByMobile(principal.getName())));
 
         return "user/wishlist";
     }
 
     @PostMapping("wishlist/add/{productId}")
-    public String addToWishlist(@PathVariable Long productId){
+    public String toggleToWishlist(@PathVariable Integer productId,Principal principal){
 
 
-
+        wishlistService.toggleToWishlist(productId,principal);
         return "redirect:/products/"+productId;
+    }
+
+    @PutMapping("wishlist/remove/{productId}")
+    public String  removeWishlistProduct(@PathVariable Integer productId,Principal principal){
+        wishlistService.toggleToWishlist(productId,principal);
+        return "redirect:/user/wishlist";
     }
 
     //------------------------------------------------mappings for changing password-----------------------------------------------------
@@ -300,6 +305,9 @@ public class UserController {
 
 
     }
+
+
+
 
 
 

@@ -3,6 +3,9 @@ package com.adith.walk.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 public class CustomerOrder {
@@ -28,7 +31,9 @@ public class CustomerOrder {
     @OneToOne
     Payment payment;
 
-    String status;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "order")
+    List<CustomerOrderStatus> orderStatus=new ArrayList<>();
+
 
     @ManyToOne
     Customer customer;

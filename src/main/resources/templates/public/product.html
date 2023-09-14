@@ -39,7 +39,7 @@
                     </div>
 
                 </div>
-                <div class=" d-flex flex-wrap  ">
+                <div class=" d-flex flex-wrap ">
                     <div class="w-50  " th:each="i:${product.list}">
                         <img th:src="@{'/img/productImages/'+${i.name}}" alt="" class="img-fluid img-thumbnail w-100 ">
                     </div>
@@ -48,32 +48,17 @@
             </div>
 
 
-            <!--                <div class="col-md-8 d-flex flex-wrap "  >-->
-            <!--                    <div class="zoom w-50" id="">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[0].name}}" alt=""   class="img-fluid img-thumbnail w-100 ">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[0].name}}" alt=""   class="img-fluid img-thumbnail w-100 imgZoom" id="imgZoom">-->
-            <!--                    </div>-->
-            <!--                    <div class="zoom w-50">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[1].name}}" alt=""   class="img-fluid img-thumbnail w-100 ">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[1].name}}" alt=""   class="img-fluid img-thumbnail w-100 imgZoom" id="imgZoom4">-->
-            <!--                    </div>-->
-            <!--                    <div class="zoom w-50">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[2].name}}" alt=""   class="img-fluid img-thumbnail w-100 ">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[2].name}}" alt=""   class="img-fluid img-thumbnail w-100 imgZoom " id="imgZoom2">-->
-            <!--                    </div>-->
-            <!--                    <div class="zoom w-50">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[3].name}}" alt=""   class="img-fluid img-thumbnail w-100 ">-->
-            <!--                        <img th:src="@{'/img/productImages/'+${product.list[3].name}}" alt=""   class="img-fluid img-thumbnail w-100 imgZoom" id="imgZoom3">-->
-            <!--                    </div>-->
-            <!--                </div>-->
 
-
-            <div class="col-md-4 tb product-details " th:object="${product}">
-<!--                <form th:action="@{/user/wishlist/add/${product.productId}}" method="post">-->
-<!--                    <button th:if="${isWishlisted}" type="submit" class="btn btn-danger"></button>-->
-<!--                    <button  th:unless="${isWishlisted}" type="submit" class="btn btn-light"></button>-->
-<!--                </form>-->
+            <div class="col-md-4 tb product-details  bg-common" th:object="${product}">
                 <div class="m-5 ">
+                    <form  th:action="@{'/user/wishlist/add/'+${product.productId}}" method="post">
+                        <button th:if="${in}" type="submit" class="btn  bg-transparent">
+                            <img th:src="@{/img/productPage/heart.png}" class="img-fluid " width="30" height="30" alt="">
+                        </button>
+                        <button  th:unless="${in}" type="submit" class="btn  bg-transparent">
+                            <img th:src="@{/img/productPage/blackHeart.png}" alt="" class="img-fluid" width="30" height="30">
+                        </button>
+                    </form>
                     <h1 class="m-5"><span th:text="${product.productName}"
                                           class="text-capitalize display-1 fw-medium  "></span></h1>
                     <h1 class="m-5"><span th:text="${product.brand}"
@@ -82,103 +67,124 @@
                                                              class="text-decoration-line-through display-6"></span></h1>
                     <h1 th:text="'&#8377'+${product.offerPrice}" class=" display-2 m-5"></h1>
 
-                    <h1 class="ms-5">AVAILABLE STOCK</h1>
+                    <h1 th:if="${product.stock.totalStock>0}" class="ms-5">AVAILABLE STOCK</h1>
+                    <h1 th:unless="${product.stock.totalStock>0}" class="ms-5 text-danger">OUT OF STOCK</h1>
                     <div class="row ms-5">
+                        <th:block th:each="size : ${product.stock.sizeList}">
+                            <div th:if="${size.totalCount>0}"
+                                 class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
+                                <span class="fs-3">size</span><span th:text="${size.sizeNumber}"></span>
 
-                        <div th:if="${product.stock.size_2}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>2
-                        </div>
-                        <div th:if="${product.stock.size_3}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>3
-                        </div>
-                        <div th:if="${product.stock.size_4}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>4
-                        </div>
-                        <div th:if="${product.stock.size_5}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>5
-                        </div>
-                        <div th:if="${product.stock.size_6}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>6
-                        </div>
-                        <div th:if="${product.stock.size_7}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>7
-                        </div>
-                        <div th:if="${product.stock.size_8}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>8
-                        </div>
-                        <div th:if="${product.stock.size_9}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>9
-                        </div>
-                        <div th:if="${product.stock.size_10}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>10
-                        </div>
-                        <div th:if="${product.stock.size_11}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>11
-                        </div>
-                        <div th:if="${product.stock.size_12}!=0"
-                             class="col-md-2 fs-1   rounded-5  border border-2 border-black text-white  bg-dark text-center m-2">
-                            <span class="fs-3">size</span>12
-                        </div>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
-                <div class="row p-2">
+                <div class="row p-2 m-4">
 
                         <a th:if="${isProductExists}" th:href="@{/user/cart}"  class="col-md-6">
                             <button class="rounded-5 w-100    btn btn-warning   btn-outline-dark  fs-1">GO TO CART</button>
                         </a>
                         <form th:if="!${isProductExists}" th:action="@{'/user/cart/add/'+${product.productId}}" method="post" class="col-md-6">
-                             <button class="rounded-5 w-100    btn btn-warning   btn-outline-dark  fs-1">ADD TO CART</button>
+                             <button th:if="${product.stock.totalStock>0}" class="rounded-5 w-100    btn btn-warning   btn-outline-dark  fs-1">ADD TO CART</button>
+                             <button th:unless="${product.stock.totalStock>0}" class="rounded-5 w-100    btn btn-warning   btn-outline-dark  fs-1" disabled >ADD TO CART</button>
                         </form>
 
                         <form th:action="@{'/user/checkout/add/'+${product.productId}}" method="post"  class="col-md-6">
-                            <button class="rounded-5    w-100  btn btn-outline-dark   fs-1" >BUY NOW </button>
+                            <button th:if="${product.stock.totalStock>0}" class="rounded-5    w-100  btn btn-outline-dark   fs-1" >BUY NOW </button>
+                            <button th:unless="${product.stock.totalStock>0}" class="rounded-5    w-100  btn btn-outline-dark   fs-1"  disabled >BUY NOW </button>
                         </form>
+                </div>
+                <div class="ms-5 me-5">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">SIZE</th>
+                            <th scope="col">Length <span class="text-danger">(inches)</span></th>
+                            <th scope="col">Width <span class="text-danger">(inches)</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="size: ${product.stock.sizeList}">
+                            <tr>
+                                <th th:text="${size.sizeNumber}" scope="row"></th>
+                                <td th:text="${size.sizeLength}"></td>
+                                <td th:text="${size.sizeWidth}">    </td>
+
+                            </tr>
+                        </th:block>
+
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="  bg-common ms-5 me-5">
+                    <h1 class="text-dark ms-0 mb-0 mt-5 fs-2">DESCRIPTION</h1>
+
+                    <p  class="fs-3 mt-0"><span th:text="${product.productDescription} "></span><span>
+                    </span>
                 </div>
 
             </div>
+
 
 
         </div>
-        <div class="col-md-10 row">
-            <div class="col-md-8">
-                <h1 class="text-dark ms-0 mb-0 mt-5 fs-1">DESCRIPTION</h1>
+        <div class="col-md-10 row border border-1 bg-common">
 
-                <p  class="fs-3 mt-0"><span th:text="${product.productDescription} "></span><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis necessitatibus numquam quaerat. Ab at
-                    delectus distinctio eaque excepturi, iusto maxime nam nihil obcaecati quos. A ad alias, aliquid
-                    assumenda consectetur delectus dicta distinctio dolore ducimus ea eius enim excepturi exercitationem
-                    fugiat hic in labore laboriosam magnam magni modi natus non nostrum possimus quae quaerat quis quo rerum
-                    tenetur ullam veniam. Adipisci blanditiis consequuntur dicta, dolor incidunt necessitatibus nobis
-                    nostrum numquam quam! Adipisci amet consequuntur cum cupiditate delectus ducimus eos fugit harum in
-                    ipsum, iste, maxime, perspiciatis placeat praesentium provident recusandae repellendus reprehenderit
-                    ullam! Delectus hic omnis quisquam repudiandae rerum. Quasi</span>
-            </div>
-       </div>
-        <div class="col-md-10 row border border-1">
             <h1>CUSTOMER REVIEWS</h1>
-            <div class="row row-cols-1 row-cols-md-5 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+
+
+            <div class="col-md-6"   th:if="${isUserLoggedIn}">
+                <div class="col-md-8" >
+                    <form th:action="@{'/products/'+${product.productId}+'/review/add'}" method="post" th:object="${productReview}">
+                        <label for="productRating" class="form-label fs-3">Rate The Product</label>
+                        <div class="bg-common d-flex justify-content-between fs-3">
+                            <div>0 &#x2605;</div>
+                            <div>1 &#x2605;</div>
+                            <div>2 &#x2605;</div>
+                            <div>3 &#x2605;</div>
+                            <div>4 &#x2605;</div>
+                            <div>5 &#x2605;</div>
                         </div>
-                        <div class="card-footer">
-                            <small class="text-body-secondary">Last updated 3 mins ago</small>
+                        <input th:field="*{rating}" type="range" class="form-range" min="0" max="5" id="productRating">
+
+                        <div class="mb-3">
+                            <label for="productReview" class="form-label fs-3">Write Your Review</label>
+                            <textarea th:field="*{message}" class="form-control fs-3" id="productReview" rows="4  "></textarea>
+                        </div>
+                        <button class="btn btn-secondary form-control fs-3">Add Your Review</button>
+                    </form>
+                </div>
+            </div>
+
+            <th:block th:each="review: ${reviews}">
+                <div class=" row-col-1 col-md-3 g-4">
+                    <div class="col">
+                        <div class="card h-100">
+<!--                            <img src="..." class="card-img-top" alt="...">-->
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${review.customer.firstName}"></h5>
+                                <p class="card-text" th:text="${review.message}"></p>
+
+                                <button th:if="${review.customer==activeCustomer}" class="btn btn-primary">edit</button>
+                            </div>
+                            <div class="card-footer">
+                                <span class="fs-4">Rating</span>
+                                <th:block th:each="star:${#numbers.sequence(1,5)}">
+                                    <span th:if="${star<=review.rating}" class="text-body-secondary ms-2 fs-2">&#x2605;</span>
+                                    <span th:unless="${star<=review.rating}" class="text-body-secondary ms-2 fs-2">
+                                        &#9734;
+                                    </span>
+
+                                </th:block>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </th:block>
+
+
         </div>
 
     </div>

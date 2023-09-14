@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"  th:replace="base/base::layout(~{::#style},~{::#content},~{::#footer})">
 <head>
     <meta charset="UTF-8">
-    <title>this is your orders</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style"  rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
+<section id="content" class="container-fluid   ">
+        <section class="  row  d-flex justify-content-center">
+            <div class="col-md-10   " >
+                <th:block th:each="product: ${wishlist.products}">
+                    <a th:href="@{'/products/'+${product.productId}}" class="text-decoration-none">
+                        <div class="card mb-3" >
+                            <div class="row g-0">
+                                <div class="col-md-1    ">
+                                    <img th:src="@{'/img/productImages/'+${product.list[0].name}}" class="img-fluid "  alt="">
+                                </div>
+                                <div class="col-md-11  row ">
+                                    <div class="card-body col-8">
+                                        <h5 class="card-title" th:text="${product.productName}"></h5>
+                                        <p class="card-text" th:text="${product.productDescription}">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                        <h4 class="card-text" th:text="${product.offerPrice}"></h4>
+                                    </div>
+                                    <div class="col-4  d-flex align-items-center justify-content-center  ">
+                                        <form th:method="put" th:action="@{'/user/wishlist/remove/'+${product.productId}}">
+                                            <button class="btn btn-danger btn-lg">remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
 
+                </th:block>
+
+
+            </div>
+        </section>
+
+</section>
+
+<footer id="footer"></footer>
 </body>
 </html>

@@ -1,19 +1,18 @@
 package com.adith.walk.Entities;
 
-import com.adith.walk.Entities.Customer;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class ConfirmToken {
+public class ConfirmToken implements Serializable {
     @SequenceGenerator(name = "token_id_generator",
                         sequenceName = "token_id_generator",
                         allocationSize = 2)

@@ -2,17 +2,16 @@ package com.adith.walk.Entities;
 
 import com.adith.walk.enums.UserRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-import org.antlr.v4.runtime.Token;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,7 +19,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+public class Customer implements Serializable {
 
     @SequenceGenerator(
             name = "customer_sequence",
@@ -61,7 +60,7 @@ public class Customer {
 
     private boolean locked= false;
 
-    @OneToOne
+    @OneToOne(mappedBy = "customer")
     private Wishlist wishlist;
 
     @OneToOne(cascade=CascadeType.ALL)
@@ -72,7 +71,7 @@ public class Customer {
     List<Address>addresses=new ArrayList<>();
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Cart cart;
 
 

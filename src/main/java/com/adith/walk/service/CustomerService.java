@@ -1,24 +1,18 @@
 package com.adith.walk.service;
 
 
-import com.adith.walk.Entities.Address;
-import com.adith.walk.Entities.Cart;
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.Entities.*;
 import com.adith.walk.dto.*;
-import com.adith.walk.Entities.ConfirmToken;
 import com.adith.walk.enums.UserRole;
 import com.adith.walk.repositories.AddressRepository;
 import com.adith.walk.repositories.CustomerRepository;
-import com.adith.walk.repositories.TokenRepo;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -26,15 +20,32 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class CustomerService {
-    CustomerRepository customerRepository;
-    TwilioOtpService otpService;
-    ModelMapper modelMapper;
-    BCryptPasswordEncoder encoder;
-    TokenService tokenService;
+    final CustomerRepository customerRepository;
+    final TwilioOtpService otpService;
+    final ModelMapper modelMapper;
+    final BCryptPasswordEncoder encoder;
+    final TokenService tokenService;
 
-    AddressRepository addressRepository;
+    final AddressRepository addressRepository;
+
+    final WishlistService wishlistService;
+
+    public CustomerService(CustomerRepository customerRepository,
+                           TwilioOtpService otpService,
+                           ModelMapper modelMapper,
+                           BCryptPasswordEncoder encoder,
+                           TokenService tokenService,
+                           AddressRepository addressRepository,
+                           WishlistService wishlistService) {
+        this.customerRepository = customerRepository;
+        this.otpService = otpService;
+        this.modelMapper = modelMapper;
+        this.encoder = encoder;
+        this.tokenService = tokenService;
+        this.addressRepository = addressRepository;
+        this.wishlistService = wishlistService;
+    }
 
 
     public List<Customer> getAllCustomers() {
@@ -132,9 +143,9 @@ public class CustomerService {
                 .setConfirmToken(confirmToken);
 
         Cart cart=new Cart();
-        cart.setTotalPrice(0l);
-        cart.setTotalDiscount(0l);
-        cart.setTotalMRP(0l);
+        cart.setTotalPrice(0L);
+        cart.setTotalDiscount(0L);
+        cart.setTotalMRP(0L);
         cart.setQuantity(0);
         customer.setCart(cart);
 
@@ -286,5 +297,17 @@ public class CustomerService {
     public void disableUser(Integer userId) {
 
         customerRepository.disableCustomer(userId);
+    }
+
+    public boolean isProductWishlist(Product product,Principal principal) {
+
+
+        Wishlist wishlist = wishlistService.getWishlist(getCustomerByMobile(principal.getName()));
+        if(wishlist==null){
+            return false;
+        }
+
+        return  wishlist.getProducts().stream().anyMatch(product1 -> product1.equals(product));
+
     }
 }

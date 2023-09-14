@@ -13,4 +13,6 @@ public interface StockService {
 
     void addStock(Product product,Long quantity,String size);
     void removeStock(Product product,Long quantity,String size);
+
+    Stock save(Stock stock);
 }

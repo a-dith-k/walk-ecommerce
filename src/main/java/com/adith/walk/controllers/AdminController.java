@@ -5,6 +5,7 @@ import com.adith.walk.dto.CustomerDTO;
 import com.adith.walk.dto.CustomerRegistrationRequest;
 import com.adith.walk.dto.CustomerRegistrationRequestAdmin;
 import com.adith.walk.dto.ProductDTO;
+import com.adith.walk.enums.OrderStatus;
 import com.adith.walk.helper.Message;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.service.*;
@@ -21,13 +22,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.LimitExceededException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
+@SessionAttributes("product")
 @RequestMapping("admin")
 public class AdminController {
 
@@ -242,6 +243,42 @@ public class AdminController {
 
     }
 
+//    @PostMapping("products/add/stock/size/add")
+//    public String addNewSize(@RequestParam short size,@ModelAttribute ProductDTO productAddRequestDto,Model model,HttpSession session){
+//
+//
+//        System.out.println(productAddRequestDto.getProductId());
+//        System.out.println(productAddRequestDto.getStock().getStockId());
+//        Size newSize=new Size();
+//        newSize.setSizeNumber(size);
+//        newSize.setSizeLength((short) 0);
+//        newSize.setSizeWidth((short) 0);
+//        newSize.setTotalCount(0);
+//        System.out.println(productAddRequestDto.getStock());
+//
+//        if(productAddRequestDto.getStock()==null){
+//            Stock stock=new Stock();
+//            productAddRequestDto.setStock(stock);
+//            System.out.println("called me");
+//        }
+//
+//
+//        Stock stock = productAddRequestDto.getStock();
+//        stock.getSizeList().add(newSize);
+//        stock.getSizeList().forEach(size1-> System.out.println(size1.getSizeNumber()));
+//        Stock save = stockService.save(stock);
+//        productAddRequestDto.setStock(save);
+//
+//
+//
+//
+//        model
+//                .addAttribute("product",productAddRequestDto);
+//
+//        return "/admin/products/add";
+//
+//    }
+
 
     @PostMapping("products/add")
     public String addProductPost(@Valid @ModelAttribute("product") ProductDTO addProductRequest,BindingResult result,Category category, @RequestParam("files")MultipartFile[] files, Model model){
@@ -258,11 +295,13 @@ public class AdminController {
             return "admin/products/add";
         }
 
+        Product product=null;
+
 
 
 
         try {
-            productService.addProduct(addProductRequest,files);
+           product = productService.addProduct(addProductRequest, files);
         }catch (FileAlreadyExistsException e){
             model
                     .addAttribute("message",
@@ -277,13 +316,7 @@ public class AdminController {
 
             return "admin/products/add";
 
-        } catch (IOException e) {
-            model.
-                    addAttribute("message",
-                            new Message("Something went wrong","alert-danger"));
-
-            return "admin/products/add";
-        }catch (Exception e){
+        } catch (Exception e){
             model.
                     addAttribute("message",
                             new Message("Something went wrong","alert-danger"));
@@ -292,7 +325,29 @@ public class AdminController {
         }
 
         model.addAttribute("message",new Message("Successfully Uploaded","alert-success"));
-        return "admin/products/add";
+        model
+                .addAttribute("product",modelMapper.map(product,ProductDTO.class));
+        return "admin/products/addStock";
+    }
+
+
+    @GetMapping("products/addStock")
+    public String addStock(){
+        return "admin/products/addStock";
+    }
+
+
+    @PostMapping("products/{productId}/stock/size/add")
+    public String addSize(@PathVariable Integer productId,@RequestParam String size,Model model){
+
+        Product product = productService.getProductById(productId);
+        ProductService.getStockOfProduct(product,size);
+        productService.saveProduct(product);
+
+        model.addAttribute("product",modelMapper.map(productService.getProductById(productId),ProductDTO.class));
+
+
+        return "admin/products/addStock";
     }
 
 //--------------------------Updating  the product-----------------------------------------------
@@ -306,8 +361,12 @@ public class AdminController {
                 modelMapper
                         .map(productService.getProductById(productId),ProductDTO.class);
 
+
         model
                 .addAttribute("productUpdateRequest",productUpdateRequest);
+
+        model
+                .addAttribute("stock",productUpdateRequest.getStock());
         return "admin/products/update";
     }
 
@@ -320,6 +379,8 @@ public class AdminController {
             model.addAttribute("message",new Message("Enter Valid Data","alert-danger"));
             return "admin/products/update";
         }
+
+
 
         try {
             productService.updateProduct(productUpdateRequest,images);
@@ -419,12 +480,13 @@ public class AdminController {
     public String getAllOrders(@PathVariable Long orderId, Model model){
 
         model.addAttribute("order",orderService.getOrderById(orderId));
+        model.addAttribute("orderStatus",orderService.getOrderStatus(orderId));
 
         return "admin/orders/order";
     }
 
     @PostMapping ("orders/{orderId}/status")
-    public String updateOrderStatus(@PathVariable Long orderId,@RequestParam String orderStatus, Model model){
+    public String updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus orderStatus, Model model){
 
         orderService.updateOrderStatus(orderId,orderStatus);
 
@@ -432,12 +494,23 @@ public class AdminController {
     }
 
 
-    @GetMapping("stock")
+    @GetMapping("products/stock")
     public String getStock(Model model){
 
         model.addAttribute("stock",stockService.getAllStock());
         return "admin/products/stock";
     }
+
+
+
+   @PostMapping("products/{productId}/stock/size/update")
+   public String updateSize(@PathVariable Integer productId,@RequestParam String size){
+
+
+       productService.addStock(productId,size);
+
+       return "redirect:/admin/products/update/"+productId;
+   }
 
 
 

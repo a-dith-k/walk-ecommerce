@@ -4,14 +4,9 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.LoggerFactoryFriend;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.Random;
 
 @Service
@@ -22,7 +17,7 @@ public class TwilioOtpService {
 
 
     public static final String ACCOUNT_SID = "AC1ae4e5f1a786d672af76fc0596bc2092";
-    public static final String AUTH_TOKEN = "e1ed71eec4671abe340765e7b2bbeba7";
+    public static final String AUTH_TOKEN = "93c6718b0e7efc31d7347ec7072906a4";
     String OTP=null;
 
 

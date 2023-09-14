@@ -6,7 +6,7 @@
   <link th:href="@{/css/admin-user-add.css}" id="style" type="text/css" rel="stylesheet">
 </head>
 <body>
-<section id="content" class="container-fluid vh-85 ">
+<section id="content" class="container-fluid ">
   <div class="row  d-flex   justify-content-center align-items-center    h-100">
     <div class="col-md-4  m-5 ">
       <h1 class="text-center m-5">UPDATE PRODUCT</h1>
@@ -182,149 +182,236 @@
         </div>
 
         <!------------------------------- product-stock- field----------------------------------------------------->
+<!--        <div class="m-4 mt-0">-->
+<!--          <label for="totalStock" class="fs-3">Total Stock of the Product</label>-->
+<!--          <input-->
+<!--                  id="totalStock"-->
+<!--                  th:value="${productUpdateRequest.stock.totalStock}"-->
+<!--                  class="form-control  fs-4 text-center"-->
+<!--                  th:field="*{stock.totalStock}"-->
+<!--                  type="number"-->
+<!--                  placeholder="totalStock">-->
+<!--          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('brand')}">-->
+<!--            <p th:text="${e}"></p>-->
+<!--          </div>-->
+<!--        </div>-->
+
+
+
+
+        <!------------------------------- product-stock-size field----------------------------------------------------->
+<!--        <th:block th:each="size ,val: *{stock.sizeList}">-->
+<!--        <div class="m-4 mt-0">-->
+
+<!--          <input-->
+
+<!--                  class="form-control  fs-4 text-center"-->
+<!--                  th:field="*{stock.sizeList[__${val.index}__].totalCount}"-->
+<!--                  type="number"-->
+<!--                  placeholder="totalStock">-->
+<!--          <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--            <p th:text="${e}"></p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        </th:block>-->
+
+        <!------------------------------- size add field----------------------------------------------------->
+        <label>
+          <input type="number"
+                 class="form-control  fs-4 text-center"
+
+                  hidden th:field="*{stock.stockId}">
+        </label>
+
+        <!------------------------------- product-stock- field----------------------------------------------------->
 
         <div class="m-4 mt-0 row">
           <label class="fs-3">Stock of the Product</label>
-          <div class="col-md-2">
-            <label for="size2" class="fs-3">2</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_2}"
-                    id="size2"
-                    placeholder="size2">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
+          <label class="fs-3 text-danger">(measurements in inches)</label>
+          <th:block th:each="size ,val: *{stock.sizeList}">
+
+          <div class="col-md-6 row  bg-white pb-3 ">
+            <h4 class="bg-dark text-white ">SIZE <span th:text="${size.sizeNumber}"></span></h4>
+            <div class="col-md-4">
+              <label th:for="${size.sizeId}" class="fs-3" >stock</label>
+              <input
+                      class="form-control  fs-4 text-center"
+                      type="number"
+                      th:field="*{stock.sizeList[__${val.index}__].totalCount}"
+                      th:id="${size.sizeId}"
+              >
             </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size3" class="fs-3">3</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_3}"
-                    id="size3"
-                    placeholder="size3">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
+            <div class="col-md-4">
+              <label class="fs-3" >length</label>
+
+              <input
+                      class="form-control  fs-4 text-center"
+                      type="number"
+                      th:field="*{stock.sizeList[__${val.index}__].sizeLength}"
+              >
             </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size4" class="fs-3">4</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_4}"
-                    id="size4"
-                    placeholder="size4">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size5" class="fs-3">5</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_5}"
-                    id="size5"
-                    placeholder="size5">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size6" class="fs-3">6</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_6}"
-                    id="size6"
-                    placeholder="size6">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size7" class="fs-3">7</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_7}"
-                    id="size7"
-                    placeholder="size7">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size8" class="fs-3">8</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_8}"
-                    id="size8"
-                    placeholder="size8">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size9" class="fs-3">9</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_9}"
-                    id="size9"
-                    placeholder="size9">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size10" class="fs-3">10</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_10}"
-                    id="size10"
-                    placeholder="size10">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size11" class="fs-3">11</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_11}"
-                    id="size11"
-                    placeholder="size11">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label for="size12" class="fs-3">12</label>
-            <input
-                    class="form-control  fs-4 text-center"
-                    type="number"
-                    th:field="*{stock.size_12}"
-                    id="size12"
-                    placeholder="size12">
-            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
-              <p th:text="${e}"></p>
+            <div class="col-md-4">
+              <label class="fs-3" >width</label>
+              <input
+                      class="form-control  fs-4 text-center"
+                      type="number"
+                      th:field="*{stock.sizeList[__${val.index}__].sizeWidth}"
+              >
             </div>
 
-            <input type="text" hidden
-            th:field="*{stock.id}">
+
+
+
+
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.sizeList[__${val.index}__].sizeNumber}"
+                    hidden
+            >
+
+            <input
+                    class="form-control  fs-4 text-center"
+                    type="number"
+                    th:field="*{stock.sizeList[__${val.index}__].sizeId}"
+                    hidden
+
+            >
+            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">
+              <p th:text="${e}"></p>
+            </div>
           </div>
+
+          </th:block>
+<!--          <div class="col-md-2">-->
+<!--            <label for="size3" class="fs-3">3</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_3}"-->
+<!--                    id="size3"-->
+<!--                    placeholder="size3">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size4" class="fs-3">4</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_4}"-->
+<!--                    id="size4"-->
+<!--                    placeholder="size4">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size5" class="fs-3">5</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_5}"-->
+<!--                    id="size5"-->
+<!--                    placeholder="size5">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size6" class="fs-3">6</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_6}"-->
+<!--                    id="size6"-->
+<!--                    placeholder="size6">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size7" class="fs-3">7</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_7}"-->
+<!--                    id="size7"-->
+<!--                    placeholder="size7">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size8" class="fs-3">8</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_8}"-->
+<!--                    id="size8"-->
+<!--                    placeholder="size8">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size9" class="fs-3">9</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_9}"-->
+<!--                    id="size9"-->
+<!--                    placeholder="size9">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size10" class="fs-3">10</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_10}"-->
+<!--                    id="size10"-->
+<!--                    placeholder="size10">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size11" class="fs-3">11</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_11}"-->
+<!--                    id="size11"-->
+<!--                    placeholder="size11">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-md-2">-->
+<!--            <label for="size12" class="fs-3">12</label>-->
+<!--            <input-->
+<!--                    class="form-control  fs-4 text-center"-->
+<!--                    type="number"-->
+<!--                    th:field="*{stock.size_12}"-->
+<!--                    id="size12"-->
+<!--                    placeholder="size12">-->
+<!--            <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors()}">-->
+<!--              <p th:text="${e}"></p>-->
+<!--            </div>-->
+
+<!--          </div>-->
+<!--          <input type="text" hidden-->
+<!--                      th:field="${productUpdateRequest.stock.stockId}">-->
 
 
 
 
         </div>
+
 
         <!------------------------------- product-description- field----------------------------------------------------->
         <div class="m-4 mt-0">
@@ -348,8 +435,36 @@
 
         <button class="btn  btn-dark input-group-text mb-5 fs-3 " type="submit">Submit</button>
       </form>
+
     </div>
+    <div class="col-md-3 bg-common p-3 rounded-5 ">
+      <div>
+        <h3 class="text-center">ENTER THE SIZE TO ADD</h3>
+      </div>
+      <div class=" mt-0 d-flex justify-content-center ">
+
+        <form th:action="@{'/admin/products/'+${productId}+'/stock/size/update'}" method="post">
+          <div class="input-group m-3">
+            <span class="input-group-text" id="basic-addon1">ENTER THE SIZE</span>
+
+              <input
+
+                      type="number"
+                      name="size"
+                      class="form-control fs-4">
+
+            <button type="submit" class="btn btn-secondary fs-4  ">ADD</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
   </div>
+
+
+
+
 
 
 

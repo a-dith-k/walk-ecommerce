@@ -6,7 +6,7 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
-  <link id="style" rel="stylesheet" th:href="@{/css/admin-dash.css}">
+  <link id="style" rel="stylesheet" th:href="@{/css/admin/order.css}">
 </head>
 <body>
 <section id="content">
@@ -19,21 +19,21 @@
         <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Mobile :</span><span class="text-primary-emphasis" th:text="${order.customer.mobileNumber}"> </span></h5>
 
           <form th:action="@{'/admin/orders/'+${order.orderId}+'/status'}" method="post" class=" mt-2 ">
-              <div class="input-group" th:if="${order.status}!='Cancelled'">
+              <div class="input-group">
                   <span class="input-group-text fs-3 text-primary">ORDER STATUS</span>
                   <select id="orderStatus"  name="orderStatus" class= "form-control fs-3">
-                      <option th:selected="${order.status}=='Placed'" value="Placed">Order Placed</option>
-                      <option th:selected="${order.status}=='Confirmed'"  value="Confirmed">Order Confirmed</option>
-                      <option  th:selected="${order.status}=='Packed'" value="Packed">Order Packed</option>
-                      <option   th:selected="${order.status}=='Shipping'" value="Shipping">Order Shipping</option>
-                      <option  th:selected="${order.status}=='Out for Delivery'"  value="Out for Delivery">Order Out for Delivery</option>
-                      <option   th:selected="${order.status}=='Delivered'" value="Delivered">Order Delivered</option>
+                          <option th:selected="${orderStatus}=='PLACED'"  th:value="${T(com.adith.walk.enums.OrderStatus).PLACED}">Order Placed</option>
+                          <option th:selected="${orderStatus}=='CONFIRMED'"  th:value="${T(com.adith.walk.enums.OrderStatus).CONFIRMED}">Order Confirmed</option>
+                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).SHIPPING}">Order Packed</option>
+                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).SHIPPING}">Order Shipping</option>
+                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).OUT_FOR_DELIVERY}">Order Out for Delivery</option>
+                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).DELIVERED }">Order Delivered</option>
                   </select>
                   <button type="submit" class=" btn btn-primary fs-3">Update Status</button>
               </div>
-              <div class="input-group" th:unless="${order.status}!='Cancelled'">
-                  <h1 class="text-center display-4 text-danger">Order Cancelled</h1>
-              </div>
+<!--              <div class="input-group" th:unless="${order.status}!='Cancelled'">-->
+<!--                  <h1 class="text-center display-4 text-danger">Order Cancelled</h1>-->
+<!--              </div>-->
 
 
 
@@ -73,7 +73,30 @@
                 <span class="h3" th:text="${order.billingAddress.state}"> </span>
             </h2>
         </div>
-        <div class="col-md-10 row m-2 border bg-common">
+        <div class="col-md-10 m-3 row bg-common p-3 my-1" style="--bs-gutter-x: 0">
+            <h1>ORDER TRACKING HISTORY</h1>
+            <section class="step-wizard">
+                <ul class="step-wizard-list">
+                    <li class="step-wizard-item" th:classappend="${orderStatus=='PLACED'}?'current-item':''">
+                        <span class="progress-count">1</span>
+                        <span class="progress-label">Order Placed</span>
+                    </li>
+                    <li class="step-wizard-item " th:classappend="${orderStatus=='SHIPPING'}?'current-item':''">
+                        <span class="progress-count">2</span>
+                        <span class="progress-label">Shipping</span>
+                    </li>
+                    <li class="step-wizard-item"  th:classappend="${orderStatus=='OUT_FOR_DELIVERY'}?'current-item':''">
+                        <span class="progress-count">3</span>
+                        <span class="progress-label">Out for Delivery</span>
+                    </li>
+                    <li class="step-wizard-item " th:classappend="${orderStatus=='DELIVERED'}?'current-item':''">
+                        <span class="progress-count">4</span>
+                        <span class="progress-label">Delivered</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <div class="col-md-10 row m-3 border bg-common">
             <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">PRODUCT DETAILS</h1>
             <th:block th:each="item :${order.cart.items}">
             <div class="card mb-3 col-md-6 me-3" style="max-width: 540px;">

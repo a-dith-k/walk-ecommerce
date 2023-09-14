@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title th:text="loginpage"></title>
-    <link id="style"  rel="stylesheet">
+    <link id="style"  rel="stylesheet" th:href="@{/css/user/order.css}">
 </head>
 <body class="">
 <!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
@@ -18,15 +18,16 @@
                 <h5 class="mt-2 fs-2 fw-normal" ><span>ORDER ID : </span><span class="text-primary-emphasis" th:text="${order.orderId}"> </span></h5>
                 <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Name : </span><span class="text-primary-emphasis" th:text="${order.customer.firstName}"> </span></h5>
                 <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Mobile : </span><span class="text-primary-emphasis" th:text="${order.customer.mobileNumber}"> </span></h5>
-                <h5 class="mt-2 fs-2 fw-normal" ><span>Order Status : </span><span class="text-success" th:text="${order.status}"> </span></h5>
+                <h5 class="mt-2 fs-2 fw-normal" ><span>Order Status : </span><span class="text-success" th:text="${'ORDER '+orderStatus}"> </span></h5>
+                <th:block th:if="${orderStatus}!='OUT_FOR_DELIVERY'">
+                    <form th:if="${orderStatus}!='CANCELLED'" th:action="@{'/user/orders/'+${order.orderId}+'/cancel'}" th:method="put">
+                        <button class="btn btn-danger fs-3" type="submit"> cancel order</button>
+                    </form>
+                    <div class="input-group" th:unless="${orderStatus}!='CANCELLED'">
+                        <h1 class="text-center display-4 text-danger">Order Cancelled</h1>
+                    </div>
+                </th:block>
 
-                <form th:if="${order.status}!='Cancelled'" th:action="@{'/user/orders/'+${order.orderId}+'/cancel'}" th:method="put">
-                    <button class="btn btn-danger fs-3" type="submit"> cancel order</button>
-                </form>
-                </form>
-                <div class="input-group" th:unless="${order.status}!='Cancelled'">
-                    <h1 class="text-center display-4 text-danger">Order Cancelled</h1>
-                </div>
 
 
             </div>
@@ -62,6 +63,59 @@
                     <span th:text="${order.billingAddress.zipCode}+',  '"></span>
                     <span class="h3" th:text="${order.billingAddress.state}"> </span>
                 </h2>
+            </div>
+            <div class="col-md-12 row bg-common p-3 my-1" style="--bs-gutter-x: 0">
+                <h1>ORDER TRACKING HISTORY</h1>
+<!--                <div class="col-12 row order-tracking">-->
+
+<!--                    <div class=" p-0 row col-2 align-items-center">-->
+<!--                        <span class="p-0">Shipped</span>-->
+<!--                        <div class="p-0 rounded-5  col-1 status-point"></div>-->
+<!--                        <div class=" col-10 status-line p-0">-->
+
+<!--                        </div>-->
+<!--                        <div class="p-0 rounded-5  col-1 status-point"></div>-->
+<!--                        <span class="p-0">Out for Delivery</span>-->
+
+
+<!--                    </div>-->
+<!--                    <div class=" p-0 row col-2 align-items-center">-->
+
+<!--                        <div class="col-11 status-line"></div>-->
+<!--                        <div class="p-0 rounded-5 col-1 status-point"></div>-->
+
+<!--                    </div>-->
+<!--                    <div class=" p-0 row col-2 align-items-center">-->
+<!--                        <span class="p-0">Out for Delivery</span>-->
+<!--                        <div class="s col-11 status-line"></div>-->
+<!--                        <div class="p-0 rounded-5 col-1 status-point"></div>-->
+
+<!--                    </div>-->
+<!--                    <div class=" p-0 row col-2 align-items-center ">-->
+<!--                        <span class="p-0">Delivered</span>-->
+<!--                        <div class="p-0 rounded-5  col-1 status-point"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <section class="step-wizard">
+                    <ul class="step-wizard-list">
+                        <li class="step-wizard-item" th:classappend="${orderStatus=='PLACED'}?'current-item':''">
+                            <span class="progress-count">1</span>
+                            <span class="progress-label">Order Placed</span>
+                        </li>
+                        <li class="step-wizard-item " th:classappend="${orderStatus=='SHIPPING'}?'current-item':''">
+                            <span class="progress-count">2</span>
+                            <span class="progress-label">Shipping</span>
+                        </li>
+                        <li class="step-wizard-item"  th:classappend="${orderStatus=='OUT_FOR_DELIVERY'}?'current-item':''">
+                            <span class="progress-count">3</span>
+                            <span class="progress-label">Out for Delivery</span>
+                        </li>
+                        <li class="step-wizard-item " th:classappend="${orderStatus=='DELIVERED'}?'current-item':''">
+                            <span class="progress-count">4</span>
+                            <span class="progress-label">Delivered</span>
+                        </li>
+                    </ul>
+                </section>
             </div>
             <div class="col-md-12 row mt-2  border bg-common" style="--bs-gutter-x: 0">
                 <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">PRODUCT DETAILS</h1>

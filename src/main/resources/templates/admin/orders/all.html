@@ -16,7 +16,7 @@
                 <div class="card mt-2 mb-2">
                     <h5 class="card-header"><span>ORDER ID:</span><span class="text-primary-emphasis" th:text="${order.orderId}"> </span></h5>
                     <div class="card-body row">
-                        <h4 class=" col-md-4"><span>Order Status :</span><span th:text="${order.status}"></span></h4>
+<!--                        <h4 class=" col-md-4"><span>Order Status :</span><span th:text="${order.orderStatus.ge}"></span></h4>-->
                         <h4 class=" col-md-4"><span>Payment Status :</span><span class="text-success"  th:text="${order.payment.status}"></span></h4>
                         <h3 class="col-md-4"><span>Total Amount :</span><span th:text="${order.payment.totalAmount}"></span></h3>
                         <a  class="col-md-2 btn btn-primary" th:href="@{'/admin/orders/'+${order.orderId}}">Order Details</a>

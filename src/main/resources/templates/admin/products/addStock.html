@@ -14,8 +14,13 @@
 
             </div>
 
-            <form  th:action="@{/admin/products/add}"
-                   method="post"  th:object="${product}"
+            <form  th:action="@{'/admin/products/update/'+${product.productId}}"
+                   th:method="put"  th:object="${product}"
+
+
+
+
+
                    class=" d-flex bg-secondary-subtle   rounded-5 m-5 p-5"
                    enctype="multipart/form-data">
 
@@ -187,21 +192,18 @@
                     <div class="m-4 mt-0">
                         <label for="productDescription" class="fs-3">ProductDescription</label>
                         <textarea
-                                th:value="${product.productDescription}"
+                                th:text="${product.productDescription}"
                                 class="form-control  fs-4"
                                 type="text"
                                 name="productDescription"
                                 id="productDescription"
                                 placeholder="Enter the description for the product">
 
-                        </textarea>
+                </textarea>
                         <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('productDescription')}">
                             <p th:text="${e}"></p>
                         </div>
                     </div>
-                   <div class="m-4 mt-0">
-                       <button class="btn  btn-dark align-self-lg-start w-100   fs-3   mt-4  " type="submit">Submit</button>
-                   </div>
                 </div>
 
                 <label>
@@ -219,108 +221,143 @@
                 </label>
 
 
-
                 <div class="col-md-6 row m-4 align-self-lg-start">
+                    <div class="fs-3">Stock of the Product</div>
                     <!------------------------------- product-stock- field----------------------------------------------------->
+                    <th:block th:each="size,val : *{stock.sizeList}">
+                        <div class="col-md-3">
+                            <div class=" input-group ">
+                                <span class="input-group-text" >SIZE <span th:text="${size.sizeNumber}"></span></span>
+                                <input
+                                        class="form-control  fs-3"
+                                        type="number"
+                                        th:field="*{stock.sizeList[__${val.index}__].totalCount}"
+                                >
+                                <input hidden
+                                       class="form-control  fs-3"
+                                       type="number"
+                                       th:field="*{stock.sizeList[__${val.index}__].sizeId}"
+                                >
+                                <input hidden
+                                       class="form-control  fs-3"
+                                       type="number"
+                                       th:field="*{stock.sizeList[__${val.index}__].sizeNumber}"
+                                >
+                            </div>
+                        </div>
+                    </th:block>
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-3</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_3}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-3</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_3}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-4</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_4}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-4</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_4}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-5</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_5}"-->
-<!--                                >-->
-<!--                            </div>-->
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-6</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_6}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-5</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_5}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-6</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_6}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-7</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_7}"-->
-<!--                                >-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-6 ">-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-7</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_7}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col-md-6 ">-->
 
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-8</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_8}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-8</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_8}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-9</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_9}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-9</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_9}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-10</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_10}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-10</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_10}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-11</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_11}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-11</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_11}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-12</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_12}"-->
-<!--                                >-->
-<!--                            </div>-->
+                    <!--                            <div class=" input-group ">-->
+                    <!--                                <span class="input-group-text" >SIZE-12</span>-->
+                    <!--                                <input-->
+                    <!--                                        class="form-control  fs-3"-->
+                    <!--                                        type="number"-->
+                    <!--                                        th:field="*{stock.size_12}"-->
+                    <!--                                >-->
+                    <!--                            </div>-->
 
-<!--                        </div>-->
-
+                    <!--                        </div>-->
+                    <button class="btn  btn-dark align-self-lg-start  fs-3   mt-4  " type="submit">Submit</button>
                 </div>
 
             </form>
-            <div class="col-md-4">
+            <div class="col-md-4 bg-common">
+                <form th:action="@{'/admin/products/'+${product.productId}+'/stock/size/add'}" method="post">
+
+
+                    <label for="newSize" class="form-label">Enter the size</label>
+                    <input
+                            id="newSize"
+                            type="number"
+                            name="size"
+                            class="form-input">
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                </form>
             </div>
         </div>
 

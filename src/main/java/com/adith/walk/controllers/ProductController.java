@@ -2,32 +2,41 @@ package com.adith.walk.controllers;
 
 
 import com.adith.walk.Entities.Product;
+import com.adith.walk.Entities.ProductReview;
 import com.adith.walk.dto.ProductPageDTO;
 import com.adith.walk.repositories.StockRepository;
 import com.adith.walk.service.CartService;
+import com.adith.walk.service.CustomerService;
 import com.adith.walk.service.ProductService;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import com.adith.walk.service.ReviewService;
+import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 @Controller
-@AllArgsConstructor
+
 @RequestMapping("products")
 public class ProductController {
 
-    ProductService productService;
+    final ProductService productService;
 
-    StockRepository stockRepository;
+    final StockRepository stockRepository;
 
-    CartService cartService;
+    final CartService cartService;
+
+    final ReviewService reviewService;
+
+    final CustomerService customerService;
+
+    public ProductController(ProductService productService, StockRepository stockRepository, CartService cartService, ReviewService reviewService, CustomerService customerService) {
+        this.productService = productService;
+        this.stockRepository = stockRepository;
+        this.cartService = cartService;
+        this.reviewService = reviewService;
+        this.customerService = customerService;
+    }
 
     //produces = MediaType.APPLICATION_JSON_VALUE
 
@@ -47,19 +56,30 @@ public class ProductController {
 
 
     @GetMapping("{id}")
-    public String  getProduct(@PathVariable Integer id, Model model, Principal principal){
+    public String  getProduct(@ModelAttribute("productReview") ProductReview productReview, @PathVariable Integer id, Model model, Principal principal){
 
-        Product productById = productService.getProductById(id);
+        Product product = productService.getProductById(id);
 
-        Integer stock = stockRepository.findStock(5001);
-        Integer stock2 = stockRepository.findStock(productById.getStock().getId());
+
+
+//        Integer stock = stockRepository.findStock(5001);
+//        Integer stock2 = stockRepository.findStock(productById.getStock().getId());
         if(principal!=null){
-            model.addAttribute("isProductExists",cartService.isProductAlreadyExistsInCart(principal,productById));
+            model.addAttribute("isProductExists",cartService.isProductAlreadyExistsInCart(principal,product));
+            model.addAttribute("activeCustomer",customerService.getCustomerByMobile(principal.getName()));
+            model.addAttribute("in", customerService.isProductWishlist(product,principal));
         }else{
             model.addAttribute("isProductExists",false);
         }
 
-        model.addAttribute("product",productById);
+        model.addAttribute("product",product);
+        model.addAttribute("reviews",reviewService.getAllReviews(product));
+
+        model.addAttribute("isUserLoggedIn", principal != null);
+
+
+
+
 
         return "public/product";
     }
@@ -79,6 +99,22 @@ public class ProductController {
         model.addAttribute("productPageResponseDTO",productPageDTO);
 
         return "public/products";
+    }
+
+
+
+    @PostMapping("{productId}/review/add")
+    public String addReview(@ModelAttribute("productReview") ProductReview productReview, @PathVariable Integer productId, Principal principal){
+
+
+        try {
+            reviewService.addReview(productReview,productId,principal);
+        } catch (AlreadyUsedException e) {
+            return  "redirect:/products/"+productId;
+        }
+
+        return "redirect:/products/"+productId;
+
     }
 
 
