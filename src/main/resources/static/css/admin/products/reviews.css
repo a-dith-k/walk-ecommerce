@@ -1,0 +1,7 @@
+*{
+    box-sizing: border-box !important;
+}
+
+.menu-bar{
+    background: rgb(185, 192, 192);
+}

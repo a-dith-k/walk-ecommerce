@@ -1,17 +1,13 @@
 package com.adith.walk.service;
 
 
-import com.adith.walk.Entities.Images;
-import com.adith.walk.Entities.Product;
-import com.adith.walk.Entities.Size;
-import com.adith.walk.Entities.Stock;
+import com.adith.walk.Entities.*;
 import com.adith.walk.dto.ProductDTO;
 import com.adith.walk.dto.ProductPageDTO;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.repositories.ProductRepo;
 import com.adith.walk.repositories.ProductRepository;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,19 +24,30 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class ProductService {
 
 
-    ProductRepository productRepository;
-    ImageRepo imageRepo;
-    ProductRepo productRepo;
-    CategoryService categoryService;
-
-    ModelMapper modelMapper;
+    final ProductRepository productRepository;
+    final ImageRepo imageRepo;
+    final ProductRepo productRepo;
+    final CategoryService categoryService;
 
 
-    FileService fileService;
+    final ModelMapper modelMapper;
+
+
+    final FileService fileService;
+
+
+
+    public ProductService(ProductRepository productRepository, ImageRepo imageRepo, ProductRepo productRepo, CategoryService categoryService,  ModelMapper modelMapper, FileService fileService) {
+        this.productRepository = productRepository;
+        this.imageRepo = imageRepo;
+        this.productRepo = productRepo;
+        this.categoryService = categoryService;
+        this.modelMapper = modelMapper;
+        this.fileService = fileService;
+    }
 
     public List<Product>getAllProducts(){
 

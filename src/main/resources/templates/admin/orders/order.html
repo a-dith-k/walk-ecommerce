@@ -14,25 +14,26 @@
     <div class="col-md-10 row">
       <div class="col-md-5 m-2 border bg-common">
         <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">ORDER DETAILS</h1>
-        <h5 class="mt-2 fs-2 fw-normal" ><span>ORDER ID :</span><span class="text-primary-emphasis" th:text="${order.orderId}"> </span></h5>
+        <h5 class="mt-2 fs-2 fw-normal" ><span>ORDER ID :</span><span class="text-primary-emphasis" th:text="${order.id}"> </span></h5>
         <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Name :</span><span class="text-primary-emphasis" th:text="${order.customer.firstName}"> </span></h5>
         <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Mobile :</span><span class="text-primary-emphasis" th:text="${order.customer.mobileNumber}"> </span></h5>
-
-          <form th:action="@{'/admin/orders/'+${order.orderId}+'/status'}" method="post" class=" mt-2 ">
+          <h5 class="mt-2 fs-2 fw-normal" >ORDER DATE :
+              <span class="fs-3 text-primary-emphasis" th:text="${order.orderHistory.orderTime.dayOfMonth}"></span>
+              <span  class="fs-3 text-primary-emphasis"  th:text="${order.orderHistory.orderTime.year  }"></span>
+              <span  class="fs-3 text-primary-emphasis"  th:text="${order.orderHistory.orderTime.month  }"></span></h5>
+          <form th:action="@{'/admin/orders/'+${order.id}+'/status'}" method="post" class=" mt-2 ">
               <div class="input-group">
                   <span class="input-group-text fs-3 text-primary">ORDER STATUS</span>
                   <select id="orderStatus"  name="orderStatus" class= "form-control fs-3">
                           <option th:selected="${orderStatus}=='PLACED'"  th:value="${T(com.adith.walk.enums.OrderStatus).PLACED}">Order Placed</option>
-                          <option th:selected="${orderStatus}=='CONFIRMED'"  th:value="${T(com.adith.walk.enums.OrderStatus).CONFIRMED}">Order Confirmed</option>
-                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).SHIPPING}">Order Packed</option>
-                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).SHIPPING}">Order Shipping</option>
-                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).OUT_FOR_DELIVERY}">Order Out for Delivery</option>
-                          <option   th:value="${T(com.adith.walk.enums.OrderStatus).DELIVERED }">Order Delivered</option>
+                          <option  th:selected="${orderStatus}=='SHIPPING'"   th:value="${T(com.adith.walk.enums.OrderStatus).SHIPPING}">Order Shipping</option>
+                          <option  th:selected="${orderStatus}=='OUT_FOR_DELIVERY'"   th:value="${T(com.adith.walk.enums.OrderStatus).OUT_FOR_DELIVERY}">Order Out for Delivery</option>
+                          <option  th:selected="${orderStatus}=='DELIVERED'"   th:value="${T(com.adith.walk.enums.OrderStatus).DELIVERED }">Order Delivered</option>
                   </select>
                   <button type="submit" class=" btn btn-primary fs-3">Update Status</button>
               </div>
-<!--              <div class="input-group" th:unless="${order.status}!='Cancelled'">-->
-<!--                  <h1 class="text-center display-4 text-danger">Order Cancelled</h1>-->
+<!--              <div class="input-group" th:unless="${orders.status}!='Cancelled'">-->
+<!--                  <h1 class="text-center display-4 text-danger">Orders Cancelled</h1>-->
 <!--              </div>-->
 
 
@@ -98,7 +99,7 @@
         </div>
         <div class="col-md-10 row m-3 border bg-common">
             <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">PRODUCT DETAILS</h1>
-            <th:block th:each="item :${order.cart.items}">
+            <th:block th:each="item :${order.items}">
             <div class="card mb-3 col-md-6 me-3" style="max-width: 540px;">
                 <div class="row g-0">
                     <div class="col-md-3">
@@ -122,7 +123,7 @@
 
             </div>
             <div class="col-md-3">
-                <h1 class=" display-6 text-end bg-white">TOTAL AMOUNT: &#8377<span class="fw-bold" th:text="${order.cart.totalPrice}"></span></h1>
+                <h1 class=" display-6 text-end bg-white">TOTAL AMOUNT: &#8377<span class="fw-bold" th:text="${order.totalPrice}"></span></h1>
             </div>
         </div>
     </div>

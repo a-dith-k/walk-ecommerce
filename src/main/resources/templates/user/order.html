@@ -15,12 +15,12 @@
 
             <div class="col-md-6  border bg-common">
                 <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">ORDER DETAILS</h1>
-                <h5 class="mt-2 fs-2 fw-normal" ><span>ORDER ID : </span><span class="text-primary-emphasis" th:text="${order.orderId}"> </span></h5>
+                <h5 class="mt-2 fs-2 fw-normal" ><span>ORDER ID : </span><span class="text-primary-emphasis" th:text="${order.id}"> </span></h5>
                 <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Name : </span><span class="text-primary-emphasis" th:text="${order.customer.firstName}"> </span></h5>
                 <h5 class="mt-2 fs-2 fw-normal" ><span>Customer Mobile : </span><span class="text-primary-emphasis" th:text="${order.customer.mobileNumber}"> </span></h5>
                 <h5 class="mt-2 fs-2 fw-normal" ><span>Order Status : </span><span class="text-success" th:text="${'ORDER '+orderStatus}"> </span></h5>
                 <th:block th:if="${orderStatus}!='OUT_FOR_DELIVERY'">
-                    <form th:if="${orderStatus}!='CANCELLED'" th:action="@{'/user/orders/'+${order.orderId}+'/cancel'}" th:method="put">
+                    <form th:if="${orderStatus}!='CANCELLED'" th:action="@{'/user/orders/'+${order.id}+'/cancel'}" th:method="put">
                         <button class="btn btn-danger fs-3" type="submit"> cancel order</button>
                     </form>
                     <div class="input-group" th:unless="${orderStatus}!='CANCELLED'">
@@ -66,7 +66,7 @@
             </div>
             <div class="col-md-12 row bg-common p-3 my-1" style="--bs-gutter-x: 0">
                 <h1>ORDER TRACKING HISTORY</h1>
-<!--                <div class="col-12 row order-tracking">-->
+<!--                <div class="col-12 row orders-tracking">-->
 
 <!--                    <div class=" p-0 row col-2 align-items-center">-->
 <!--                        <span class="p-0">Shipped</span>-->
@@ -119,7 +119,7 @@
             </div>
             <div class="col-md-12 row mt-2  border bg-common" style="--bs-gutter-x: 0">
                 <h1 class="bg-secondary text-white p-2 mt-3 fs-3 fw-light">PRODUCT DETAILS</h1>
-                <th:block th:each="item :${order.cart.items}">
+                <th:block th:each="item :${order.items}">
                     <div class="card mb-3 col-md-6 me-3" style="max-width: 540px;">
                         <div class="row g-0">
                             <div class="col-md-3">
@@ -143,7 +143,7 @@
 
                 </div>
                 <div class="col-md-3">
-                    <h1 class=" display-6 text-end bg-white">TOTAL AMOUNT: &#8377<span class="fw-bold" th:text="${order.cart.totalPrice}"></span></h1>
+                    <h1 class=" display-6 text-end bg-white">TOTAL AMOUNT: &#8377<span class="fw-bold" th:text="${order.totalPrice}"></span></h1>
                 </div>
             </div>
 </section>

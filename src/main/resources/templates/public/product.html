@@ -89,7 +89,7 @@
                              <button th:unless="${product.stock.totalStock>0}" class="rounded-5 w-100    btn btn-warning   btn-outline-dark  fs-1" disabled >ADD TO CART</button>
                         </form>
 
-                        <form th:action="@{'/user/checkout/add/'+${product.productId}}" method="post"  class="col-md-6">
+                        <form th:action="@{'/user/checkout/'+${product.productId}}" method="post"  class="col-md-6">
                             <button th:if="${product.stock.totalStock>0}" class="rounded-5    w-100  btn btn-outline-dark   fs-1" >BUY NOW </button>
                             <button th:unless="${product.stock.totalStock>0}" class="rounded-5    w-100  btn btn-outline-dark   fs-1"  disabled >BUY NOW </button>
                         </form>
@@ -130,43 +130,40 @@
 
         </div>
         <div class="col-md-10 row border border-1 bg-common">
+            <div class="text-white col-1 m-3 ms-1">
+                <div  class="rating   text-white bg-dark d-flex px-4 py-2 shadow">
+                    <div class="">
+                        <h1 class="display-1 fw-normal" th:if="${aggregateReview>0}"  th:text="${aggregateReview}"></h1>
+                        <h1 class="display-1 fw-normal" th:unless="${aggregateReview>0}" >0</h1>
+                    </div>
 
-            <h1>CUSTOMER REVIEWS</h1>
+                    <div class=" px-2 py-1">
+                        <img th:src="@{/img/productPage/star.png}" alt="" class="img-fluid">
+                    </div>
 
-
-            <div class="col-md-6"   th:if="${isUserLoggedIn}">
-                <div class="col-md-8" >
-                    <form th:action="@{'/products/'+${product.productId}+'/review/add'}" method="post" th:object="${productReview}">
-                        <label for="productRating" class="form-label fs-3">Rate The Product</label>
-                        <div class="bg-common d-flex justify-content-between fs-3">
-                            <div>0 &#x2605;</div>
-                            <div>1 &#x2605;</div>
-                            <div>2 &#x2605;</div>
-                            <div>3 &#x2605;</div>
-                            <div>4 &#x2605;</div>
-                            <div>5 &#x2605;</div>
-                        </div>
-                        <input th:field="*{rating}" type="range" class="form-range" min="0" max="5" id="productRating">
-
-                        <div class="mb-3">
-                            <label for="productReview" class="form-label fs-3">Write Your Review</label>
-                            <textarea th:field="*{message}" class="form-control fs-3" id="productReview" rows="4  "></textarea>
-                        </div>
-                        <button class="btn btn-secondary form-control fs-3">Add Your Review</button>
-                    </form>
                 </div>
             </div>
+            <div class="col-md-8">
+
+            </div>
+            <div th:if="${userHaveTheProduct}" class="col-md-2  mt-4">
+                <a th:if="${isProductReviewed}" th:href="@{'/products/'+${product.productId}+'/review/update'}" class="btn bg-common shadow fw-bold fs-2" >RATE THE PRODUCT</a>
+                <a th:unless="${isProductReviewed}" th:href="@{'/products/'+${product.productId}+'/review/add'}" class="btn bg-common shadow fw-bold fs-2" >RATE THE PRODUCT</a>
+            </div>
+
+
+
+            <h1 th:if="${!reviews.isEmpty()}">REVIEWS</h1>
+            <h1 th:unless="${!reviews.isEmpty()}">NO REVIEWS YET</h1>
 
             <th:block th:each="review: ${reviews}">
                 <div class=" row-col-1 col-md-3 g-4">
                     <div class="col">
-                        <div class="card h-100">
+                        <div class="card h-100 shadow">
 <!--                            <img src="..." class="card-img-top" alt="...">-->
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${review.customer.firstName}"></h5>
-                                <p class="card-text" th:text="${review.message}"></p>
-
-                                <button th:if="${review.customer==activeCustomer}" class="btn btn-primary">edit</button>
+                                    <h5 class="card-title" th:text="${review.customer.firstName}"></h5>
+                                    <p   class="card-text fs-3" th:text="${review.message}"></p>
                             </div>
                             <div class="card-footer">
                                 <span class="fs-4">Rating</span>
@@ -217,6 +214,13 @@
         imgZoom.style.opacity = 0;
 
     })
+
+    document.getElementById("review-edit-button").onclick=function(){
+        document.getElementById("review-input").style.background='red';
+        document.getElementById("review-edit-button").style.display='none'
+        document.getElementById("review-submit-button").style.display='block'
+
+    }
 </script>
 </body>
 </html>

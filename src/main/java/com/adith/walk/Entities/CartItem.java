@@ -4,10 +4,12 @@ package com.adith.walk.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 
 @Entity
 @Data
-public class CartItem {
+public class CartItem implements Serializable {
 
     @SequenceGenerator(initialValue =101,
                         allocationSize = 1,
@@ -29,7 +31,7 @@ public class CartItem {
     Long totalPrice;
 
     @ManyToOne()
-            @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "cart_id")
     Cart cart;
 
 

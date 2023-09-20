@@ -5,4 +5,12 @@
     border:2px solid black;
 }
 
+.resize-none{
+    resize: none
+;
+}
 
+.border-none{
+    border: none;
+    outline: none;
+}

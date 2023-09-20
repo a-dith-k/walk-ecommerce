@@ -11,6 +11,7 @@ import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.service.*;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
@@ -60,7 +61,9 @@ public class AdminController {
     final OrderService orderService;
     final StockService stockService;
 
-    public AdminController(FileService fileService, CustomerService customerService, ProductService productService, CouponService couponService, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper, ImageRepo imageRepo, BannerService bannerService, CategoryService categoryService, OrderService orderService, StockService stockService) {
+    final ReviewService reviewService;
+
+    public AdminController(FileService fileService, CustomerService customerService, ProductService productService, CouponService couponService, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper, ImageRepo imageRepo, BannerService bannerService, CategoryService categoryService, OrderService orderService, StockService stockService, ReviewService reviewService) {
         this.fileService = fileService;
         this.customerService = customerService;
         this.productService = productService;
@@ -72,6 +75,7 @@ public class AdminController {
         this.categoryService = categoryService;
         this.orderService = orderService;
         this.stockService = stockService;
+        this.reviewService = reviewService;
     }
 
 
@@ -406,6 +410,14 @@ public class AdminController {
 
     }
 
+    @GetMapping("/products/reviews")
+    public String getProductReviews(Model model){
+
+        model.addAttribute("pendingReviews",reviewService.getAllPendingReviews());
+
+        return "admin/products/reviews";
+    }
+
 
 
 
@@ -527,6 +539,26 @@ public class AdminController {
 
         return "admin/coupon/add";
 
+    }
+
+
+
+
+    @DeleteMapping("/products/review/{reviewId}/delete")
+    public String deleteProductReview(@PathVariable Long reviewId){
+
+        reviewService.deleteReview(reviewId);
+
+        return "redirect:/admin/products/reviews";
+    }
+
+    @Transactional
+    @PutMapping("/products/review/{reviewId}/approve")
+    public String approveProductReview(@PathVariable Long reviewId){
+
+        reviewService.approveReview(reviewId);
+
+        return "redirect:/admin/products/reviews";
     }
 
 

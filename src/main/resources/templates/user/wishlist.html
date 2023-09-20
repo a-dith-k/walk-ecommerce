@@ -11,7 +11,10 @@
 <body>
 <section id="content" class="container-fluid   ">
         <section class="  row  d-flex justify-content-center">
-            <div class="col-md-10   " >
+            <div class="col-md-10  default-size " >
+                <div th:if="${wishlist.products.isEmpty()}" class="bg-dark text-white text-center p-2 fs-1" >
+                    your wishlist is empty
+                </div>
                 <th:block th:each="product: ${wishlist.products}">
                     <a th:href="@{'/products/'+${product.productId}}" class="text-decoration-none">
                         <div class="card mb-3" >

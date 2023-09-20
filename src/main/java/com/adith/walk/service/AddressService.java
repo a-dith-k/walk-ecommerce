@@ -1,9 +1,10 @@
 package com.adith.walk.service;
 
 import com.adith.walk.Entities.Address;
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.Entities.Orders;
 import com.adith.walk.dto.AddressRequest;
 import com.adith.walk.repositories.AddressRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -110,5 +111,14 @@ public class AddressService {
         });
 
         return true;
+    }
+
+    public void updateOrderDeliveryAddress(Long addressId, HttpSession session) {
+
+        Orders order =(Orders) session.getAttribute("order");
+
+        order.setDeliveryAddress(addressRepository.findById(addressId).orElse(order.getDeliveryAddress()));
+
+
     }
 }

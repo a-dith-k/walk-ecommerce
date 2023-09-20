@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class ProductDTO {
+public class ProductDTO implements Serializable {
 
 
     private Integer productId;

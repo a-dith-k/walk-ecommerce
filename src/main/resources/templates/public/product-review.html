@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"  th:replace="base/base::layout(~{::#style},~{::#content},~{::#footer})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style"  rel="stylesheet" th:href="@{/css/products.css}">
+</head>
+<body>
+<section id="content" class="container-fluid   ">
+    <div class="row justify-content-center">
+        <div class="col-md-6"   >
+            <div class="col-md-12 m-5" >
+                <form th:action="@{'/products/'+${productId}+'/review/add'}" th:method="post" th:object="${productReview}">
+                    <label for="productRating" class="form-label fs-3">Rate The Product</label>
+                    <div class="bg-common d-flex justify-content-between fs-3">
+                        <div>0 &#x2605;</div>
+                        <div>1 &#x2605;</div>
+                        <div>2 &#x2605;</div>
+                        <div>3 &#x2605;</div>
+                        <div>4 &#x2605;</div>
+                        <div>5 &#x2605;</div>
+                    </div>
+                    <input th:field="*{rating}" type="range" class="form-range" min="0" max="5" id="productRating">
+
+                    <div class="mb-3">
+                        <label for="productReview" class="form-label fs-3">Write Your Review</label>
+                        <textarea th:field="*{message}" class="form-control fs-3 resize-none " id="productReview" rows="4  "></textarea>
+                    </div>
+                    <button class="btn btn-secondary form-control fs-3">Add Your Review</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<footer id="footer"></footer>
+</body>
+</html>

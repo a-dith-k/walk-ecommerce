@@ -28,6 +28,8 @@ public class ProductReview {
     @ManyToOne
     private Customer customer;
 
+    private Boolean isApproved;
+
 
 
 }

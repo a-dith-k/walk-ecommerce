@@ -6,13 +6,13 @@
     <link id="style" rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 <body >
-<section id="content">
-    <section class="row  justify-content-center " style="--bs-gutter-x:0">
-        <section class="col-md-8   row">
+<section id="content" >
+    <section class="row  justify-content-center " style="--bs-gutter-x:0" th:with="order=${session.order}" >
+        <section class="col-md-8   row" >
             <div class="col-md-12">
                 <h1>Order Summary</h1>
             </div>
-            <th:block  th:each="item : ${cart.items}">
+            <th:block  th:each="item : ${order.items}">
                 <div class="col-md-3">
                     <h2 th:text="${item.product.productName}"></h2>
                 </div>
@@ -33,19 +33,19 @@
         </section>
         <article class="col-md-2 p-4 pt-0 bg-common  tb row h-75 display-6 fw-normal  mt-0 m-2"   style="--bs-gutter-x: 0 ;">
             <article  class=" col-12   display-6 fw-normal ">PRICE DETAILS</article>
-            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total MRP</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.totalMRP}"></h2>
-            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Discount</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.totalDiscount}"></h2>
-            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Quantity</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.quantity}"></h2>
-            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Payable</h2><h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${cart.totalPrice}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total MRP</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${order.totalMRP}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Discount</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${order.totalDiscount}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Quantity</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${order.quantity}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Payable</h2><h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${order.totalPrice}"></h2>
 
         </article>
 
     </section>
     <section class="row justify-content-center" style="--bs-gutter-x:0">
-        <div class="col-md-8 row flex-column ps-0 p-3 pt-0" >
+        <div class="col-md-8 row flex-column ps-0 p-3 pt-0" th:with="deliveryAddress=${session.order.deliveryAddress}">
             <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Delivery Address</h3>
             <div class="col-md-12 bg-common" >
-                <h2 class="col-12 m-3"  th:if="${deliveryAddress}!=null" >
+                <h2 class="col-12 m-3"  >
                     <span th:text="${deliveryAddress.name}+', '"></span>
                     <span th:text="${deliveryAddress.mobile}+', '"></span>
                     <span th:text="${deliveryAddress.building}+', '"></span>
@@ -80,10 +80,10 @@
 
     </section>
     <section class="row justify-content-center" style="--bs-gutter-x:0">
-        <div class="col-md-8 row flex-column ps-0 p-3 pt-0" >
+        <div class="col-md-8 row flex-column ps-0 p-3 pt-0" th:with="billingAddress=${session.order.billingAddress}">
             <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Billing Address</h3>
             <div class="col-md-12 bg-common" >
-                <h2 class="col-12 m-3"  th:if="${billingAddress}!=null">
+                <h2 class="col-12 m-3"  >
                     <span th:text="${billingAddress.name}+', '"></span>
                     <span th:text="${billingAddress.mobile}+', '"></span>
                     <span th:text="${billingAddress.building}+', '"></span>
@@ -100,7 +100,7 @@
                         change
                     </button>
                     <a
-                            th:href="@{'/user/address/update/'+${deliveryAddress.id}}"
+                            th:href="@{'/user/address/update/'+${billingAddress.id}}"
                             class="btn btn-secondary rounded-5 fs-3 m-2 ps-5 pe-5">
                         edit
                     </a>
@@ -136,7 +136,7 @@
                 </label>
             <div class="row" >
                 <button type="submit" class="btn btn-success rounded-0 col-md-6 fs-3">PROCEED TO PAYMENT</button>
-                <a th:href="@{/user/cart}" class="btn btn-warning rounded-0 col-md-6  fs-3">CANCEL</a>
+                <a  class="btn btn-warning rounded-0 col-md-6  fs-3">CANCEL</a>
             </div>
 
             </form>
@@ -195,8 +195,8 @@
                 <form th:action="@{/user/checkout/billingAddress/update}" th:method="put">
                     <div class="modal-body">
                         <div class="form-check border-black p-3" th:each="  address: ${addressList}">
-                            <input class="btn-check" type="radio" name="addressId" th:id="${address.id}+1" th:value="${address.id}" th:checked="${address.isBilling}">
-                            <label class="btn btn-outline-secondary text-dark w-100" th:for="${address.id}+1">
+                            <input class="btn-check" type="radio" name="addressId" th:id="${address.id}+'billing'" th:value="${address.id}" th:checked="${address.isBilling}">
+                            <label class="btn btn-outline-secondary text-dark w-100" th:for="${address.id}+'billing'">
                                 <h2 class=" mt-3" th:text="${address.name}+', '+${address.mobile}"></h2>
                                 <h3 class=" mt-3" th:text="${address.building}+', '+${address.street}  +' '+${address.city}"> <span ></span></h3>
 

@@ -5,10 +5,7 @@ import com.adith.walk.Entities.Product;
 import com.adith.walk.Entities.ProductReview;
 import com.adith.walk.dto.ProductPageDTO;
 import com.adith.walk.repositories.StockRepository;
-import com.adith.walk.service.CartService;
-import com.adith.walk.service.CustomerService;
-import com.adith.walk.service.ProductService;
-import com.adith.walk.service.ReviewService;
+import com.adith.walk.service.*;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,12 +27,19 @@ public class ProductController {
 
     final CustomerService customerService;
 
-    public ProductController(ProductService productService, StockRepository stockRepository, CartService cartService, ReviewService reviewService, CustomerService customerService) {
+    final WishlistService wishlistService;
+
+
+    final OrderService orderService;
+
+    public ProductController(ProductService productService, StockRepository stockRepository, CartService cartService, ReviewService reviewService, CustomerService customerService, WishlistService wishlistService, OrderService orderService) {
         this.productService = productService;
         this.stockRepository = stockRepository;
         this.cartService = cartService;
         this.reviewService = reviewService;
         this.customerService = customerService;
+        this.wishlistService = wishlistService;
+        this.orderService = orderService;
     }
 
     //produces = MediaType.APPLICATION_JSON_VALUE
@@ -62,20 +66,23 @@ public class ProductController {
 
 
 
-//        Integer stock = stockRepository.findStock(5001);
-//        Integer stock2 = stockRepository.findStock(productById.getStock().getId());
+//      Integer stock = stockRepository.findStock(5001);
+//      Integer stock2 = stockRepository.findStock(productById.getStock().getId());
         if(principal!=null){
             model.addAttribute("isProductExists",cartService.isProductAlreadyExistsInCart(principal,product));
             model.addAttribute("activeCustomer",customerService.getCustomerByMobile(principal.getName()));
-            model.addAttribute("in", customerService.isProductWishlist(product,principal));
+            model.addAttribute("in",wishlistService.isProductWishlist(product,principal));
+            model.addAttribute("userHaveTheProduct", orderService.isProductExistsInOrder(principal,id));
+            model.addAttribute("isProductReviewed",reviewService.isProductAlreadyReviewed(principal,product));
+
         }else{
             model.addAttribute("isProductExists",false);
+            model.addAttribute("userHaveTheProduct", false);
         }
 
         model.addAttribute("product",product);
-        model.addAttribute("reviews",reviewService.getAllReviews(product));
-
-        model.addAttribute("isUserLoggedIn", principal != null);
+        model.addAttribute("reviews",reviewService.getAllReviewsOfProduct(product));
+        model.addAttribute("aggregateReview",reviewService.getAggregate(id));
 
 
 
@@ -101,6 +108,15 @@ public class ProductController {
         return "public/products";
     }
 
+    @GetMapping("{productId}/review/add")
+    public String getReviewPage(@ModelAttribute("productReview") ProductReview productReview, @PathVariable Integer productId,Model model){
+
+
+        model.addAttribute("productId",productId);
+        return "/public/product-review";
+
+    }
+
 
 
     @PostMapping("{productId}/review/add")
@@ -113,6 +129,25 @@ public class ProductController {
             return  "redirect:/products/"+productId;
         }
 
+        return "redirect:/products/"+productId;
+
+    }
+
+    @GetMapping("{productId}/review/update")
+    public String getReviewUpdatePage( @PathVariable Integer productId,Model model,Principal principal){
+
+        model.addAttribute("productReview",reviewService.getProductReviewByProductAndCustomer(productId,principal));
+
+
+        model.addAttribute("productId",productId);
+        return "/public/productReviewUpdate";
+
+    }
+
+    @PutMapping("{productId}/review/update")
+    public String updateReview( @PathVariable Integer productId,@ModelAttribute("productReview") ProductReview productReview,Principal principal){
+
+        reviewService.updateReview(productReview);
         return "redirect:/products/"+productId;
 
     }

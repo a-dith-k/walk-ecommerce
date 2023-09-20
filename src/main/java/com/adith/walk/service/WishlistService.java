@@ -3,7 +3,6 @@ package com.adith.walk.service;
 import com.adith.walk.Entities.Customer;
 import com.adith.walk.Entities.Product;
 import com.adith.walk.Entities.Wishlist;
-import com.adith.walk.repositories.CustomerRepository;
 import com.adith.walk.repositories.WishlistRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +15,14 @@ public class WishlistService {
 
 
     final WishlistRepository wishlistRepository;
-    final CustomerRepository customerRepository;
+    final CustomerService customerService;
 
     final ProductService productService;
 
 
-    public WishlistService(WishlistRepository wishlistRepository, CustomerRepository customerRepository, ProductService productService) {
+    public WishlistService(WishlistRepository wishlistRepository, CustomerService customerService, ProductService productService) {
         this.wishlistRepository = wishlistRepository;
-        this.customerRepository = customerRepository;
+        this.customerService = customerService;
         this.productService = productService;
     }
 
@@ -35,13 +34,13 @@ public class WishlistService {
     public void toggleToWishlist(Integer productId, Principal principal) {
 
         Product product = productService.getProductById(productId);
-        Wishlist wishlistByCustomer = wishlistRepository.findWishlistByCustomer(customerRepository.findCustomerByMobileNumber(principal.getName()));
+        Wishlist wishlistByCustomer = wishlistRepository.findWishlistByCustomer(customerService.getCustomerByMobile(principal.getName()));
 
         if(wishlistByCustomer==null){
             wishlistByCustomer=new Wishlist();
             List<Product>pList=new ArrayList<>();
             wishlistByCustomer.setProducts(pList);
-            wishlistByCustomer.setCustomer(customerRepository.findCustomerByMobileNumber(principal.getName()));
+            wishlistByCustomer.setCustomer(customerService.getCustomerByMobile(principal.getName()));
         }
 
 
@@ -56,5 +55,17 @@ public class WishlistService {
         }
 
         wishlistRepository.save(wishlistByCustomer);
+    }
+
+    public boolean isProductWishlist(Product product,Principal principal) {
+
+
+        Wishlist wishlist =getWishlist(customerService.getCustomerByMobile(principal.getName()));
+        if(wishlist==null){
+            return false;
+        }
+
+        return  wishlist.getProducts().stream().anyMatch(product1 -> product1.equals(product));
+
     }
 }

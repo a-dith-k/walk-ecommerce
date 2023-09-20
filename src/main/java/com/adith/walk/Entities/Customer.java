@@ -75,4 +75,8 @@ public class Customer implements Serializable {
     private Cart cart;
 
 
+    @OneToMany(mappedBy = "customer")
+    List<Orders>orders=new ArrayList<>();
+
+
 }

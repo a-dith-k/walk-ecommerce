@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/admin/products/reviews.css}">
+</head>
+<body>
+<section id="content">
+    <div class="row mx-4" style="--bs-gutter-x: 0">
+        <div class="col-md-2 ">
+            <div class="menu-bar d-flex flex-column shadow  m-4 "   >
+
+                <a th:href="@{/admin/products/add}"  class="btn  btn-secondary fs-2  m-2 mb-0">ADD PRODUCTS</a >
+
+
+                <a th:href="@{/admin/products/reviews}" type="button" class="btn  btn-secondary fs-2 m-2 ">REVIEWS</a>
+
+            </div>
+        </div>
+        <div class="col-md-10 ">
+            <div class="col-12 m-4 ms-0 pb-2 shadow">
+                <div class="card w-75 m-3 mt-0 " th:each="review: ${pendingReviews}">
+                    <div class="card-body"  >
+                        <h5 class="card-title" th:text="${review.product.productName}"></h5>
+                        <p class="card-text" th:text="${review.message}">With supporting text below as a natural lead-in to additional content.</p>
+                        <h3 th:text="${review.rating}"></h3>
+                        <div class="d-flex">
+                            <form class="m-2" th:action="@{'/admin/products/review/'+${review.id}+'/approve'}" th:method="put">
+                                <button type="submit" class="btn btn-outline-secondary">Approve</button>
+                            </form>
+                            <form th:action="@{'/admin/products/review/'+${review.id}+'/delete'}" class=" m-2 ms-0" th:method="delete">
+                                <button  type="submit" class="btn btn-outline-danger">Remove</button>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</section>
+
+
+
+</body>
+</html>

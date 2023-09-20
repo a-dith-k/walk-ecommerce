@@ -29,22 +29,25 @@ public class CustomerService {
 
     final AddressRepository addressRepository;
 
-    final WishlistService wishlistService;
+
+
+
 
     public CustomerService(CustomerRepository customerRepository,
                            TwilioOtpService otpService,
                            ModelMapper modelMapper,
                            BCryptPasswordEncoder encoder,
                            TokenService tokenService,
-                           AddressRepository addressRepository,
-                           WishlistService wishlistService) {
+                           AddressRepository addressRepository) {
         this.customerRepository = customerRepository;
         this.otpService = otpService;
         this.modelMapper = modelMapper;
         this.encoder = encoder;
         this.tokenService = tokenService;
         this.addressRepository = addressRepository;
-        this.wishlistService = wishlistService;
+
+
+
     }
 
 
@@ -299,15 +302,7 @@ public class CustomerService {
         customerRepository.disableCustomer(userId);
     }
 
-    public boolean isProductWishlist(Product product,Principal principal) {
 
 
-        Wishlist wishlist = wishlistService.getWishlist(getCustomerByMobile(principal.getName()));
-        if(wishlist==null){
-            return false;
-        }
 
-        return  wishlist.getProducts().stream().anyMatch(product1 -> product1.equals(product));
-
-    }
 }

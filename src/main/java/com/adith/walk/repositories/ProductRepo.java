@@ -1,7 +1,6 @@
 package com.adith.walk.repositories;
 
 import com.adith.walk.Entities.Product;
-import com.adith.walk.dto.ProductPageDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;

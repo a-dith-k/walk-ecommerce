@@ -1,17 +1,11 @@
 package com.adith.walk.controllers;
 
-import com.adith.walk.Entities.Address;
-import com.adith.walk.Entities.CartItem;
 import com.adith.walk.Entities.Customer;
 import com.adith.walk.dto.AddressRequest;
 import com.adith.walk.helper.Message;
 import com.adith.walk.service.*;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -91,6 +85,7 @@ public class CartController {
     public String deleteProduct(@PathVariable Long itemId){
 
         cartService.deleteItem(itemId);
+
         return "redirect:/user/cart";
     }
 

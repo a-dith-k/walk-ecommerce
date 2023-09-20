@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
@@ -35,6 +34,7 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
     @Modifying
     @Query("UPDATE Customer c " +
             "SET c.enabled = FALSE WHERE c.userId = ?1")
-    int disableCustomer(Integer userId);
+    void disableCustomer(Integer userId);
+
 
 }

@@ -1,6 +1,9 @@
 package com.adith.walk.controllers;
 
-import com.adith.walk.Entities.*;
+import com.adith.walk.Entities.Address;
+import com.adith.walk.Entities.Customer;
+import com.adith.walk.Entities.Orders;
+import com.adith.walk.Entities.Payment;
 import com.adith.walk.dto.AddressRequest;
 import com.adith.walk.dto.CustomerProfileUpdateRequest;
 import com.adith.walk.dto.PasswordResetRequest;
@@ -39,7 +42,9 @@ public class UserController {
 
     OrderService orderService;
 
-    UserController(OrderService orderService,PaymentService paymentService,CustomerService customerService,WishlistService wishlistService,ModelMapper modelMapper,CartService cartService,AddressService addressService){
+    final ProductService productService;
+    UserController(OrderService orderService, PaymentService paymentService, CustomerService customerService, WishlistService wishlistService, ModelMapper modelMapper, CartService cartService, AddressService addressService, ProductService productService){
+        this.productService = productService;
         logger= LoggerFactory.getLogger(UserController.class);
         this.customerService=customerService;
         this.wishlistService=wishlistService;
@@ -176,13 +181,12 @@ public class UserController {
     public String getUserOrders(Model model,Principal principal){
 
 
-    model.addAttribute("orders",orderService.getAllOrderByPrincipal(principal))    ;
+    model.addAttribute("orders",orderService.getAllOrderByPrincipal(principal));
             return "user/orders";
     }
 
     @GetMapping("orders/{orderId}")
-    public String getUserOrders(@PathVariable Long orderId, Model model,Principal principal){
-
+    public String getUserOrders(@PathVariable Long orderId, Model model){
 
         model.addAttribute("order",orderService.getOrderById(orderId));
         model.addAttribute("orderStatus",orderService.getOrderStatus(orderId));
@@ -206,38 +210,55 @@ public class UserController {
     }
 
 
+    @PostMapping("checkout")
+    public String GetCheckoutPage(Principal principal,Model model,HttpSession session){
 
 
-    @GetMapping("checkout")
-    public String GetCheckoutPage(Principal principal,Model model){
-
-        model.addAttribute("deliveryAddress",addressService.getDefaultAddress(principal));
-        model.addAttribute("cart",cartService.getCartByPrincipal(principal));
         model.addAttribute("addressList",addressService.getAllAddress(principal));
-        model.addAttribute("billingAddress",addressService.getBillingAddress(principal));
+        orderService.createOrder(cartService.getCartByPrincipal(principal), principal, session);
+
         return "user/checkout";
     }
 
-    @PostMapping("payment")
-    public String doPayment(@RequestParam String paymentMethod,Principal principal){
+    @PostMapping("checkout/{id}")
+    public String buyNowProduct(@PathVariable Integer id,Principal principal,HttpSession session,Model model){
 
+
+        model.addAttribute("addressList",addressService.getAllAddress(principal));
+        orderService.buyNow(id,principal,session);
+        return "/user/checkout";
+    }
+
+//    @GetMapping("checkout")
+//    public String getCheckout(@SessionAttribute("order")Orders order,HttpSession session){
+//        return "/user/checkout";
+//    }
+
+
+    @PostMapping("payment")
+    public String doPayment(@RequestParam String paymentMethod, Principal principal, @SessionAttribute("order")Orders orders){
         if(paymentMethod.equals("cod")){
-            Cart cart = cartService.getCartByPrincipal(principal);
-            Payment payment = paymentService.doPayment(cart.getTotalPrice(), paymentMethod, "paid");
-            orderService.placeOrder(cart,payment,principal);
+            Payment payment = paymentService.doPayment(orders.getTotalPrice(), paymentMethod, "paid");
+            orderService.placeOrder(orders,payment,principal);
             cartService.deleteCart(principal);
             return "/user/success";
         }
 
-
-
         return "redirect:/user/checkout";
     }
 
+    @GetMapping("/order/success")
+    public String getSuccessPage(){
+
+        return "user/success";
+    }
+
     @PutMapping("/checkout/deliveryAddress/update")
-    public String updateCheckoutDeliveryAddress(@RequestParam Long addressId,Principal principal){
+    public String updateCheckoutDeliveryAddress(@RequestParam Long addressId,Principal principal,HttpSession session){
 
         addressService.setDefault(addressId,principal);
+
+
 
         return "redirect:/user/checkout";
     }

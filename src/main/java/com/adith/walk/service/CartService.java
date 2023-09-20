@@ -1,10 +1,8 @@
 package com.adith.walk.service;
 
 import com.adith.walk.Entities.Cart;
-import com.adith.walk.Entities.Customer;
 import com.adith.walk.Entities.Product;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;

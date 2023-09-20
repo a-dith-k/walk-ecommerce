@@ -15,17 +15,17 @@
 
     <div class="col-md-10">
         <th:block th:each="order: ${orders}">
-            <a class="text-decoration-none" th:href="@{'/user/orders/'+${order.orderId}}">
+            <a class="text-decoration-none" th:href="@{'/user/orders/'+${order.id}}">
                 <div class="card mt-2 mb-2">
-                    <h5 class="card-header"><span>ORDER ID:</span><span class="text-primary-emphasis" th:text="${order.orderId}"> </span></h5>
+                    <h5 class="card-header"><span>ORDER ID:</span><span class="text-primary-emphasis" th:text="${order.id}"> </span></h5>
                     <div class="card-body row">
-<!--                        <h4 class=" col-md-4"><span>Order Status :</span><span th:text="${order.status}"></span></h4>-->
+                        <h4 class=" col-md-4"><span>Status : ORDER </span><span th:text="${order.orderStatus}"></span></h4>
                         <h4 class=" col-md-4"><span>Payment Status :</span><span class="text-success"  th:text="${order.payment.status}"></span></h4>
                         <h3 class="col-md-4"><span>Total Amount :</span><span th:text="${order.payment.totalAmount}"></span></h3>
 
-<!--                        <form th:if="${order.status}!='Cancelled'" th:action="@{'/user/orders/'+${order.orderId}+'/cancel'}" th:method="put">-->
-<!--                            <button class="btn btn-danger" type="submit"> cancel</button>-->
-<!--                        </form>-->
+                        <form th:if="${order.orderStatus}!='Cancelled'" th:action="@{'/user/orders/'+${order.id}+'/cancel'}" th:method="put">
+                            <button class="btn btn-danger" type="submit"> cancel</button>
+                        </form>
 
 
                     </div>
@@ -35,7 +35,7 @@
         </th:block>
 
     </div>
-    </div>
+
 
 </section>
 

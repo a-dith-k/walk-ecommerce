@@ -10,14 +10,17 @@
 </head>
 <body>
 <section id="content">
-    <div class="row">
-        <div class="col-md-2 menu-bar d-flex justify-content-center mt-0  m-4 shadow">
-            <a th:href="@{/admin/products/add}">
+    <div class="row m-4">
+        <div class="col-md-2 menu-bar d-flex flex-column mb-2 shadow p-2">
+            <a th:href="@{/admin/products/add}" class="col-md-12">
                 <button type="button" class="btn  btn-secondary fs-2">ADD PRODUCTS</button>
+            </a>
+            <a th:href="@{/admin/products/reviews}" class="col-md-12">
+                <button type="button" class="btn  btn-secondary fs-2">REVIEWS</button>
             </a>
 
         </div>
-        <div class="col-md-9 p-5">
+        <div class="col-md-10 p-5">
             <table class="table ">
                 <div class="d-flex justify-content-between row">
                     <thead class="">

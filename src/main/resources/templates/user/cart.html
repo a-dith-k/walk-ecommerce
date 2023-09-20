@@ -83,9 +83,12 @@
 <!--                            <span  class=" fs-2 fw-normal" th:text="${item.product.productDescription}" ></span>-->
                         </h3>
                     </div>
-                    <button class="col-md-2 btn btn-secondary btn-outline-dark fs-2 text-white rounded-start-5 p-3">
-                        BUY NOW
-                    </button>
+                    <form th:action="@{'/user/checkout/'+${item.product.productId}}" method="post" class="col-md-2">
+                        <button class="col-md-12 btn btn-secondary btn-outline-dark fs-2 text-white rounded-start-5 p-3">
+                            BUY NOW
+                        </button>
+                    </form>
+
 
                 </div>
             </th:block>
@@ -101,7 +104,10 @@
                 <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Quantity</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.quantity}"></h2>
                 <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Payable</h2><h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${cart.totalPrice}"></h2>
                 <div class="col-md-12">
-                    <a th:if="${cart.totalPrice}>0" th:href="@{/user/checkout}" class="btn btn-secondary fs-3 w-100 pt-3 pb-3">PROCEED TO CHECKOUT</a>
+                    <form th:action="@{/user/checkout}" method="post">
+                        <button th:if="${cart.totalPrice}>0" type="submit" class="btn btn-secondary fs-3 w-100 pt-3 pb-3">PROCEED TO CHECKOUT</button>
+                    </form>
+
                     <a th:unless="${cart.totalPrice}>0" href="" class="btn btn-secondary fs-3 disabled w-100 pt-3 pb-3">PROCEED TO CHECKOUT</a>
                 </div>
         </article>

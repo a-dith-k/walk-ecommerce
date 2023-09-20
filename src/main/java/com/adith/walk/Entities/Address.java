@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Data
-public class Address {
+public class Address implements Serializable {
 
     @SequenceGenerator(
             initialValue = 10,

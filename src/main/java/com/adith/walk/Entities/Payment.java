@@ -3,12 +3,12 @@ package com.adith.walk.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Payment {
+public class Payment implements Serializable {
 
     @SequenceGenerator(name = "paymentIdGenerator",
     sequenceName = "paymentIdGenerator",

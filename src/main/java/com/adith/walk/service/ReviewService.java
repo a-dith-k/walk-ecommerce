@@ -14,5 +14,22 @@ public interface ReviewService {
 
     void addReview(ProductReview productReview, Integer productId, Principal principal) throws AlreadyUsedException;
 
-List<ProductReview> getAllReviews(Product product);
+    List<ProductReview> getAllReviewsOfProduct(Product product);
+
+    ProductReview getProductReviewByProductAndCustomer(Integer productId, Principal principal);
+
+    boolean isProductAlreadyReviewed(Principal principal, Product product);
+
+
+
+    void updateReview(ProductReview productReview);
+
+    List<ProductReview> getAllPendingReviews();
+
+    void deleteReview(Long reviewId);
+
+    void approveReview(Long reviewId);
+
+
+    Long getAggregate(Integer productId);
 }

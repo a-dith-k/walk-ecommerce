@@ -7,8 +7,6 @@ import com.adith.walk.repositories.CartItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 public class CartItemServiceImplementation implements CartItemService {

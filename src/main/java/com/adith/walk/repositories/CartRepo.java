@@ -2,7 +2,6 @@ package com.adith.walk.repositories;
 
 import com.adith.walk.Entities.Cart;
 import com.adith.walk.Entities.Customer;
-import com.adith.walk.service.CustomerCustomUserDetailsService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

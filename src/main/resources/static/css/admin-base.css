@@ -1,9 +1,11 @@
 
 html{
     font-size: 10px;
+
 }
 
 body{
+    font-family: 'Poppins', sans-serif;
     background:  /*url("../img/user-login.png")  107% 280%  no-repeat fixed,url("../img/user-login2.png")  0% 0%  no-repeat fixed*/ white;
 
 }
