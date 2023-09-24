@@ -1,13 +1,11 @@
 package com.adith.walk.Entities;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,13 +28,12 @@ public class Stock implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "StockIdGenerator")
     long stockId;
 
-    @HashCodeExclude
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "stock")
     List<Size> sizeList =new ArrayList<>();
 
-    @HashCodeExclude
-    @JsonBackReference
-    @OneToOne(mappedBy = "stock")
+    @JoinColumn(name = "product_id")
+    @OneToOne(cascade = CascadeType.ALL)
     Product product;
 
 

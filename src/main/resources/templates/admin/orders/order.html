@@ -21,7 +21,13 @@
               <span class="fs-3 text-primary-emphasis" th:text="${order.orderHistory.orderTime.dayOfMonth}"></span>
               <span  class="fs-3 text-primary-emphasis"  th:text="${order.orderHistory.orderTime.year  }"></span>
               <span  class="fs-3 text-primary-emphasis"  th:text="${order.orderHistory.orderTime.month  }"></span></h5>
-          <form th:action="@{'/admin/orders/'+${order.id}+'/status'}" method="post" class=" mt-2 ">
+            <div th:if="${orderStatus=='CANCELLED'}">
+                <h1 class="text-danger mx-3">Order Cancelled</h1>
+            </div>
+          <div th:if="${orderStatus=='RETURNED'}">
+              <h1 class="text-danger mx-3">ORDER RETURNED</h1>
+          </div>
+          <form th:unless="${orderStatus=='CANCELLED'||orderStatus=='RETURNED'}" th:action="@{'/admin/orders/'+${order.id}+'/status'}" method="post" class=" my-2 ">
               <div class="input-group">
                   <span class="input-group-text fs-3 text-primary">ORDER STATUS</span>
                   <select id="orderStatus"  name="orderStatus" class= "form-control fs-3">
@@ -76,7 +82,8 @@
         </div>
         <div class="col-md-10 m-3 row bg-common p-3 my-1" style="--bs-gutter-x: 0">
             <h1>ORDER TRACKING HISTORY</h1>
-            <section class="step-wizard">
+            <section th:unless="${orderStatus!='CANCELLED'}" class="step-wizard fs-3 text-danger">Order Was Cancelled</section>
+            <section th:if="${orderStatus!='CANCELLED'}" class="step-wizard">
                 <ul class="step-wizard-list">
                     <li class="step-wizard-item" th:classappend="${orderStatus=='PLACED'}?'current-item':''">
                         <span class="progress-count">1</span>
@@ -90,7 +97,7 @@
                         <span class="progress-count">3</span>
                         <span class="progress-label">Out for Delivery</span>
                     </li>
-                    <li class="step-wizard-item " th:classappend="${orderStatus=='DELIVERED'}?'current-item':''">
+                    <li class="step-wizard-item " th:classappend="${orderStatus=='DELIVERED'||orderStatus=='RETURNED'}?'current-item':''">
                         <span class="progress-count">4</span>
                         <span class="progress-label">Delivered</span>
                     </li>
@@ -109,6 +116,7 @@
                         <div class="card-body">
                             <h2 class="card-title fs-3 display-6"><span th:text="${item.product.productName}"></span></h2>
                             <h3 class="card-text fs-3 display-6" >Quantity: <span class="text-primary-emphasis fw-bold" th:text="${item.quantity}"></span></h3>
+                            <h3 class="card-text fs-3 display-6" >SIZE: <span class="text-primary-emphasis fw-bold" th:text="${item.productSize.sizeNumber}"></span></h3>
                             <h3 class="card-text fs-3 display-6" >Unit Price: &#8377;<span class="text-primary-emphasis fw-bold" th:text="${item.product.offerPrice}"></span></h3>
                             <h3 class="card-text fs-3 display-6" >Total Price: &#8377;<span class="text-primary-emphasis fw-bold" th:text="${item.totalPrice}"></span></h3>
                         </div>

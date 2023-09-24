@@ -3,9 +3,11 @@ package com.adith.walk.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Data
-public class Size {
+public class Size implements Serializable {
 
     @SequenceGenerator(initialValue = 201,
             allocationSize = 1,
@@ -23,8 +25,9 @@ public class Size {
 
     short sizeWidth;
 
-    long totalCount;
+    long totalStock;
 
+    @JoinColumn(name = "stock_id")
     @ManyToOne(cascade = CascadeType.ALL)
     Stock stock;
 

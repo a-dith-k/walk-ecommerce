@@ -49,6 +49,7 @@ let totalPages=0;
 window.onload = function() {
     request();
 
+
 };
 
 function loadPage(i){
@@ -76,14 +77,17 @@ function nextPage(){
 
 
 function request(){
+
     let url=`http://localhost:2021/rest/${pageNumber}`;
     fetch(url)
         .then(res=>{
             return res.json()
+
         })
         .then (data=>{
             totalPages=data.totalPages;
             console.log(data)
+
             let result='';
 
             data.products.content.forEach(product=>{

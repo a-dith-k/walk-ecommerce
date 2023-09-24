@@ -1,18 +1,6 @@
-.input-id{
-    width: 40px;
-}
-.w-80px{
-    width: 80px;
-}
-
-#inputs input{
-    border: none;
-    outline: none;
-
-}
-
-thead th{
- font-size: 20px;
+img{
+    width:20px ;
+    height: 20px;
 }
 
 .menu-bar{
@@ -31,4 +19,9 @@ thead th{
     width: 80%;
     margin:2% 2% 2% 2%;
 
+}
+
+.display-6{
+    font-size: 1.7rem;
+    font-weight: bold;
 }

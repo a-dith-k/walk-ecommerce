@@ -34,4 +34,8 @@ import java.util.List;
 
 
     Boolean isProductExistsInOrder(Principal principal, Integer productId);
+
+    void cancelOrder(Long OrderId);
+
+    void returnOrder(Long orderId);
 }

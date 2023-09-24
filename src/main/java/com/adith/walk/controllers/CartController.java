@@ -67,11 +67,11 @@ public class CartController {
     }
 
     @PostMapping("add/{productId}")
-    public String addToCart(@PathVariable Integer productId, Principal principal, Model model){
+    public String addToCart(@PathVariable Integer productId,@RequestParam("sizeId")Long sizeId, Principal principal, Model model){
 
 
         try {
-            cartService.add(productId, principal);
+            cartService.add(productId,sizeId, principal);
         } catch (AlreadyUsedException e) {
            model.addAttribute("message",new Message(e.getMessage(),"alert-danger"));
             return "redirect:/products/"+productId;

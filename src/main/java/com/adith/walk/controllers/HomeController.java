@@ -84,7 +84,7 @@ public class HomeController {
 //    @CrossOrigin(origins = "http://127.0.0.1:5500")
     @GetMapping(value = "rest/{pageNumber}",produces ="application/json")
     public ProductPageDTO getHomePage(@PathVariable Integer pageNumber){
-
+        System.out.println("hello----------------------");
         return productService.getPageOfProducts(pageNumber,1);
     }
 

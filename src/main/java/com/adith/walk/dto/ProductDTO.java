@@ -1,15 +1,18 @@
 package com.adith.walk.dto;
 
-import com.adith.walk.Entities.Category;
+import com.adith.walk.Entities.ProductCategory;
 import com.adith.walk.Entities.Stock;
+import com.adith.walk.enums.CustomerCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ProductDTO implements Serializable {
 
@@ -23,6 +26,8 @@ public class ProductDTO implements Serializable {
     @NotNull(message = "required")
     private Long productMrp;
 
+    private CustomerCategory customerCategory;
+
     @NotNull
     private Long offerPrice;
 
@@ -32,7 +37,7 @@ public class ProductDTO implements Serializable {
     @NotBlank(message = "required")
     private String productDescription;
 
-    private Category category;
+    private ProductCategory productCategory;
 
     private Stock stock;
 }

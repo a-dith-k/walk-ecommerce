@@ -39,4 +39,9 @@ public class StockServiceImplementation implements StockService{
     public Stock save(Stock stock) {
            return stockRepository.save(stock);
     }
+
+    @Override
+    public Stock getStockByProduct(Product product) {
+      return stockRepository.findStockByProduct(product);
+    }
 }

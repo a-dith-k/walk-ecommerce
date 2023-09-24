@@ -7,7 +7,8 @@ import com.adith.walk.Entities.Payment;
 import com.adith.walk.dto.AddressRequest;
 import com.adith.walk.dto.CustomerProfileUpdateRequest;
 import com.adith.walk.dto.PasswordResetRequest;
-import com.adith.walk.enums.OrderStatus;
+import com.adith.walk.exceptions.CouponNotFoundException;
+import com.adith.walk.exceptions.InvalidCouponException;
 import com.adith.walk.helper.Message;
 import com.adith.walk.service.*;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
@@ -25,26 +26,29 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
-@SessionAttributes({"activeUser"})
+@SessionAttributes({"activeUser","message"})
 @RequestMapping("user")
 public class UserController {
 
 
-    Logger logger;
-    CustomerService customerService;
-    WishlistService wishlistService;
-    ModelMapper modelMapper;
+    final Logger logger;
+    final CustomerService customerService;
+    final WishlistService wishlistService;
+    final ModelMapper modelMapper;
 
-    AddressService addressService;
-    CartService cartService;
+    final AddressService addressService;
+    final CartService cartService;
 
-    PaymentService paymentService;
+    final PaymentService paymentService;
 
-    OrderService orderService;
+    final OrderService orderService;
 
     final ProductService productService;
-    UserController(OrderService orderService, PaymentService paymentService, CustomerService customerService, WishlistService wishlistService, ModelMapper modelMapper, CartService cartService, AddressService addressService, ProductService productService){
+
+    final CouponService couponService;
+    UserController(OrderService orderService, PaymentService paymentService, CustomerService customerService, WishlistService wishlistService, ModelMapper modelMapper, CartService cartService, AddressService addressService, ProductService productService, CouponService couponService){
         this.productService = productService;
+        this.couponService = couponService;
         logger= LoggerFactory.getLogger(UserController.class);
         this.customerService=customerService;
         this.wishlistService=wishlistService;
@@ -196,7 +200,15 @@ public class UserController {
     @PutMapping("orders/{orderId}/cancel")
     public String cancelOrder(@PathVariable Long orderId){
 
-        orderService.updateOrderStatus(orderId, OrderStatus.CANCELLED);
+        orderService.cancelOrder(orderId);
+
+        return "redirect:/user/orders";
+    }
+
+    @PutMapping("orders/{orderId}/return")
+    public String returnOrder(@PathVariable Long orderId){
+
+        orderService.returnOrder(orderId);
 
         return "redirect:/user/orders";
     }
@@ -210,8 +222,18 @@ public class UserController {
     }
 
 
-    @PostMapping("checkout")
+    @GetMapping("checkout")
     public String GetCheckoutPage(Principal principal,Model model,HttpSession session){
+
+
+        model.addAttribute("addressList",addressService.getAllAddress(principal));
+
+        return "user/checkout";
+    }
+
+
+    @PostMapping("checkout")
+    public String PostCheckoutPage(Principal principal,Model model,HttpSession session){
 
 
         model.addAttribute("addressList",addressService.getAllAddress(principal));
@@ -229,10 +251,34 @@ public class UserController {
         return "/user/checkout";
     }
 
-//    @GetMapping("checkout")
-//    public String getCheckout(@SessionAttribute("order")Orders order,HttpSession session){
-//        return "/user/checkout";
-//    }
+    @PutMapping("checkout/applyCoupon")
+    public String applyCoupon(@SessionAttribute("order")Orders order, @RequestParam String couponName,HttpSession session,Model model){
+
+
+        try {
+            order.setDiscountedPrice(couponService.applyCoupon(order.getTotalPrice(),couponService.getCouponByName(couponName)));
+            order.setCoupon(couponService.getCouponByName(couponName));
+            model.addAttribute("message",new Message("Coupon Applied SuccessFully","alert-success"));
+        } catch (CouponNotFoundException | InvalidCouponException e) {
+            model.addAttribute("message",new Message(e.getMessage(),"alert-danger"));
+        }
+
+        session.setAttribute("order",order);
+        return "redirect:/user/checkout";
+    }
+
+    @PutMapping("checkout/removeCoupon")
+    public String removeCoupon(@SessionAttribute("order")Orders order,HttpSession session,Model model){
+
+
+
+            order.setDiscountedPrice(couponService.removeCoupon(order.getDiscountedPrice(),order.getTotalPrice(),order.getCoupon()));
+            order.setCoupon(null);
+            model.addAttribute("message",new Message("Coupon removed SuccessFully","alert-success"));
+
+        session.setAttribute("order",order);
+        return "redirect:/user/checkout";
+    }
 
 
     @PostMapping("payment")

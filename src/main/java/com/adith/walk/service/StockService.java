@@ -15,4 +15,6 @@ public interface StockService {
     void removeStock(Product product,Long quantity,String size);
 
     Stock save(Stock stock);
+
+    Stock getStockByProduct(Product product);
 }

@@ -40,6 +40,8 @@ public class Orders implements Serializable {
 
     private Long totalPrice;
 
+    private Long discountedPrice;
+
     private Long totalMRP;
 
     private Long totalDiscount;
@@ -52,6 +54,9 @@ public class Orders implements Serializable {
     boolean isCurrentOrder;
 
     Boolean isPaymentDone;
+
+    @OneToOne
+    private Coupon coupon;
 
 
 }

@@ -23,9 +23,11 @@ public class CartServiceImpl implements CartService{
 
     CartItemRepository cartItemRepository;
 
+    SizeService sizeService;
+
 
     @Override
-    public void add(Integer productId, Principal principal) throws AlreadyUsedException {
+    public void add(Integer productId,long sizeId, Principal principal) throws AlreadyUsedException {
 
         //getting current logged in customer
         Customer customer=
@@ -63,6 +65,7 @@ public class CartServiceImpl implements CartService{
         cartItem.setQuantity(1L);
         cartItem.setTotalPrice(product.getOfferPrice());
         cartItem.setTotalMRP(product.getProductMrp());
+        cartItem.setProductSize(sizeService.getSizeBySizeId(sizeId));
 
         items.add(cartItem);
 

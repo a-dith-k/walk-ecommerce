@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link id="style" rel="stylesheet" th:href="@{/css/admin-product.css}">
+</head>
+<body>
+<section id="content">
+    <div class="row">
+        <div class="col-md-2 menu-bar d-flex justify-content-center mt-0  m-4 shadow">
+            <a th:href="@{/admin/coupons/create-new}">
+                <button type="button" class="btn  btn-secondary fs-2">CREATE COUPON</button>
+            </a>
+
+        </div>
+        <div class="col-md-9 p-5">
+            <th:block th:each="coupon :${coupons}">
+                <h1>Coupon Name: <span  th:text="${coupon.couponName}"></span></h1>
+                <h1>Coupon Type: <span  th:text="${coupon.discountType}"></span></h1>
+                <h1>Coupon Value: <span  th:text="${coupon.discountValue}"></span></h1>
+                <form th:action="@{'/admin/coupons/toggle/'+${coupon.couponId}}" th:method="put">
+                    <button th:unless="${coupon.isActive}" type="submit" class="btn btn-success">Enable</button>
+                    <button th:if="${coupon.isActive}" type="submit" class="btn btn-danger">Disable</button>
+                </form>
+
+            </th:block>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+</body>
+</html>

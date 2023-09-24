@@ -11,20 +11,24 @@
         <section class="col-md-8   row">
             <section class="row  bg-common shadow mt-0 mb-3 " style="--bs-gutter-x:0" >
                 <h1 class="fs-3 col-md-2 text-center">PRODUCT</h1>
-                <h1 class="fs-3 col-md-3 text-center">PRICE</h1>
+                <h1 class="fs-3 col-md-2 text-center">PRICE</h1>
+                <h1 class="fs-3 col-md-2 text-center">SIZE</h1>
                 <h1 class="fs-3 col-md-3 text-center">QUANTITY</h1>
-                <h1 class="fs-3 col-md-3 text-center">TOTAL</h1>
+                <h1 class="fs-3 col-md-2 text-center">TOTAL</h1>
             </section>
             <th:block   th:each="item : ${cart.items}" >
                 <div class=" row " style="background-color: #D9D9D9; --bs-gutter-x: 0"  >
 
-                    <div class=" col-md-2 d-flex justify-content-center p-5 ">
+                    <div class=" col-md-2 d-flex justify-content-center p-5 flex-column">
                         <img th:src="@{'/img/productImages/'+${item.product.list[0].name}}" class="img-fluid " alt="">
                     </div>
 
 
-                    <div class=" col-md-3  d-flex align-items-center justify-content-center fs-1" th:text="${item.product.offerPrice}">
+                    <div class=" col-md-2  d-flex align-items-center justify-content-center fs-1" th:text="${item.product.offerPrice}">
 
+                    </div>
+                    <div class="col-md-2  d-flex align-items-center justify-content-center fs-1">
+                        <h1 class="fs-1 fw-bold text-center" th:text="${item.productSize.sizeNumber}"></h1>
                     </div>
 
                     <div class=" col-md-3 d-flex align-items-center   justify-content-center">
@@ -40,7 +44,7 @@
                         </div>
                     </div>
 
-                    <div class=" col-md-3 d-flex  justify-content-evenly ">
+                    <div class=" col-md-2 d-flex  justify-content-evenly ">
 
                         <div class=" fs-2 d-flex justify-content-center align-items-center" th:text="${item.totalPrice}">
 

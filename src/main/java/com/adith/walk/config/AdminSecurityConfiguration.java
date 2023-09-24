@@ -43,8 +43,9 @@ public class AdminSecurityConfiguration {
                   .authenticationProvider(authenticationProviderAdmin());
 
            http.
-
                     securityMatcher("/admin/**")
+                    .   csrf(c->c.disable())
+                    .cors(cors->cors.disable())
                     .authorizeHttpRequests(auth->auth
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated())

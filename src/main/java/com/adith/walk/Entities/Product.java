@@ -1,17 +1,21 @@
 package com.adith.walk.Entities;
 
 
+import com.adith.walk.enums.CustomerCategory;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Product implements Serializable {
 
     @Id
@@ -31,21 +35,24 @@ public class Product implements Serializable {
     @NotBlank(message = "required")
     private String brand;
 
-    private String productRating;
+    @NotBlank(message = "required")
+    private CustomerCategory customerCategory;
+
 
     @NotBlank(message = "required")
     private String productDescription;
-
 
     @OneToMany(mappedBy = "product" ,orphanRemoval = true,cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     List<Images>list=new ArrayList<>();
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Category category;
+    @ManyToOne(cascade = CascadeType.ALL )
+    private ProductCategory productCategory;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @JsonBackReference
+    @OneToOne(mappedBy ="product",cascade = CascadeType.ALL)
     private  Stock stock;
 
 

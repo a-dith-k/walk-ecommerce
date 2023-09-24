@@ -60,7 +60,7 @@ public class ProductController {
 
 
     @GetMapping("{id}")
-    public String  getProduct(@ModelAttribute("productReview") ProductReview productReview, @PathVariable Integer id, Model model, Principal principal){
+    public String  getProduct(@ModelAttribute("productReview") ProductReview productReview,@PathVariable Integer id, Model model, Principal principal){
 
         Product product = productService.getProductById(id);
 
@@ -74,6 +74,7 @@ public class ProductController {
             model.addAttribute("in",wishlistService.isProductWishlist(product,principal));
             model.addAttribute("userHaveTheProduct", orderService.isProductExistsInOrder(principal,id));
             model.addAttribute("isProductReviewed",reviewService.isProductAlreadyReviewed(principal,product));
+            model.addAttribute("sizeList",product.getStock().getSizeList());
 
         }else{
             model.addAttribute("isProductExists",false);
@@ -83,6 +84,7 @@ public class ProductController {
         model.addAttribute("product",product);
         model.addAttribute("reviews",reviewService.getAllReviewsOfProduct(product));
         model.addAttribute("aggregateReview",reviewService.getAggregate(id));
+        model.addAttribute("sizeList",product.getStock().getSizeList());
 
 
 

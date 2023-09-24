@@ -26,11 +26,14 @@ public class OrderServiceImplementation implements OrderService{
 
      final ProductService productService;
 
-    public OrderServiceImplementation(OrderRepo orderRepo, AddressService addressService, CustomerService customerService, ProductService productService) {
+     final SizeService sizeService;
+
+    public OrderServiceImplementation(OrderRepo orderRepo, AddressService addressService, CustomerService customerService, ProductService productService, SizeService sizeService) {
         this.orderRepo = orderRepo;
         this.addressService = addressService;
         this.customerService = customerService;
         this.productService = productService;
+        this.sizeService = sizeService;
     }
 
 
@@ -102,6 +105,7 @@ public class OrderServiceImplementation implements OrderService{
             orderItem.setTotalMRP(item.getTotalMRP());
             orderItem.setTotalPrice(item.getTotalPrice());
             orderItem.setOrder(orders);
+            orderItem.setProductSize(item.getProductSize());
             orderItems.add(orderItem);
         }
         orders.setItems(orderItems);
@@ -167,6 +171,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public void placeOrder(Orders orders, Payment payment, Principal principal) {
+
         payment.setDateTime(LocalDateTime.now());
         payment.setTotalAmount(orders.getTotalPrice());
         orders.setPayment(payment);
@@ -175,6 +180,11 @@ public class OrderServiceImplementation implements OrderService{
         orderHistory.setOrderTime(LocalDateTime.now());
         orders.setOrderHistory(orderHistory);
         orders.setIsPaymentDone(true);
+        orders.getItems().forEach(orderItem -> {
+            sizeService.removeStock(orderItem.getProductSize().getSizeId(), orderItem.getQuantity());
+
+
+        });
 
         orderRepo.save(orders);
 
@@ -199,5 +209,31 @@ public class OrderServiceImplementation implements OrderService{
         }
 
         return false;
+    }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+
+        Orders orders = orderRepo.findById(orderId).orElse(new Orders());
+
+     orders.getItems().forEach(orderItem -> {
+         sizeService.addStock(orderItem.getProductSize().getSizeId(), orderItem.getQuantity());
+     });
+
+        updateOrderStatus(orderId,OrderStatus.CANCELLED);
+    }
+
+    @Override
+    public void returnOrder(Long orderId) {
+        Orders orders = orderRepo.findById(orderId).orElse(new Orders());
+
+        orders.getItems().forEach(orderItem -> {
+            sizeService.addStock(orderItem.getProductSize().getSizeId(), orderItem.getQuantity());
+        });
+
+
+        updateOrderStatus(orderId,OrderStatus.RETURNED);
+
+
     }
 }

@@ -10,7 +10,7 @@ import java.security.Principal;
 @Service
 public interface CartService {
 
-    void add(Integer productId, Principal principal) throws AlreadyUsedException;
+    void add(Integer productId,long sizeId, Principal principal) throws AlreadyUsedException;
 
     Cart getCartByCustomerId(Long customerId);
 

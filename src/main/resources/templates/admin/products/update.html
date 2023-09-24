@@ -237,7 +237,7 @@
               <input
                       class="form-control  fs-4 text-center"
                       type="number"
-                      th:field="*{stock.sizeList[__${val.index}__].totalCount}"
+                      th:field="*{stock.sizeList[__${val.index}__].totalStock}"
                       th:id="${size.sizeId}"
               >
             </div>
@@ -443,7 +443,7 @@
       </div>
       <div class=" mt-0 d-flex justify-content-center ">
 
-        <form th:action="@{'/admin/products/'+${productId}+'/stock/size/update'}" method="post">
+        <form th:action="@{'/admin/products/'+${productId}+'/stock/size/add'}" method="post">
           <div class="input-group m-3">
             <span class="input-group-text" id="basic-addon1">ENTER THE SIZE</span>
 

@@ -7,6 +7,7 @@ import com.adith.walk.dto.ProductPageDTO;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.repositories.ProductRepo;
 import com.adith.walk.repositories.ProductRepository;
+import com.adith.walk.repositories.SizeRepository;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -38,15 +39,21 @@ public class ProductService {
 
     final FileService fileService;
 
+    final StockService stockService;
+
+    final SizeRepository sizeRepository;
 
 
-    public ProductService(ProductRepository productRepository, ImageRepo imageRepo, ProductRepo productRepo, CategoryService categoryService,  ModelMapper modelMapper, FileService fileService) {
+
+    public ProductService(ProductRepository productRepository, ImageRepo imageRepo, ProductRepo productRepo, CategoryService categoryService, ModelMapper modelMapper, FileService fileService, StockService stockService, SizeRepository sizeRepository) {
         this.productRepository = productRepository;
         this.imageRepo = imageRepo;
         this.productRepo = productRepo;
         this.categoryService = categoryService;
         this.modelMapper = modelMapper;
         this.fileService = fileService;
+        this.stockService = stockService;
+        this.sizeRepository = sizeRepository;
     }
 
     public List<Product>getAllProducts(){
@@ -81,16 +88,7 @@ public class ProductService {
 
     }
 
-    public void addStock(Integer productId,String size){
 
-        Product product =getProductById(productId);
-
-
-        getStockOfProduct(product,size);
-
-        productRepository.save(product);
-
-    }
 
     public static void getStockOfProduct(Product product,String size) {
 
@@ -101,7 +99,7 @@ public class ProductService {
         newSize.setSizeNumber(Short.parseShort(size));
         newSize.setSizeLength((short) 0);
         newSize.setSizeWidth((short) 0);
-        newSize.setTotalCount(0);
+        newSize.setTotalStock(0);
 
         List<Size> sizeList = stock.getSizeList();
         sizeList.add(newSize);
@@ -164,10 +162,23 @@ public class ProductService {
 
             throw new AlreadyUsedException("Product with this  name already exists");
         }
+
         modelMapper.map(productDTO,product);
+
+        Stock stock = product.getStock();
+        stock.setTotalStock(0);
+        List<Size> sizeList = stock.getSizeList();
+        sizeList.forEach(size -> {
+            stock.setTotalStock(stock.getTotalStock()+size.getTotalStock());
+            size.setStock(stock);
+        });
+
+
+
+        stock.setProduct(product);
+        stockService.save(stock);
+
         productRepository.save(product);
-
-
     }
 
 
@@ -260,4 +271,24 @@ public class ProductService {
     }
 
 
+
+    public void addSize(Integer productId, String sizeNumber){
+
+        Product product =getProductById(productId);
+
+
+        Stock stock = stockService.getStockByProduct(product);
+
+        Size newSize=new Size();
+        newSize.setSizeWidth((short) 0);
+        newSize.setSizeLength((short) 0);
+        newSize.setSizeNumber(Short.parseShort(sizeNumber));
+        newSize.setTotalStock(0);
+        newSize.setStock(stock);
+
+        stock.getSizeList().add(newSize);
+
+        stockService.save(stock);
+
+    }
 }

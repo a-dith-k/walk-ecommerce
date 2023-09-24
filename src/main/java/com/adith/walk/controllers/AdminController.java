@@ -1,6 +1,7 @@
 package com.adith.walk.controllers;
 
-import com.adith.walk.Entities.*;
+import com.adith.walk.Entities.Banner;
+import com.adith.walk.Entities.Product;
 import com.adith.walk.dto.CustomerDTO;
 import com.adith.walk.dto.CustomerRegistrationRequest;
 import com.adith.walk.dto.CustomerRegistrationRequestAdmin;
@@ -26,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @SessionAttributes("product")
@@ -131,13 +131,13 @@ public class AdminController {
         }
 
         try{
-                customerService.registerCustomerAdmin(registrationRequest);
+            customerService.registerCustomerAdmin(registrationRequest);
 
         }catch (AlreadyUsedException usedException){
-                model
-                        .addAttribute("message",
-                                new Message(usedException.getMessage(),"alert-danger"));
-                return  "admin/users/add";
+            model
+                    .addAttribute("message",
+                            new Message(usedException.getMessage(),"alert-danger"));
+            return  "admin/users/add";
         }
 
         model
@@ -154,7 +154,7 @@ public class AdminController {
     public String updateUserGET(@PathVariable Long userId,Model model){
 
         CustomerDTO customer =
-                    modelMapper
+                modelMapper
                         .map(customerService.getCustomerById(userId), CustomerDTO.class);
 
         model
@@ -285,7 +285,7 @@ public class AdminController {
 
 
     @PostMapping("products/add")
-    public String addProductPost(@Valid @ModelAttribute("product") ProductDTO addProductRequest,BindingResult result,Category category, @RequestParam("files")MultipartFile[] files, Model model){
+    public String addProductPost(@Valid @ModelAttribute("product") ProductDTO addProductRequest,BindingResult result, @RequestParam("files")MultipartFile[] files, Model model){
 
         if(result.hasErrors()){
 
@@ -305,7 +305,7 @@ public class AdminController {
 
 
         try {
-           product = productService.addProduct(addProductRequest, files);
+            product = productService.addProduct(addProductRequest, files);
         }catch (FileAlreadyExistsException e){
             model
                     .addAttribute("message",
@@ -340,19 +340,19 @@ public class AdminController {
         return "admin/products/addStock";
     }
 
-
-    @PostMapping("products/{productId}/stock/size/add")
-    public String addSize(@PathVariable Integer productId,@RequestParam String size,Model model){
-
-        Product product = productService.getProductById(productId);
-        ProductService.getStockOfProduct(product,size);
-        productService.saveProduct(product);
-
-        model.addAttribute("product",modelMapper.map(productService.getProductById(productId),ProductDTO.class));
-
-
-        return "admin/products/addStock";
-    }
+//
+//    @PostMapping("products/{productId}/stock/size/add")
+//    public String addSize(@PathVariable Integer productId,@RequestParam String size,Model model){
+//
+//        Product product = productService.getProductById(productId);
+//        ProductService.getStockOfProduct(product,size);
+//        productService.saveProduct(product);
+//
+//        model.addAttribute("product",modelMapper.map(productService.getProductById(productId),ProductDTO.class));
+//
+//
+//        return "admin/products/addStock";
+//    }
 
 //--------------------------Updating  the product-----------------------------------------------
 
@@ -450,14 +450,14 @@ public class AdminController {
         }
 
         try{
-                bannerService.save(new Banner(fileService.uploadBanner(file),heading,description,status));
-            }catch (FileAlreadyExistsException e){
-                model.addAttribute("message","file exists");
-                return "admin/banner/add";
-            }catch (MultipartException | IOException e){
-                model.addAttribute("message",e.getMessage());
-                return "admin/banner/add";
-            }
+            bannerService.save(new Banner(fileService.uploadBanner(file),heading,description,status));
+        }catch (FileAlreadyExistsException e){
+            model.addAttribute("message","file exists");
+            return "admin/banner/add";
+        }catch (MultipartException | IOException e){
+            model.addAttribute("message",e.getMessage());
+            return "admin/banner/add";
+        }
 
 
         model.addAttribute("message","uploaded successfully");
@@ -515,31 +515,15 @@ public class AdminController {
 
 
 
-   @PostMapping("products/{productId}/stock/size/update")
-   public String updateSize(@PathVariable Integer productId,@RequestParam String size){
+    @PostMapping("products/{productId}/stock/size/add")
+    public String updateSize(@PathVariable Integer productId,@RequestParam String size){
 
 
-       productService.addStock(productId,size);
+        productService.addSize(productId,size);
 
-       return "redirect:/admin/products/update/"+productId;
-   }
-
-
-
-    @ResponseBody
-    @GetMapping("coupons")
-    public List<Coupon> getAllCoupons(){
-
-        return couponService.getAllCoupons();
+        return "redirect:/admin/products/update/"+productId;
     }
 
-
-    @GetMapping("add-coupons")
-    public String addCoupons(){
-
-        return "admin/coupon/add";
-
-    }
 
 
 
@@ -564,4 +548,3 @@ public class AdminController {
 
 
 }
-

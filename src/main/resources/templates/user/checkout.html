@@ -6,8 +6,8 @@
     <link id="style" rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 <body >
-<section id="content" >
-    <section class="row  justify-content-center " style="--bs-gutter-x:0" th:with="order=${session.order}" >
+<section class="container-fluid" id="content"  th:with="order=${session.order}">
+    <section class="row  justify-content-center " style="--bs-gutter-x:0" >
         <section class="col-md-8   row" >
             <div class="col-md-12">
                 <h1>Order Summary</h1>
@@ -15,6 +15,9 @@
             <th:block  th:each="item : ${order.items}">
                 <div class="col-md-3">
                     <h2 th:text="${item.product.productName}"></h2>
+                </div>
+                <div class="col-md-1">
+                    <h2 th:text="'SIZE-'+${item.productSize.sizeNumber}"></h2>
                 </div>
                 <div class="col-md-1">
                     <h2>X</h2>
@@ -36,12 +39,16 @@
             <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total MRP</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${order.totalMRP}"></h2>
             <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Discount</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${order.totalDiscount}"></h2>
             <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Quantity</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${order.quantity}"></h2>
-            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Payable</h2><h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${order.totalPrice}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Price</h2><h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${order.totalPrice}"></h2>
+            <th:block th:if="${order.coupon!=null}">
+                <h2 class="fs-3 mt-3  col-md-6">Coupon Discount</h2><h2 class="text-end col-6 fs-3 mt-3  " th:text="${order.totalPrice}-${order.discountedPrice}"></h2>
+                <h2 class="fs-2 mt-3 fw-normal  col-md-6">Total Payable</h2><h2 class="text-end col-6 fs-1 mt-3 fw-bold " th:text="${order.discountedPrice}"></h2>
+            </th:block>
 
         </article>
 
     </section>
-    <section class="row justify-content-center" style="--bs-gutter-x:0">
+    <section class="row justify-content-center " style="--bs-gutter-x:0">
         <div class="col-md-8 row flex-column ps-0 p-3 pt-0" th:with="deliveryAddress=${session.order.deliveryAddress}">
             <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Delivery Address</h3>
             <div class="col-md-12 bg-common" >
@@ -54,7 +61,7 @@
                     <span th:text="${deliveryAddress.zipCode}+',  '"></span>
                     <span class="h3" th:text="${deliveryAddress.state}"> </span>
                 </h2>
-                <div class="col-md-12 m-3 mt-0">
+                <div class="col-md-12 m-3 mt-0   ">
                     <button
                             class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4"
                             data-bs-toggle="modal"
@@ -69,20 +76,8 @@
 
                 </div>
             </div>
-
-        </div>
-        <div class="col-md-2" >
-
-
-        </div>
-
-
-
-    </section>
-    <section class="row justify-content-center" style="--bs-gutter-x:0">
-        <div class="col-md-8 row flex-column ps-0 p-3 pt-0" th:with="billingAddress=${session.order.billingAddress}">
             <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Billing Address</h3>
-            <div class="col-md-12 bg-common" >
+            <div class="col-md-12 bg-common" th:with="billingAddress=${session.order.billingAddress}">
                 <h2 class="col-12 m-3"  >
                     <span th:text="${billingAddress.name}+', '"></span>
                     <span th:text="${billingAddress.mobile}+', '"></span>
@@ -107,8 +102,66 @@
 
                 </div>
             </div>
+        </div>
+        <div class="col-md-2 bg-secondary-subtle" >
+            <div th:if="${order.coupon!=null}" class="m-2 d-flex flex-column align-items-center ">
+                <h1 class="text-center mb-4 "> Coupons Applied</h1>
+                <div class="        ">
+                    <h3 class=" p-3 bg-dark text-white ms-5  d-inline " th:text="${order.coupon.couponName}"></h3>
+                    <form th:action="@{/user/checkout/removeCoupon}" th:method="put" class="d-inline">
+                        <button type="submit" class="btn btn-danger rounded-0  ">remove</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <form th:action="@{/user/checkout/applyCoupon}" class="mx-5 my-5 mt-0" th:method="put">
+                <label for="couponName" class="fs-3">Enter Your Coupon Code</label>
+                 <input name="couponName" placeholder="COUPON CODE" id="couponName" class="form-control fs-2" type="text">
+                <div class="mx-5 my-3 text-center">
+                    <div th:if="${message}" th:text="${message.content}" th:classappend="${message.type}" class="alert py-2 fs-3 border-0 d-inline">
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary form-control fs-2 my-2">APPLY</button>
+            </form>
+
 
         </div>
+
+
+
+    </section>
+    <section class="row justify-content-center" style="--bs-gutter-x:0">
+<!--        <div class="col-md-8 row flex-column ps-0 p-3 pt-0" th:with="billingAddress=${session.order.billingAddress}">-->
+<!--            <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Billing Address</h3>-->
+<!--            <div class="col-md-12 bg-common" >-->
+<!--                <h2 class="col-12 m-3"  >-->
+<!--                    <span th:text="${billingAddress.name}+', '"></span>-->
+<!--                    <span th:text="${billingAddress.mobile}+', '"></span>-->
+<!--                    <span th:text="${billingAddress.building}+', '"></span>-->
+<!--                    <span th:text="${billingAddress.street}+', '"></span>-->
+<!--                    <span th:text="${billingAddress.city}+', '"></span>-->
+<!--                    <span th:text="${billingAddress.zipCode}+',  '"></span>-->
+<!--                    <span class="h3" th:text="${billingAddress.state}"> </span>-->
+<!--                </h2>-->
+<!--                <div class="col-md-12 m-3 mt-0">-->
+<!--                    <button-->
+<!--                            class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4"-->
+<!--                            data-bs-toggle="modal"-->
+<!--                            data-bs-target="#billingAddressModal">-->
+<!--                        change-->
+<!--                    </button>-->
+<!--                    <a-->
+<!--                            th:href="@{'/user/address/update/'+${billingAddress.id}}"-->
+<!--                            class="btn btn-secondary rounded-5 fs-3 m-2 ps-5 pe-5">-->
+<!--                        edit-->
+<!--                    </a>-->
+
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
         <div class="col-md-2" >
 
 

@@ -24,6 +24,9 @@ public class OrderItem implements Serializable {
     @ManyToOne()
     private Product product;
 
+    @ManyToOne
+    private Size productSize;
+
     private Long quantity;
 
     private Long totalMRP;

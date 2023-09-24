@@ -16,50 +16,49 @@
                 <button type="button" class="btn  btn-secondary fs-2">ADD USERS</button>
             </a>
         </div>
-        <div class="col-md-9 p-0 m-5 ">
-            <table class="table">
+        <div class="col-md-9 p-0 m-5 table-responsive ">
+            <table class="table align-middle">
                 <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">FIRSTNAME</th>
-                    <th scope="col">LASTNAME</th>
-                    <th scope="col">MOBILE</th>
-                    <th scope="col">EMAIL</th>
-                    <th scope="col">GENDER</th>
-                    <th scope="col">STATUS</th>
-                </tr>
+                    <tr>
+                        <th class="display-6 px-5" scope="col">ID</th>
+                        <th class="display-6 px-5" scope="col">FIRSTNAME</th>
+                        <th class="display-6 px-5" scope="col">LASTNAME</th>
+                        <th class="display-6 px-5" scope="col">MOBILE</th>
+                        <th class="display-6 px-5" scope="col">EMAIL</th>
+                        <th class="display-6 px-5" scope="col">GENDER</th>
+                        <th class="display-6 px-5" scope="col">STATUS</th>
+                    </tr>
                 </thead>
                 <tbody>
+                    <tr th:each="user: ${userResponse.customers}">
+                        <th scope="row" class="fs-3 px-5" th:text="${user.userId}"></th>
+                        <td class="fs-3 px-5" th:text="${user.firstName}"    >     </td>
+                        <td class="fs-3 px-5" th:text="${user.lastName}"     >     </td>
+                        <td class="fs-3 px-5" th:text="${user.mobileNumber}" >     </td>
+                        <td class="fs-3 px-5" th:text="${user.email}"        >     </td>
+                        <td class="fs-3 px-5" th:text="${user.gender}"       >     </td>
+                        <td class="fs-3 px-5">
+                            <form  th:if="${user.enabled}" th:action="@{'/admin/users/disable/'+${user.userId}}" th:method="put">
+                                <button type="submit"   class="btn btn-danger fw-bold fs-4">DISABLE</button>
+                            </form>
 
-                <tr th:each="user: ${userResponse.customers}" id="inputs">
-                    <th class="fs-3"><input th:value="${user.userId}"       type="text" name="id"  class="input-id" id="user-id" readonly></th>
-                    <td class="fs-3"><input th:value="${user.firstName}"    type="text" readonly="readonly" id="customer-firstname"></td>
-                    <td class="fs-3"><input th:value="${user.lastName}"     type="text" readonly="readonly"  id="customer-lastname"></td>
-                    <td class="fs-3"><input th:value="${user.mobileNumber}" type="text" readonly="readonly"  id="customer-mobile"></td>
-                    <td class="fs-3"><input th:value="${user.email}"        type="text" readonly="readonly"  id="customer-email"></td>
-                    <td class="fs-3"><input th:value="${user.gender}"       type="text" readonly="readonly"  id="customer-gender" class="w-80px"></td>
-                    <td class="">
-                        <form  th:if="${user.enabled}" th:action="@{'/admin/users/disable/'+${user.userId}}" th:method="put">
-                            <button type="submit"   class="btn btn-danger fw-bold fs-4">DISABLE</button>
-                        </form>
+                            <form th:unless="${user.enabled}"  th:action="@{'/admin/users/enable/'+${user.userId}}" th:method="put">
+                                <button type="submit"  class="btn btn-success fw-bold fs-4">ENABLE</button>
+                            </form>
+                        </td>
+                        <td class="px-5">
+                            <a  th:href="@{'/admin/users/update/'+*{user.userId}}" class="btn btn-outline-info border-0 ">
+                                <img th:src="@{/img/admin/img.png}" alt="" class="">
+                            </a>
+                        </td>
+                        <td class="fs-3 px-5">
+                          <button type="button" class="btn btn-outline-danger border-0 " data-bs-toggle="modal" data-bs-target="#exampleModal" >
+                              <img th:src="@{/img/admin/delete.png}" alt="" class="  ">
+                          </button>
 
-                        <form th:unless="${user.enabled}"  th:action="@{'/admin/users/enable/'+${user.userId}}" th:method="put">
-                            <button type="submit"  class="btn btn-success fw-bold fs-4">ENABLE</button>
-                        </form>
+                        </td>
+                        <!-----------------------------------modal---------------------------------------->
 
-                    </td>
-
-
-                    <td class="">
-                        <a  th:href="@{'/admin/users/update/'+*{user.userId}}" class="btn btn-outline-info border-0 ">
-                            <img th:src="@{/img/admin/img.png}" alt="" class="img-fluid w-25">
-                        </a>
-                    </td>
-                    <td class="fs-3">
-                      <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#exampleModal" >
-                          <img th:src="@{/img/admin/delete.png}" alt="" class="img-fluid w-25   ">
-                      </button>
-                        <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -81,23 +80,17 @@
                                 </div>
                             </div>
                         </div>
-                    </td>
-
-
-
-                </tr>
-
-
+                    </tr>
                 </tbody>
             </table>
-
-            <!-----------------------------------modal---------------------------------------->
-
+        </div>
 
 
 
 
-            <!------------------------------------pagination--------------------------------------------------->
+
+
+                        <!------------------------------------pagination--------------------------------------------------->
             <nav aria-label="...">
                 <ul class="pagination" >
                     <li class="page-item " th:if="${userResponse.currentPageNumber!=0}">
@@ -117,7 +110,7 @@
                 </ul>
             </nav>
         </div>
-    </div>
+
 
 
 <!--    <script-->

@@ -19,20 +19,23 @@ public class CartItem implements Serializable {
 
     @Id
     @GeneratedValue(generator = "CartItemGenerator",strategy = GenerationType.SEQUENCE)
-    Long ItemId;
+    private Long ItemId;
 
     @ManyToOne()
-    Product product;
+    private Product product;
 
-    Long quantity;
+    @ManyToOne
+    private Size productSize;
 
-    Long totalMRP;
+    private Long quantity;
 
-    Long totalPrice;
+    private Long totalMRP;
+
+    private Long totalPrice;
 
     @ManyToOne()
     @JoinColumn(name = "cart_id")
-    Cart cart;
+    private Cart cart;
 
 
 }

@@ -16,56 +16,113 @@
         <tr>
             <th scope="col" rowspan="2">ID</th>
             <th scope="col" rowspan="2">Product Name</th>
-            <th scope="col" colspan="11">SIZE</th>
+            <th scope="col" colspan="11">STOCK</th>
 
         </tr>
-        <tr>
+        <tr >
+            <th scope="col" colspan="1"> TOTAL STOCK</th>
+            <th scope="col" colspan="6">
+                SIZE-STOCK
+            </th>
+<!--            <th:block th:each="pStock : ${stock}">-->
+<!--                <th th:each="size: ${pStock.sizeList}" scope="col" th:text="${size.sizeNumber}">12</th>-->
+<!--            </th:block>-->
 
-            <th scope="col">12</th>
-            <th scope="col">11</th>
-            <th scope="col">10</th>
-            <th scope="col">9</th>
-            <th scope="col">8</th>
-            <th scope="col">7</th>
-            <th scope="col">6</th>
-            <th scope="col">5</th>
-            <th scope="col">4</th>
-            <th scope="col">3</th>
-            <th scope="col">2</th>
+<!--            <th scope="col">12</th>-->
+<!--            <th scope="col">11</th>-->
+<!--            <th scope="col">10</th>-->
+<!--            <th scope="col">9</th>-->
+<!--            <th scope="col">8</th>-->
+<!--            <th scope="col">7</th>-->
+<!--            <th scope="col">6</th>-->
+<!--            <th scope="col">5</th>-->
+<!--            <th scope="col">4</th>-->
+<!--            <th scope="col">3</th>-->
+<!--            <th scope="col">2</th>-->
             <th scope="col">UPDATE</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="productStock:${stock}">
 
-        <tr>
-            <th scope="row"  th:text="${productStock.id}">1</th>
+
+        <tr th:each="productStock:${stock}" >
+            <th scope="row"  th:text="${productStock.stockId}"></th>
             <td th:text="${productStock.product.productName}"></td>
-            <td th:if="${productStock.size_12>0}" th:classappend="${productStock.size_12<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_12}"></td>
-            <td th:unless="${productStock.size_12>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_11>0}" th:classappend="${productStock.size_11<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_11}"></td>
-            <td th:unless="${productStock.size_11>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_10>0}" th:classappend="${productStock.size_10<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_10}"></td>
-            <td th:unless="${productStock.size_10>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_9>0}" th:classappend="${productStock.size_9<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_9}"></td>
-            <td th:unless="${productStock.size_9>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_8>0}" th:classappend="${productStock.size_8<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_8}"></td>
-            <td th:unless="${productStock.size_8>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_7>0}" th:classappend="${productStock.size_7<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_7}"></td>
-            <td th:unless="${productStock.size_7>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_6>0}" th:classappend="${productStock.size_6<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_6}"></td>
-            <td th:unless="${productStock.size_6>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_5>0}" th:classappend="${productStock.size_5<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_5}"></td>
-            <td th:unless="${productStock.size_5>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_4>0}" th:classappend="${productStock.size_4<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_4}"></td>
-            <td th:unless="${productStock.size_4>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_3>0}" th:classappend="${productStock.size_3<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_3}"></td>
-            <td th:unless="${productStock.size_3>0}" class="bg-dark"></td>
-            <td th:if="${productStock.size_2>0}" th:classappend="${productStock.size_2<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_2}"></td>
-            <td th:unless="${productStock.size_2>0}" class="bg-dark"></td>
+            <td th:text="${productStock.totalStock}"></td>
+            <td colspan="6">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <td >Size</td>
+                            <td>stock</td>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr  th:each="size: ${productStock.sizeList}">
+                        <th th:text="${size.sizeNumber}"></th>
+                        <td th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+<!--            <th:block th:each="size : ${productStock.sizeList}">-->
+
+
+<!--            <td  th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td  class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==11}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==11}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==10}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==10}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==9}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==9}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==8}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==8}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==7}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==7}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==6}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==6}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==5}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==5}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==4}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==4}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==3}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==3}" class="bg-dark"></td>-->
+<!--            <td th:if="${size.sizeNumber==2}" th:classappend="${size.totalStock<10}?'text-black bg-danger':'text-success'" th:text="${size.totalStock}"></td>-->
+<!--            <td th:unless="${size.sizeNumber==2}" class="bg-dark"></td>-->
+
+    <!--            </th:block>-->
+
+
+
+
+
+
+
+<!--            <td th:if="${productStock.size_11>0}" th:classappend="${productStock.size_11<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_11}"></td>-->
+<!--            <td th:unless="${productStock.size_11>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_10>0}" th:classappend="${productStock.size_10<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_10}"></td>-->
+<!--            <td th:unless="${productStock.size_10>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_9>0}" th:classappend="${productStock.size_9<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_9}"></td>-->
+<!--            <td th:unless="${productStock.size_9>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_8>0}" th:classappend="${productStock.size_8<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_8}"></td>-->
+<!--            <td th:unless="${productStock.size_8>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_7>0}" th:classappend="${productStock.size_7<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_7}"></td>-->
+<!--            <td th:unless="${productStock.size_7>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_6>0}" th:classappend="${productStock.size_6<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_6}"></td>-->
+<!--            <td th:unless="${productStock.size_6>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_5>0}" th:classappend="${productStock.size_5<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_5}"></td>-->
+<!--            <td th:unless="${productStock.size_5>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_4>0}" th:classappend="${productStock.size_4<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_4}"></td>-->
+<!--            <td th:unless="${productStock.size_4>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_3>0}" th:classappend="${productStock.size_3<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_3}"></td>-->
+<!--            <td th:unless="${productStock.size_3>0}" class="bg-dark"></td>-->
+<!--            <td th:if="${productStock.size_2>0}" th:classappend="${productStock.size_2<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_2}"></td>-->
+<!--            <td th:unless="${productStock.size_2>0}" class="bg-dark"></td>-->
                 <td><a th:href="@{'/admin/products/update/'+${productStock.product.productId}}" class="btn btn-primary rounded-0">UPDATE</a></td>
         </tr>
-        </th:block>
+
 
         </tbody>
     </table>
