@@ -1,7 +1,7 @@
 package com.adith.walk.service;
 
-import com.adith.walk.Entities.ConfirmToken;
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.entities.ConfirmToken;
+import com.adith.walk.entities.Customer;
 import com.adith.walk.repositories.TokenRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class TokenService {
         return tokenRepo.findByToken(token);
     }
 
-    public Optional<ConfirmToken> getTokenByCustomer(Customer customer){
+    public Optional<ConfirmToken> getTokenByCustomer(Customer customer) {
         return tokenRepo.getConfirmTokenByCustomer(customer);
     }
 

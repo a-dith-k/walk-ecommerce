@@ -1,8 +1,8 @@
 package com.adith.walk.service;
 
-import com.adith.walk.Entities.Banner;
+import com.adith.walk.entities.Banner;
 import com.adith.walk.repositories.BannerRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,23 +13,28 @@ import java.util.List;
 @Service
 public class BannerService {
 
-    @Autowired
-    BannerRepo bannerRepo;
 
+    final BannerRepo bannerRepo;
+
+    public BannerService(BannerRepo bannerRepo) {
+        this.bannerRepo = bannerRepo;
+    }
+
+    @Transactional
     public void save(Banner banner) {
         bannerRepo.save(banner);
     }
 
     public List<Banner> getAllBanner() {
 
-       return  bannerRepo.findAll();
+        return bannerRepo.findAll();
     }
 
     public void delete(Integer bannerId) throws IOException {
 
-        Banner banner=bannerRepo.findById(bannerId).get();
+        Banner banner = bannerRepo.findById(bannerId).get();
 
-        Path path = Path.of("src/main/resources/static/img/banner/"+banner.getName());
+        Path path = Path.of("src/main/resources/static/img/banner/" + banner.getName());
 
         Files.deleteIfExists(path);
 
@@ -37,7 +42,28 @@ public class BannerService {
         bannerRepo.delete(banner);
 
 
+    }
 
+    public List<Banner> getHeaderBanners() {
 
+        return bannerRepo.findBannersByBannerPosition("header");
+    }
+
+    @Transactional
+    public void createNewBanner(String s, Banner banner) {
+
+        banner.setName(s);
+
+        bannerRepo.save(banner);
+    }
+
+    public Banner getRightFooterBanner() {
+
+        return bannerRepo.findBannersByBannerPosition("footer-right").stream().findFirst().orElse(new Banner());
+    }
+
+    public List<Banner> getLeftFooterBanners() {
+
+        return bannerRepo.findBannersByBannerPosition("footer-left");
     }
 }

@@ -9,12 +9,13 @@
     <link id="style" rel="stylesheet" th:href="@{/css/admin-product.css}">
 </head>
 <body>
-<section id="content">
-    <div class="row">
-        <div class="col-md-2 menu-bar d-flex justify-content-center mt-0  m-4 shadow">
-            <a th:href="@{/admin/banners/add}">
-                <button type="button" class="btn  btn-secondary fs-2">ADD BANNER</button>
-            </a>
+<section id="content" class="container-fluid">
+    <div class="row mx-4"   style="--bs-gutter-x: 0">
+        <div class="col-md-2 mt-5">
+            <div class="menu-bar d-flex flex-column shadow  m-4 pb-2" >
+                <a th:href="@{/admin/banners/add}"  class="btn  btn-secondary fs-2  m-2 mb-0">ADD BANNER</a >
+            </div>
+
 
         </div>
         <div th:if="${message}" th:text="${message.content}" th:classappend="${message.type}" class="alert">
@@ -28,11 +29,12 @@
                 <div class="col-md-5">
                     <h1 th:text="${banner.heading}"></h1>
                     <h3 th:text="${banner.description}"></h3>
+                    <h2 class="fw-bold">Position : <span th:text="${banner.bannerPosition}"></span></h2>
 
                     <form th:action="@{'/admin/banners/delete/'+${banner.id}}" method="post">
-                        <button type="button" class="btn btn-danger fw-bold " data-bs-toggle="modal" data-bs-target="#exampleModal">DELETE</button>
+                        <button type="button" class="btn btn-danger fw-bold " data-bs-toggle="modal" th:data-bs-target="${'#'+banner.id}">DELETE</button>
 
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" th:id="${banner.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">

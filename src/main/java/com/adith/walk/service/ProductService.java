@@ -1,13 +1,20 @@
 package com.adith.walk.service;
 
 
-import com.adith.walk.Entities.*;
 import com.adith.walk.dto.ProductDTO;
 import com.adith.walk.dto.ProductPageDTO;
+import com.adith.walk.entities.Images;
+import com.adith.walk.entities.Product;
+import com.adith.walk.entities.Size;
+import com.adith.walk.entities.Stock;
+import com.adith.walk.enums.CustomerCategory;
+import com.adith.walk.exceptions.SizeAlreadyExistsException;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.repositories.ProductRepo;
 import com.adith.walk.repositories.ProductRepository;
 import com.adith.walk.repositories.SizeRepository;
+import com.adith.walk.service.file.service.FileService;
+import com.adith.walk.service.stock.service.StockService;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -44,7 +51,6 @@ public class ProductService {
     final SizeRepository sizeRepository;
 
 
-
     public ProductService(ProductRepository productRepository, ImageRepo imageRepo, ProductRepo productRepo, CategoryService categoryService, ModelMapper modelMapper, FileService fileService, StockService stockService, SizeRepository sizeRepository) {
         this.productRepository = productRepository;
         this.imageRepo = imageRepo;
@@ -56,7 +62,7 @@ public class ProductService {
         this.sizeRepository = sizeRepository;
     }
 
-    public List<Product>getAllProducts(){
+    public List<Product> getAllProducts() {
 
         return productRepository.findAll();
     }
@@ -76,7 +82,7 @@ public class ProductService {
 
     public List<Product> getProductByPage(Integer pageNumber, Integer count) {
         Page<Product> all = productRepository.findAll(PageRequest.of(pageNumber, count));
-        List<Product> list=new ArrayList<>();
+        List<Product> list = new ArrayList<>();
         all.stream().forEach(product -> list.add(product));
         Pageable pageable = all.nextPageable();
         return list;
@@ -84,18 +90,17 @@ public class ProductService {
 
 
     public Product saveProduct(Product product) {
-       return productRepository.save(product);
+        return productRepository.save(product);
 
     }
 
 
-
-    public static void getStockOfProduct(Product product,String size) {
+    public static void getStockOfProduct(Product product, String size) {
 
         Stock stock = product.getStock();
 
 
-        Size newSize=new Size();
+        Size newSize = new Size();
         newSize.setSizeNumber(Short.parseShort(size));
         newSize.setSizeLength((short) 0);
         newSize.setSizeWidth((short) 0);
@@ -112,67 +117,65 @@ public class ProductService {
     public Product addProduct(ProductDTO addProductRequest, MultipartFile[] images) throws IOException, AlreadyUsedException {
         Product product
                 = modelMapper
-                        .map(addProductRequest,Product.class);
+                .map(addProductRequest, Product.class);
 
         product
                 .setProductDescription(product
                         .getProductDescription()
-                            .trim());
-
-        Stock stock=new Stock();
-        modelMapper.map(product.getStock(),stock);
-        product.setStock(stock);
+                        .trim());
 
 
-        if(isProductExists(product)){
+        Stock stock = product.getStock();
+        stock.setProduct(product);
+
+
+        if (isProductExists(product)) {
             throw new AlreadyUsedException("Product Name Already Exists");
         }
 
 
         for (MultipartFile image : images) {
             if (!image.getContentType().equals("image/jpeg")) {
-                throw new  IllegalArgumentException("Only JPEG images are Allowed");
+                throw new IllegalArgumentException("Only JPEG images are Allowed");
             }
         }
 
-        List<Images>imageList=new ArrayList<>();
+        List<Images> imageList = new ArrayList<>();
 
-        for(MultipartFile image:  images){
-            Images imageNew=new Images();
+        for (MultipartFile image : images) {
+            Images imageNew = new Images();
             imageNew.setName(fileService.fileUpload(image));
             imageNew.setProduct(product);
             imageList.add(imageNew);
         }
         product.setList(imageList);
-        return   productRepository.save(product);
-
+        return productRepository.save(product);
 
 
     }
 
-    public void updateProduct(ProductDTO productDTO,MultipartFile[] images) throws  AlreadyUsedException {
+    public void updateProduct(ProductDTO productDTO, MultipartFile[] images) throws AlreadyUsedException {
 
         Product product =
                 productRepository
                         .findById(productDTO.getProductId()).get();
 
 
-        if(!product.getProductName().equals(productDTO.getProductName())
-                &&isProductExists(modelMapper.map(productDTO,Product.class))){
+        if (!product.getProductName().equals(productDTO.getProductName())
+                && isProductExists(modelMapper.map(productDTO, Product.class))) {
 
             throw new AlreadyUsedException("Product with this  name already exists");
         }
 
-        modelMapper.map(productDTO,product);
+        modelMapper.map(productDTO, product);
 
         Stock stock = product.getStock();
         stock.setTotalStock(0);
         List<Size> sizeList = stock.getSizeList();
         sizeList.forEach(size -> {
-            stock.setTotalStock(stock.getTotalStock()+size.getTotalStock());
+            stock.setTotalStock(stock.getTotalStock() + size.getTotalStock());
             size.setStock(stock);
         });
-
 
 
         stock.setProduct(product);
@@ -182,32 +185,28 @@ public class ProductService {
     }
 
 
-    public void deleteProduct(Integer productId){
+    public void deleteProduct(Integer productId) {
 
-        if(productRepository.findById(productId).isPresent()){
+        if (productRepository.findById(productId).isPresent()) {
             Product product = productRepository.findById(productId).get();
             List<Images> images = product.getList();
-            images.forEach(i->{
-                Path path= Paths.get("src/main/resources/static/img/productImages/"+i.getName());
+            images.forEach(i -> {
+                Path path = Paths.get("src/main/resources/static/img/productImages/" + i.getName());
                 try {
                     Files.delete(path);
                 } catch (IOException e) {
                     throw new RuntimeException("images were not deleted");
                 }
             });
-            productRepository.delete( product);
+            productRepository.delete(product);
         }
-
-
-
-
 
 
     }
 
     public Product removeProduct(Integer productId) {
 
-       return productRepository.removeProductByProductId( productId);
+        return productRepository.removeProductByProductId(productId);
     }
 
     public List<Product> getProductByNameContaining(String query) {
@@ -222,28 +221,31 @@ public class ProductService {
 
     public List<Product> getMenProducts() {
 
-        return  productRepo.findMenProducts();
+        return productRepo.findMenProducts();
     }
 
     public ProductPageDTO getPageOfProducts(Integer pageNumber, Integer noOfProducts) {
 
-        Pageable pageable=PageRequest.of(pageNumber,noOfProducts);
+
+        System.out.println("here----------------------");
+
+        Pageable pageable = PageRequest.of(pageNumber, noOfProducts);
 
         Page<Product> all = productRepository.findAll(pageable);
 
-        ProductPageDTO responseDTO=new ProductPageDTO();
+        ProductPageDTO responseDTO = new ProductPageDTO();
         responseDTO.setProducts(all);
         responseDTO.setCurrentPageNumber(all.getNumber());
         responseDTO.setTotalPages(all.getTotalPages());
 
-        return  responseDTO;
+        return responseDTO;
     }
 
-    public ProductPageDTO getMenProducts(Integer pageNumber,Integer count) {
+    public ProductPageDTO getMenProducts(Integer pageNumber, Integer count) {
 
-        Page<Product> menProducts = productRepo.findMenProducts(PageRequest.of(pageNumber, count));
+        Page<Product> menProducts = productRepository.findProductsByCustomerCategory(CustomerCategory.MALE, PageRequest.of(pageNumber, count));
 
-        ProductPageDTO productPageDTO=new ProductPageDTO();
+        ProductPageDTO productPageDTO = new ProductPageDTO();
         productPageDTO.setTotalPages(menProducts.getTotalPages());
         productPageDTO.setCurrentPageNumber(menProducts.getNumber());
         productPageDTO.setProducts(menProducts);
@@ -252,11 +254,11 @@ public class ProductService {
     }
 
 
-    public ProductPageDTO getWomenProducts(Integer pageNumber,Integer count) {
+    public ProductPageDTO getWomenProducts(Integer pageNumber, Integer count) {
 
-        Page<Product> womenProducts = productRepo.findWomenProducts(PageRequest.of(pageNumber, count));
+        Page<Product> womenProducts = productRepository.findProductsByCustomerCategory(CustomerCategory.FEMALE, PageRequest.of(pageNumber, count));
 
-        ProductPageDTO productPageDTO=new ProductPageDTO();
+        ProductPageDTO productPageDTO = new ProductPageDTO();
         productPageDTO.setTotalPages(womenProducts.getTotalPages());
         productPageDTO.setCurrentPageNumber(womenProducts.getNumber());
         productPageDTO.setProducts(womenProducts);
@@ -265,24 +267,25 @@ public class ProductService {
     }
 
 
-
-    private boolean isProductExists(Product product){
-       return productRepository.findByProductName(product.getProductName())!=null;
+    private boolean isProductExists(Product product) {
+        return productRepository.findByProductName(product.getProductName()) != null;
     }
 
 
-
-    public void addSize(Integer productId, String sizeNumber){
-
-        Product product =getProductById(productId);
+    public void addSize(long stockId, short sizeNumber) throws SizeAlreadyExistsException {
 
 
-        Stock stock = stockService.getStockByProduct(product);
+        Stock stock = stockService.getStockById(stockId);
+        for (Size size : stock.getSizeList()) {
+            if (size.getSizeNumber() == sizeNumber) {
+                throw new SizeAlreadyExistsException("Size Already Available");
+            }
+        }
 
-        Size newSize=new Size();
+        Size newSize = new Size();
         newSize.setSizeWidth((short) 0);
         newSize.setSizeLength((short) 0);
-        newSize.setSizeNumber(Short.parseShort(sizeNumber));
+        newSize.setSizeNumber(sizeNumber);
         newSize.setTotalStock(0);
         newSize.setStock(stock);
 
@@ -290,5 +293,15 @@ public class ProductService {
 
         stockService.save(stock);
 
+    }
+
+
+    public void updateStock(Integer productId, Stock stock) {
+        stock.setProduct(getProductById(productId));
+        stock.getSizeList().forEach(size -> {
+            stock.setTotalStock(stock.getTotalStock() + size.getTotalStock());
+            size.setStock(stock);
+        });
+        stockService.save(stock);
     }
 }

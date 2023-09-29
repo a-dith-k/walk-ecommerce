@@ -1,6 +1,6 @@
 package com.adith.walk.repositories;
 
-import com.adith.walk.Entities.Product;
+import com.adith.walk.entities.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -25,7 +25,6 @@ public class ProductRepo {
     }
 
 
-
     public Page<Product> findMenProducts(Pageable pageable) {
         Query query = entityManager.createQuery(
                 "SELECT p FROM Product p JOIN p.category c WHERE c.men = true",
@@ -45,8 +44,6 @@ public class ProductRepo {
         );
         return (long) countQuery.getSingleResult();
     }
-
-
 
 
     public Page<Product> findWomenProducts(Pageable pageable) {

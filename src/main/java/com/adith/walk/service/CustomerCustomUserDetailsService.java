@@ -1,7 +1,7 @@
 package com.adith.walk.service;
 
-import com.adith.walk.Entities.Customer;
-import com.adith.walk.Entities.CustomerUserDetails;
+import com.adith.walk.entities.Customer;
+import com.adith.walk.entities.CustomerUserDetails;
 import com.adith.walk.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +19,9 @@ public class CustomerCustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Customer customer= customerRepository.findCustomerByMobileNumber(username);
+        Customer customer = customerRepository.findCustomerByMobileNumber(username);
 
-        if(customer==null){
+        if (customer == null) {
             throw new UsernameNotFoundException("User could not be found");
         }
 
@@ -29,5 +29,5 @@ public class CustomerCustomUserDetailsService implements UserDetailsService {
     }
 
 
-    }
+}
 

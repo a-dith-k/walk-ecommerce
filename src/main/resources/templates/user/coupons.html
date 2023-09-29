@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{user/base::layout(~{::#style},~{::#content},~{::#script})}">
 <head>
     <meta charset="UTF-8">
-    <title>this is your coupon</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="loginpage"></title>
+    <link id="style"  rel="stylesheet" th:href="@{/css/user/coupons.css}">
 </head>
-<body>
+<body class="">
+<!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
+
+<section id="content" class="col-md-10 container-fluid mt-3">
+    <div class="">
+        <div class="my-4 text-center heading">
+            <h1>AVAILABLE COUPONS</h1>
+        </div>
+
+        <div class="col-md-12 d-flex flex-wrap ">
+            <th:block th:each="coupon: ${coupons}">
+                <div class=" card p-2 m-2 shadow-lg">
+                    <h1 th:text="${coupon.couponName}" class=""></h1>
+                    <p th:text="${coupon.couponDescription}" class="fs-3"></p>
+
+                </div>
+            </th:block>
+
+
+        </div>
+    </div>
+
+
+
+</section>
+
+
+<script id="script" th:src="@{/js/user/reset-password.js}">
+
+</script>
+
+
 
 </body>
 </html>
+
+

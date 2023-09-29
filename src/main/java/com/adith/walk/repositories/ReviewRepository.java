@@ -1,9 +1,9 @@
 package com.adith.walk.repositories;
 
 
-import com.adith.walk.Entities.Customer;
-import com.adith.walk.Entities.Product;
-import com.adith.walk.Entities.ProductReview;
+import com.adith.walk.entities.Customer;
+import com.adith.walk.entities.Product;
+import com.adith.walk.entities.ProductReview;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<ProductReview,Long> {
+public interface ReviewRepository extends JpaRepository<ProductReview, Long> {
 
-    List<ProductReview>getProductReviewsByProductAndIsApprovedTrue(Product product);
+    List<ProductReview> getProductReviewsByProductAndIsApprovedTrue(Product product);
 
     Optional<ProductReview> findProductReviewByProductAndAndCustomer(Product product, Customer customer);
 
@@ -31,5 +31,5 @@ public interface ReviewRepository extends JpaRepository<ProductReview,Long> {
 
     @Transactional
     @Query("select avg(pr.rating) from ProductReview pr where pr.product=:product and pr.isApproved=true ")
-            Optional<Long> findReviewAggregate(@Param("product")Product product);
+    Optional<Long> findReviewAggregate(@Param("product") Product product);
 }

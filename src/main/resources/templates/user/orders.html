@@ -1,40 +1,42 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="user/base::layout(~{::#style},~{::#content},~{::#script})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="user/base::layout(~{::#style},~{::#content},~{::#script})">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title th:text="loginpage"></title>
-    <link id="style"  rel="stylesheet">
+    <link id="style" rel="stylesheet" th:href="@{/css/user/orders.css}">
 </head>
 <body class="">
 <!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
 
-<section id="content" class=" mt-3 col-md-10 row">
+<section id="content" class=" mt-3 col-md-10 container-fluid">
 
-    <div class="col-md-10">
-        <th:block th:each="order: ${orders}">
-            <a class="text-decoration-none" th:href="@{'/user/orders/'+${order.id}}">
-                <div class="card mt-2 mb-2">
-                    <h5 class="card-header"><span>ORDER ID:</span><span class="text-primary-emphasis" th:text="${order.id}"> </span></h5>
-                    <div class="card-body row">
-                        <h4 class=" col-md-4"><span>Status : ORDER </span><span th:text="${order.orderStatus}"></span></h4>
-                        <h4 class=" col-md-4"><span>Payment Status :</span><span class="text-success"  th:text="${order.payment.status}"></span></h4>
-                        <h3 class="col-md-4"><span>Total Amount :</span><span th:text="${order.payment.totalAmount}"></span></h3>
+    <th:block th:each="order: ${orders}">
+        <a class="text-decoration-none text-dark" th:href="@{'/user/orders/'+${order.id}}">
+            <div class="order-card my-3 ">
+                <h5 class=""><span class="text-primary-emphasis fs-2"
+                                   th:text="${order.id}"> </span></h5>
+                <div class="card-body">
+                    <h4 class="display-6 ">Order is <span class="text-lowercase" th:text="${order.orderStatus}"></span>
+                        now
+                    </h4>
+                    <h3 class=""><span>Total Amount :</span><span
+                            th:text="${order.payment.totalAmount}"></span></h3>
 
-                        <form th:if="${order.orderStatus}!='Cancelled'" th:action="@{'/user/orders/'+${order.id}+'/cancel'}" th:method="put">
-                            <button class="btn btn-danger" type="submit"> cancel</button>
-                        </form>
+                    <form th:if="${order.orderStatus.name()}!='CANCELLED'"
+                          th:action="@{'/user/orders/'+${order.id}+'/cancel'}" th:method="put">
+                        <button class="btn btn-danger" type="submit"> cancel</button>
+                    </form>
 
 
-                    </div>
                 </div>
-            </a>
+            </div>
+        </a>
 
-        </th:block>
-
-    </div>
+    </th:block>
 
 
 </section>
@@ -43,7 +45,6 @@
 <script id="script" th:src="@{/js/user/reset-password.js}">
 
 </script>
-
 
 
 </body>

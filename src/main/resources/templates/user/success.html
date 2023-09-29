@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link id="style" rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
-<body >
+<body>
 <section id="content">
     <section class="row  justify-content-center align-items-center " style="--bs-gutter-x:0">
         <div class="col-md-4 bg-common m-5 p-5 rounded-5">
             <h1 class="text-center">Thank You For The Order</h1>
-            <h2 class="text-center"><span class="text-success">order-id:</span><span th:text="${session.order.id}"></span></h2>
+            <h2 class="text-center"><span class="text-success">order-id:</span><span
+                    th:text="${session.order.id}"></span></h2>
             <a class="fs-2 " th:href="@{/user/orders}"><h1 class="text-center">click to track your orders</h1></a>
-            <h1 th:text="${session.order.quantity}"></h1>
         </div>
 
     </section>

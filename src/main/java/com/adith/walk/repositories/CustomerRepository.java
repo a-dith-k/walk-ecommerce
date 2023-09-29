@@ -1,7 +1,7 @@
 package com.adith.walk.repositories;
 
 
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.entities.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,16 +11,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer,Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-        Customer findCustomerByUserId(Long id);
-        Customer findCustomerByEmail(String email);
+    Customer findCustomerByUserId(Long id);
 
-        Customer findCustomerByMobileNumber(String mobile);
+    Customer findCustomerByEmail(String email);
+
+    Customer findCustomerByMobileNumber(String mobile);
 
 
-
-        List<Customer> findCustomerByUserIdBetween(Integer start,Integer end);
+    List<Customer> findCustomerByUserIdBetween(Integer start, Integer end);
 
 
     @Transactional

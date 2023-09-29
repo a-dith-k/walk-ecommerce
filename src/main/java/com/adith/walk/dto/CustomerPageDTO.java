@@ -1,6 +1,6 @@
 package com.adith.walk.dto;
 
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.entities.Customer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,10 +14,6 @@ public class CustomerPageDTO {
     Integer CurrentPageNumber;
 
     Integer totalPages;
-
-
-
-
 
 
 }

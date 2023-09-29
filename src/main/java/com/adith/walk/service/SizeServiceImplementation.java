@@ -1,11 +1,11 @@
 package com.adith.walk.service;
 
-import com.adith.walk.Entities.Size;
+import com.adith.walk.entities.Size;
 import com.adith.walk.repositories.SizeRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SizeServiceImplementation implements  SizeService{
+public class SizeServiceImplementation implements SizeService {
 
     final SizeRepository sizeRepository;
 
@@ -19,12 +19,12 @@ public class SizeServiceImplementation implements  SizeService{
     }
 
     @Override
-    public void removeStock(long sizeId,long count ){
-            sizeRepository.removeStock(sizeId,count);
+    public void removeStock(long sizeId, long count) {
+        sizeRepository.removeStock(sizeId, count);
     }
 
     @Override
     public void addStock(long sizeId, long count) {
-        sizeRepository.addStock(sizeId,count);
+        sizeRepository.addStock(sizeId, count);
     }
 }

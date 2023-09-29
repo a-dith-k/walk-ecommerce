@@ -1,8 +1,11 @@
 package com.adith.walk.service;
 
 
-import com.adith.walk.Entities.*;
 import com.adith.walk.dto.*;
+import com.adith.walk.entities.Cart;
+import com.adith.walk.entities.ConfirmToken;
+import com.adith.walk.entities.Coupon;
+import com.adith.walk.entities.Customer;
 import com.adith.walk.enums.UserRole;
 import com.adith.walk.repositories.AddressRepository;
 import com.adith.walk.repositories.CustomerRepository;
@@ -30,9 +33,6 @@ public class CustomerService {
     final AddressRepository addressRepository;
 
 
-
-
-
     public CustomerService(CustomerRepository customerRepository,
                            TwilioOtpService otpService,
                            ModelMapper modelMapper,
@@ -47,7 +47,6 @@ public class CustomerService {
         this.addressRepository = addressRepository;
 
 
-
     }
 
 
@@ -56,18 +55,18 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer getActiveCustomer(Principal principal){
-        if (principal!=null&&principal.getName() != null) {
+    public Customer getActiveCustomer(Principal principal) {
+        if (principal != null && principal.getName() != null) {
             return getCustomerByMobile(principal.getName());
 
         }
-        Customer customer=new Customer();
+        Customer customer = new Customer();
         customer.setFirstName("SIGN IN");
         return customer;
 
     }
 
-    public Customer saveCustomer(Customer customer){
+    public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
@@ -77,32 +76,30 @@ public class CustomerService {
 
     }
 
-    public List<Customer> getCustomerBetween(Integer start, Integer end){
+    public List<Customer> getCustomerBetween(Integer start, Integer end) {
 
-        return customerRepository.findCustomerByUserIdBetween(start,end);
+        return customerRepository.findCustomerByUserIdBetween(start, end);
     }
 
 
-//    public List<Customer>getPageOfCustomer(Integer page,Integer count){
+    //    public List<Customer>getPageOfCustomer(Integer page,Integer count){
 //        Page<Customer> all = customerRepository.findAll(PageRequest.of(page, count));
 //        List<Customer>CustomerPage=new ArrayList<>();
 //        all.stream().forEach(customer -> CustomerPage.add(customer));
 //       return CustomerPage;
 //    }
-    public CustomerPageDTO getPageOfCustomer(Integer pageNumber, Integer pageSize){
+    public CustomerPageDTO getPageOfCustomer(Integer pageNumber, Integer pageSize) {
 
-        Pageable pageable=PageRequest.of(pageNumber,pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Customer> all = customerRepository.findAll(pageable);
 
-        CustomerPageDTO responseDTO=new CustomerPageDTO();
+        CustomerPageDTO responseDTO = new CustomerPageDTO();
         responseDTO.setTotalPages(all.getTotalPages());
         responseDTO.setCustomers(all);
         responseDTO.setCurrentPageNumber(pageable.getPageNumber());
 
         return responseDTO;
     }
-
-
 
 
     public void deleteCustomerById(Integer id) {
@@ -114,38 +111,37 @@ public class CustomerService {
     public Customer getCustomerById(Long userId) {
 
 
-        return  customerRepository.findCustomerByUserId(userId);
+        return customerRepository.findCustomerByUserId(userId);
     }
 
     public Customer registerCustomer(CustomerRegistrationRequest request) throws AlreadyUsedException {
 
 
-       if( isMobileNumberExists(request.getMobileNumber())){
-           throw new AlreadyUsedException("mobile number already taken");
-       }
-       if(isEmailIdExists(request.getEmail())){
+        if (isMobileNumberExists(request.getMobileNumber())) {
+            throw new AlreadyUsedException("mobile number already taken");
+        }
+        if (isEmailIdExists(request.getEmail())) {
             throw new AlreadyUsedException("email id already taken");
-       }
+        }
 
-            String token = otpService.sendOTP();
-
+        String token = otpService.sendOTP();
 
 
         Customer customer = modelMapper.map(request, Customer.class);
-                    customer
-                        .setUserRole(UserRole.ROLE_USER);
-                    customer
-                        .setPassword(encoder.encode(customer.getPassword()));
+        customer
+                .setUserRole(UserRole.ROLE_USER);
+        customer
+                .setPassword(encoder.encode(customer.getPassword()));
 
         ConfirmToken confirmToken =
                 new ConfirmToken(token,
                         LocalDateTime.now(),
-                            LocalDateTime.now().plusMinutes(1));
+                        LocalDateTime.now().plusMinutes(1));
 
         customer
                 .setConfirmToken(confirmToken);
 
-        Cart cart=new Cart();
+        Cart cart = new Cart();
         cart.setTotalPrice(0L);
         cart.setTotalDiscount(0L);
         cart.setTotalMRP(0L);
@@ -156,7 +152,6 @@ public class CustomerService {
                 .save(customer);
 
 
-
         tokenService
                 .saveConfirmationToken(confirmToken);
 
@@ -164,48 +159,46 @@ public class CustomerService {
     }
 
 
-    public boolean isMobileNumberExists(String mobile){
+    public boolean isMobileNumberExists(String mobile) {
 
-            return customerRepository.findCustomerByMobileNumber(mobile)!=null;
+        return customerRepository.findCustomerByMobileNumber(mobile) != null;
     }
 
 
-    public boolean isEmailIdExists(String email){
+    public boolean isEmailIdExists(String email) {
 
-        return customerRepository.findCustomerByEmail(email)!=null;
+        return customerRepository.findCustomerByEmail(email) != null;
     }
 
     public boolean confirmToken(ConfirmTokenRequest request) {
 
 
-
-       Customer existing=customerRepository.findCustomerByMobileNumber(request.getMobile());
-       if(existing==null){
-           throw new IllegalStateException("user not found");
-       }
-        ConfirmToken confirmationToken =existing.getConfirmToken();
-        if(!request.getToken().equals(confirmationToken.getToken())){
+        Customer existing = customerRepository.findCustomerByMobileNumber(request.getMobile());
+        if (existing == null) {
+            throw new IllegalStateException("user not found");
+        }
+        ConfirmToken confirmationToken = existing.getConfirmToken();
+        if (!request.getToken().equals(confirmationToken.getToken())) {
             throw new IllegalStateException("invalid-otp");
         }
 
-        if(customerRepository.findCustomerByMobileNumber(request.getMobile()).isEnabled()){
+        if (customerRepository.findCustomerByMobileNumber(request.getMobile()).isEnabled()) {
             throw new IllegalStateException("already Verified");
         }
 
-            if (confirmationToken.getConfirmedAt() != null) {
-                throw new IllegalStateException("already confirmed");
-            }
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("already confirmed");
+        }
 
-            LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
-            if (expiredAt.isBefore(LocalDateTime.now())) {
-                throw new IllegalStateException("otp expired");
-            }
-            tokenService.setConfirmedAt(request.getToken());
-            enableAppUser(
-                    confirmationToken.getCustomer().getMobileNumber());
-            return true;
-
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("otp expired");
+        }
+        tokenService.setConfirmedAt(request.getToken());
+        enableAppUser(
+                confirmationToken.getCustomer().getMobileNumber());
+        return true;
 
 
     }
@@ -216,16 +209,16 @@ public class CustomerService {
 
     public void sendNewToken(String mobile) {
 
-        if(!isMobileNumberExists(mobile)){
+        if (!isMobileNumberExists(mobile)) {
             throw new UsernameNotFoundException("Mobile number is not registered");
         }
 
 
-        Customer customer=customerRepository.findCustomerByMobileNumber(mobile);
+        Customer customer = customerRepository.findCustomerByMobileNumber(mobile);
 
 
         String token = otpService.sendOTP();
-        ConfirmToken confirmToken =new ConfirmToken(token, LocalDateTime.now(),
+        ConfirmToken confirmToken = new ConfirmToken(token, LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(1));
         customer.setConfirmToken(confirmToken);
 
@@ -234,57 +227,55 @@ public class CustomerService {
 
     public void resetPassword(PasswordResetRequest passwordResetRequest) {
 
-        Customer customer=customerRepository.findCustomerByMobileNumber(passwordResetRequest.getMobile());
+        Customer customer = customerRepository.findCustomerByMobileNumber(passwordResetRequest.getMobile());
         customer.setPassword(encoder.encode(passwordResetRequest.getPassword()));
         customerRepository.save(customer);
 
     }
 
     public CustomerProfileUpdateRequest getProfileData(Principal principal) {
-        CustomerProfileUpdateRequest request=new CustomerProfileUpdateRequest();
-       modelMapper.map(customerRepository.findCustomerByMobileNumber(principal.getName()),request);
+        CustomerProfileUpdateRequest request = new CustomerProfileUpdateRequest();
+        modelMapper.map(customerRepository.findCustomerByMobileNumber(principal.getName()), request);
 
-       return request;
+        return request;
     }
 
 
-    public Customer updateProfileData(CustomerProfileUpdateRequest request,Principal principal) throws AlreadyUsedException {
+    public Customer updateProfileData(CustomerProfileUpdateRequest request, Principal principal) throws AlreadyUsedException {
 
-        Customer customer=customerRepository.findCustomerByMobileNumber(request.getMobileNumber());
-      if(isMobileNumberExists(request.getMobileNumber())&&!request.getMobileNumber().equals(principal.getName())){
-          throw  new AlreadyUsedException("mobile number exists");
-      }
+        Customer customer = customerRepository.findCustomerByMobileNumber(request.getMobileNumber());
+        if (isMobileNumberExists(request.getMobileNumber()) && !request.getMobileNumber().equals(principal.getName())) {
+            throw new AlreadyUsedException("mobile number exists");
+        }
 
-        modelMapper.map(request,customer);
+        modelMapper.map(request, customer);
 
-        return  customerRepository.save(customer);
+        return customerRepository.save(customer);
 
     }
 
     public void updateCustomer(CustomerDTO customer) throws AlreadyUsedException {
 
-        Customer existingCustomer= customerRepository.findCustomerByUserId(customer.getUserId());
+        Customer existingCustomer = customerRepository.findCustomerByUserId(customer.getUserId());
 
-        if(isMobileNumberExists(customer.getMobileNumber())&&!existingCustomer.getMobileNumber().equals(customer.getMobileNumber())){
+        if (isMobileNumberExists(customer.getMobileNumber()) && !existingCustomer.getMobileNumber().equals(customer.getMobileNumber())) {
             throw new AlreadyUsedException("mobile number already used");
         }
 
-        if(isEmailIdExists(customer.getEmail())&&!customer.getEmail().equals(existingCustomer.getEmail())){
+        if (isEmailIdExists(customer.getEmail()) && !customer.getEmail().equals(existingCustomer.getEmail())) {
             throw new AlreadyUsedException("email  id already used");
         }
 
 
-        modelMapper.map(customer,existingCustomer);
+        modelMapper.map(customer, existingCustomer);
 
         customerRepository.save(existingCustomer);
     }
 
 
-
     public void registerCustomerAdmin(CustomerRegistrationRequestAdmin registrationRequest) throws AlreadyUsedException {
 
-        registrationRequest.setPassword(encoder.encode(registrationRequest.getFirstName().substring(0,3)+"@"+registrationRequest.getMobileNumber().substring(0,3)));
-
+        registrationRequest.setPassword(encoder.encode(registrationRequest.getFirstName().substring(0, 3) + "@" + registrationRequest.getMobileNumber().substring(0, 3)));
 
 
         registerCustomer(modelMapper
@@ -303,6 +294,8 @@ public class CustomerService {
     }
 
 
+    public List<Coupon> getCustomerCoupons(Principal principal) {
 
-
+        return customerRepository.findCustomerByMobileNumber(principal.getName()).getCoupons();
+    }
 }

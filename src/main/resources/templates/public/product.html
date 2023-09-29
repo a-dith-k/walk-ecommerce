@@ -88,7 +88,7 @@
                             <div class="col-md-2 m-3">
                                 <label for="sizeSelector">Select Your Size</label>
                                 <select name="sizeId" id="sizeSelector" class="form-select fs-2">
-                                    <option th:if="${sizeO.totalStock>0}" class="fs-2" th:selected="${sizeO.sizeNumber==8}" th:each="sizeO : ${sizeList}" th:value="${sizeO.sizeId}" th:text="${sizeO.sizeNumber}"></option>
+                                    <option th:if="${sizeO.totalStock>0}" class="fs-2"  th:each="sizeO : ${sizeList}" th:value="${sizeO.sizeId}" th:text="${sizeO.sizeNumber}"></option>
                                 </select>
                             </div>
                             <div class="col-md-10">

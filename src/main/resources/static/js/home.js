@@ -64,6 +64,13 @@ function previousPage(){
     }
 
 }
+let numberOfProducts=5;
+
+function productCount(count){
+
+        numberOfProducts=count;
+        request();
+}
 
 
 function nextPage(){
@@ -76,9 +83,11 @@ function nextPage(){
 }
 
 
+
+
 function request(){
 
-    let url=`http://localhost:2021/rest/${pageNumber}`;
+    let url=`http://localhost:2021/rest/${pageNumber}/${numberOfProducts}`;
     fetch(url)
         .then(res=>{
             return res.json()
@@ -151,6 +160,20 @@ function request(){
             </nav>`
 
 
+
+           let productCount=`<div class="w-50">
+                    
+                
+                   <button class="btn btn-primary fs-2"  onclick="productCount(2)" >2</button>
+                   <button class="btn btn-primary fs-2"  onclick="productCount(3)" >3</button>
+                   <button class="btn btn-primary fs-2"  onclick="productCount(4)" >4</button>
+                    
+
+               
+            </div>`
+
+
+            $("#productCount").html(productCount);
 
             $("#paginationDiv").html(pagination);
             $("#productList").html(result);

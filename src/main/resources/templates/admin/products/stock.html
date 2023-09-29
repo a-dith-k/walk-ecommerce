@@ -9,9 +9,9 @@
     <link id="style" rel="stylesheet" >
 </head>
 <body>
-<section id="content">
+<section id="content" class="container-fluid">
 
-    <table class="table table-bordered text-center fs-3 fw-normal">
+    <table class="table table-bordered text-center fs-3 fw-normal ">
         <thead>
         <tr>
             <th scope="col" rowspan="2">ID</th>
@@ -53,8 +53,8 @@
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <td >Size</td>
-                            <td>stock</td>
+                            <td class="bg-secondary" >SIZE</td>
+                            <td  class="bg-secondary">STOCK</td>
                         </tr>
 
                     </thead>
@@ -120,7 +120,7 @@
 <!--            <td th:unless="${productStock.size_3>0}" class="bg-dark"></td>-->
 <!--            <td th:if="${productStock.size_2>0}" th:classappend="${productStock.size_2<10}?'text-black bg-danger':'text-success'" th:text="${productStock.size_2}"></td>-->
 <!--            <td th:unless="${productStock.size_2>0}" class="bg-dark"></td>-->
-                <td><a th:href="@{'/admin/products/update/'+${productStock.product.productId}}" class="btn btn-primary rounded-0">UPDATE</a></td>
+                <td><a th:href="@{/admin/products/{id}/stock/add(id=${productStock.product.productId})}" class="btn btn-primary rounded-0">UPDATE</a></td>
         </tr>
 
 

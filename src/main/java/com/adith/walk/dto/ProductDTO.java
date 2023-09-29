@@ -1,7 +1,7 @@
 package com.adith.walk.dto;
 
-import com.adith.walk.Entities.ProductCategory;
-import com.adith.walk.Entities.Stock;
+import com.adith.walk.entities.ProductCategory;
+import com.adith.walk.entities.Stock;
 import com.adith.walk.enums.CustomerCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

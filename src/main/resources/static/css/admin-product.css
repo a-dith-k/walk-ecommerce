@@ -1,51 +1,40 @@
-.input-id{
+
+.input-id {
     width: 40px;
 }
-.w-80px{
+
+.w-80px {
     width: 80px;
 }
 
-#inputs input{
+#inputs input {
     border: none;
     outline: none;
 
 }
 
-thead th{
- font-size: 20px;
+thead th {
+    font-size: 20px;
 }
 
-.menu-bar{
+.menu-bar {
     background: rgb(158, 182, 187);
 
 
 }
 
-.menu-bar .btn{
-    margin:2% 2% 2% 2%;
-    height: 50px;
-    width: 100%;
-
-}
-.menu-bar a{
-    width: 80%;
-    margin:2% 2% 2% 2%;
-
-}
-
-.table td{
+.table td {
 
     text-align: center;
 }
 
-.table th{
+.table th {
 
     text-align: center;
 }
 
 
-
-.table img{
+.table img {
     width: 20px;
     height: auto;
 }

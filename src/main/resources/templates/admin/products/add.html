@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="admin/admin_base::layout(~{::#style},~{::#content})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/admin_base::layout(~{::#style},~{::#content})}">
 <head>
     <meta charset="UTF-8">
     <title>this is for adding user</title>
@@ -118,6 +118,18 @@
                     </div>
                 </div>
 
+                <div class="row m-4 mt-0">
+                    <label for="productCategory" class="fs-3 mb-1">Product Category</label>
+                    <div class=" d-flex flex-wrap">
+                        <select id="productCategory"  class="form-select fs-3"  name="productCategory">
+                            <th:block th:each="cate: ${productCategories}">
+                                <option th:value="${cate.id}"  class="fs-2"  th:text="${cate.categoryName}"></option>
+                            </th:block>
+
+                        </select>
+                    </div>
+                </div>
+
 
 
 <!--                    <div th:if="${#fields.hasErrors()}" class="text-center fs-3 text-capitalize text-danger" th:each="e: ${#fields.errors('category')}">-->
@@ -160,117 +172,18 @@
                 </label>
 
 
-
-
-                    <!------------------------------- product-stock- field----------------------------------------------------->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-3</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_3}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-4</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_4}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-5</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_5}"-->
-<!--                                >-->
-<!--                            </div>-->
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-6</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_6}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-7</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_7}"-->
-<!--                                >-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-6 ">-->
-
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-8</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_8}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-9</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_9}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-10</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_10}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-11</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_11}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                            <div class=" input-group ">-->
-<!--                                <span class="input-group-text" >SIZE-12</span>-->
-<!--                                <input-->
-<!--                                        class="form-control  fs-3"-->
-<!--                                        type="number"-->
-<!--                                        th:field="*{stock.size_12}"-->
-<!--                                >-->
-<!--                            </div>-->
-
-<!--                        </div>-->
-
-
             </form>
 
         </div>
-<!--        <div class="col-md-2  mt-5">-->
-<!--            <form th:method="post" th:action="@{/admin/products/category/add}" th:object="${newCategory}" class="d-flex justify-content-center flex-column mt-5" >-->
-<!--                <label class="fs-2 mt-5" for="categoryName">Create new Product Category</label>-->
-<!--                    <input id="categoryName" th:field="*{categoryName}" class= "fs-2 form-control" type="text" placeholder="name of the category">-->
+        <div class="col-md-2  mt-5">
+            <form th:method="post" th:action="@{/admin/products/category/add}" th:object="${newCategory}" class="d-flex justify-content-center flex-column mt-5" >
+                <label class="fs-2 mt-5" for="categoryName">Create new Product Category</label>
+                    <input id="categoryName" th:field="*{categoryName}" class= "fs-2 form-control" type="text" placeholder="name of the category">
 
-<!--                <button type="submit" class="btn btn-primary fs-2 my-3">Add Category</button>-->
+                <button type="submit" class="btn btn-primary fs-2 my-3">Add Category</button>
 
-<!--            </form>-->
-<!--        </div>-->
+            </form>
+        </div>
 
 
 

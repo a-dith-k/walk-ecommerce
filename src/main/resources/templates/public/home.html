@@ -43,8 +43,8 @@
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
                             aria-label="Slide 3"></button>
                 </div>
-                <div class="carousel-inner" th:each="banner:${banners}">
-                    <div class="carousel-item " th:classappend="${banner.status}">
+                <div class="carousel-inner" th:each="banner:${headerBanners}">
+                    <div class="carousel-item " th:classappend="${banner.status}" data-bs-interval="3000">
                         <img th:src="@{'/img/banner/'+${banner.name}}" class="d-block w-100" alt="...">
                         <div class="carousel-caption d-none d-md-block position-absolute top-0 end-0">
                             <h5 class="text-start display-2 fw-bold"><span th:text="${banner.heading}"></span></h5>
@@ -134,7 +134,12 @@
 <!--                </div>-->
             </div>
         </div>
-        <div class="col-md-10 d-flex justify-content-end" id="paginationDiv">
+        <div class="col-md-4 my-5 " id="productCount">
+
+
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-end my-5" id="paginationDiv">
 <!--            <nav aria-label="...">-->
 <!--                <ul class="pagination" th:if="${productPageResponseDTO.totalPages!=0}">-->
 <!--                    <li class="page-item " th:if="${productPageResponseDTO.currentPageNumber!=0}">-->
@@ -172,14 +177,42 @@
         <!--        </nav>-->
     </section>
     <section class="row d-flex justify-content-center mt-5 ">
-        <div class="col-md-10 d-flex justify-content-end">
+<!--        <div class="col-md-10 d-flex justify-content-end">-->
 
-            <a th:href="@{/products/page/0}" class="text-decoration-none text-dark d-flex justify-content-end">
-            <img th:src="@{/img/right-arrow.png}" class="img-fluid w-25 ">
-            </a>
+<!--            <a th:href="@{/products/page/0}" class="text-decoration-none text-dark d-flex justify-content-end">-->
+<!--            <img th:src="@{/img/right-arrow.png}" class="img-fluid w-25 ">-->
+<!--            </a>-->
+
+<!--        </div>-->
+
+
+    </section>
+    <section class="row  justify-content-center mt-">
+        <div class="col-md-4">
+            <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <th:block th:each="banner: ${footerBanners}">
+                        <div class="carousel-item " data-bs-interval="3000" th:classappend="${banner.status}">
+                            <img th:src="@{'/img/banner/'+${banner.name}}" class="d-block w-100" alt="...">
+                        </div>
+                    </th:block>
+
+
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6  border border-5 ">
+            <img th:if="${rightFooterBanner}" th:src="@{'/img/banner/'+${rightFooterBanner.name}}" class="footer-right-img" alt="">
 
         </div>
-
 
     </section>
     <!--    <script>-->

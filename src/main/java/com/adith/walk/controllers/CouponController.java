@@ -1,15 +1,12 @@
 package com.adith.walk.controllers;
 
-import com.adith.walk.Entities.Coupon;
+import com.adith.walk.entities.Coupon;
 import com.adith.walk.exceptions.CouponAlreadyExistsException;
 import com.adith.walk.helper.Message;
-import com.adith.walk.service.CouponService;
+import com.adith.walk.service.coupon.service.CouponService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/coupons")
@@ -23,7 +20,7 @@ public class CouponController {
 
 
     @GetMapping("")
-    public String getAllCoupons(Model model){
+    public String getAllCoupons(Model model) {
 
         model.addAttribute("coupons", couponService.getAllCoupons());
 
@@ -31,24 +28,32 @@ public class CouponController {
     }
 
 
-
     @GetMapping("create-new")
-    public String createCoupon(@ModelAttribute("coupon")Coupon coupon){
+    public String createCoupon(@ModelAttribute("coupon") Coupon coupon) {
 
         return "admin/coupon/add";
 
     }
 
     @PostMapping("create-new")
-    public String saveCoupon(@ModelAttribute("coupon")Coupon coupon,Model model){
+    public String saveCoupon(@ModelAttribute("coupon") Coupon coupon, Model model) {
 
         try {
             couponService.createCoupon(coupon);
 
         } catch (CouponAlreadyExistsException e) {
-            model.addAttribute("message",new Message(e.getMessage(),"alert-danger"));
+            model.addAttribute("message", new Message(e.getMessage(), "alert-danger"));
             return "/admin/coupon/add";
         }
+
+        return "redirect:/admin/coupons";
+    }
+
+
+    @PutMapping("/toggle/{couponId}")
+    public String toggleCoupon(@PathVariable Integer couponId) {
+
+        couponService.toggleCoupon(couponId);
 
         return "redirect:/admin/coupons";
     }

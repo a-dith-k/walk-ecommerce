@@ -1,7 +1,7 @@
 package com.adith.walk.helper;
 
 
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.entities.Customer;
 import com.adith.walk.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

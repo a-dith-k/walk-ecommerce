@@ -3,69 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>this is for adding user</title>
-    <link th:href="@{/css/admin-user-add.css}" id="style" type="text/css" rel="stylesheet">
+    <link th:href="@{/css/}"  type="text/css" rel="stylesheet">
+    <link id="style" th:href="@{/node_modules/cropperjs/dist/cropper.min.css}"  type="text/css" rel="stylesheet">
 </head>
 <body>
 <section id="content" class="container-fluid vh-85 ">
     <div class="row  d-flex   justify-content-center align-items-center    h-100">
-        <div class="col-md-4 offset-4 bg-secondary  m-5 ">
+        <div class="col-md-4 bg-common  m-5 ">
             <h1 class="text-center">ADD BANNER</h1>
 
-            <div>
-                <p th:text="${message}" class="text-center display-6" ></p>
-            </div>
-
             <form
-                    th:action="@{/admin/banners/add}"
+                    id="bannerForm"
                     method="post"
-                    class="d-flex bg-secondary flex-column align-items-center fs-3"
+                    class="d-flex bg-common flex-column align-items-center fs-3"
                     enctype="multipart/form-data"
                     >
 
 
                 <!------------------------------- image upload- field----------------------------------------------------->
-                <input
+                <label  for="bannerImage">Banner Image</label>
+                <input  required
+                        id="bannerImage"
                         class="input-group-text fs-3 form-control mb-3  "
                         type="file"
-                        name="file"
                         placeholder="file"
                         accept="image/*"
                         >
 
 
                 <!------------------------------- heading- field----------------------------------------------------->
-                <input
-                        class="input-group-text fs-3 form-control  mb-3 "
+                <label  for="bannerHeading">Banner Heading</label>
+                <input  required
+                        id="bannerHeading"
+                        class=" fs-3 form-control  mb-3 "
                         type="text"
-                        name="heading"
                         placeholder="Heading"
                         >
 
                 <!------------------------------- description-field----------------------------------------------------->
-                <input
-                        class="input-group-text fs-3 form-control  mb-3  "
+                <label  for="bannerDescription">Banner Description</label>
+                <input  required
+                        id="bannerDescription"
+                        class=" fs-3 form-control  mb-3  "
                         type="text"
-                        name="description"
                         placeholder="Description"
                         >
                 <!------------------------------- status-field----------------------------------------------------->
-                <input
-                        class="input-group-text fs-3 form-control  mb-3 "
-                        type="text"
-                        name="status"
-                        placeholder="status"
+                <label for="bannerStatus">Banner Status</label>
+                <select
+                        required
+                        class=" fs-3 form-control  mb-3 "
+                        id="bannerStatus"
                 >
+                    <option value="active">active</option>
+                    <option value="not-active">not-active</option>
+                </select>
+
+                <label   for="bannerPosition">Banner Position</label>
+                <select  required
+                         class=" fs-3 form-control  mb-3 "
+                         id="bannerPosition"
+                >
+                    <option value="header">header</option>
+                    <option value="footer-right">footer-right</option>
+                    <option value="footer-left">footer-left</option>
+                </select>
 
 
 
 
-                <button class="btn  btn-dark input-group-text form-control  mb-3 fs-2" type="submit">Submit</button>
+                <button  class="btn  btn-dark input-group-text form-control  mb-3 fs-2" type="submit">Submit</button>
             </form>
         </div>
+        <div class="col-md-4">
+            <img src="" alt="" id="imageOutput" class="img-fluid">
+        </div>
+        <div class="d-flex align-items-center flex-column">
+
+
+                <div class="w-50" id="inputImageDiv">
+
+                </div>
+            <button  id="imgCropBtn" class="btn btn-primary form-control fs-2 w-50">crop image</button>
+
+
+        </div>
+
     </div>
 
 
-
+    <script th:src="@{/node_modules/cropperjs/dist/cropper.min.js}"></script>
+    <script th:src="@{/js/admin/addBanner.js}"></script>
 </section>
 
 </body>

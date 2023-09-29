@@ -1,7 +1,7 @@
 package com.adith.walk.repositories;
 
-import com.adith.walk.Entities.ConfirmToken;
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.entities.ConfirmToken;
+import com.adith.walk.entities.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-public interface TokenRepo extends JpaRepository<ConfirmToken,Long> {
+public interface TokenRepo extends JpaRepository<ConfirmToken, Long> {
 
     Optional<ConfirmToken> findByToken(String token);
 

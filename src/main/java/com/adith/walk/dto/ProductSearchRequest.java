@@ -1,6 +1,6 @@
 package com.adith.walk.dto;
 
-import com.adith.walk.Entities.Images;
+import com.adith.walk.entities.Images;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -15,5 +15,5 @@ public class ProductSearchRequest {
 
     private String brand;
 
-    List<Images> list=new ArrayList<>();
+    List<Images> list = new ArrayList<>();
 }

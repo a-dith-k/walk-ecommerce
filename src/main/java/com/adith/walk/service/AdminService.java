@@ -1,8 +1,8 @@
 package com.adith.walk.service;
 
 
-import com.adith.walk.Entities.Admin;
-import com.adith.walk.Entities.Customer;
+import com.adith.walk.entities.Admin;
+import com.adith.walk.entities.Customer;
 import com.adith.walk.repositories.AdminRepository;
 import com.adith.walk.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
