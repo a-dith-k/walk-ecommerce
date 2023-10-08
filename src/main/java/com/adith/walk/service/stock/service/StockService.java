@@ -11,9 +11,6 @@ import java.util.List;
 public interface StockService {
     List<Stock> getAllStock();
 
-    void addStock(Product product, Long quantity, String size);
-
-    void removeStock(Product product, Long quantity, String size);
 
     Stock save(Stock stock);
 
