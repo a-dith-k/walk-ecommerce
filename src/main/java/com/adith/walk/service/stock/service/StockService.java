@@ -21,4 +21,5 @@ public interface StockService {
 
     Stock getStockById(long stockId);
 
+    Long getStockOutProductCount();
 }

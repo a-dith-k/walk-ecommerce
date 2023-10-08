@@ -6,28 +6,41 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link id="style" rel="stylesheet" th:href="@{/css/admin-product.css}">
+    <link id="style" rel="stylesheet" th:href="@{/css/admin/coupons/coupons.css}">
 </head>
 <body>
 <section id="content" class="container-fluid">
-    <div class="row mx-4"   style="--bs-gutter-x: 0">
+    <div class="row mx-4" style="--bs-gutter-x: 0">
         <div class="col-md-2 mt-5">
-            <div class="menu-bar d-flex flex-column shadow  m-4 pb-2" >
+            <div class="menu-bar d-flex flex-column shadow  m-4 pb-2">
 
-                <a th:href="@{/admin/coupons/create-new}"  class="btn  btn-secondary fs-2  m-2 mb-0">CREATE COUPON</a >
+                <a th:href="@{/admin/coupons/create-new}" class="btn  btn-secondary fs-2  m-2 mb-0">CREATE COUPON</a>
             </div>
 
 
         </div>
-        <div class="col-md-9 p-5">
+        <div class="col-md-9   d-flex flex-wrap">
             <th:block th:each="coupon :${coupons}">
-                <h1>Coupon Name: <span  th:text="${coupon.couponName}"></span></h1>
-                <h1>Coupon Type: <span  th:text="${coupon.discountType}"></span></h1>
-                <h1>Coupon Value: <span  th:text="${coupon.discountValue}"></span></h1>
-                <form th:action="@{'/admin/coupons/toggle/'+${coupon.couponId}}" th:method="put">
-                    <button th:unless="${coupon.isActive}" type="submit" class="btn btn-success">Enable</button>
-                    <button th:if="${coupon.isActive}" type="submit" class="btn btn-danger">Disable</button>
-                </form>
+                <div class="card">
+                    <h1>Name: <span th:text="${coupon.couponName}"></span></h1>
+                    <p class="fs-3">Type: <span th:text="${coupon.discountType}"></span></p>
+                    <p class="fs-3">Value: <span th:text="${coupon.discountValue}"></span></p>
+                    <p class="fs-3">Range:
+                        <span th:text="${coupon.minOrderValue+'&#8377;'}"></span> to
+                        <span th:text="${coupon.maxOrderValue+'&#8377;'}"></span>
+                    </p>
+                    <p class="fs-3">Expiry: <span th:text="${coupon.expirationDate}"></span></p>
+                    <p class="fs-3">Total Count: <span th:text="${coupon.couponCount}"></span></p>
+
+
+                    <form th:action="@{'/admin/coupons/toggle/'+${coupon.couponId}}" th:method="put">
+                        <button th:unless="${coupon.isActive}" type="submit" class="btn btn-success w-100 fs-3">Enable
+                        </button>
+                        <button th:if="${coupon.isActive}" type="submit" class="btn btn-danger w-100 fs-3">Disable
+                        </button>
+                    </form>
+                </div>
+
 
             </th:block>
 
@@ -37,7 +50,6 @@
     </div>
 
 </section>
-
 
 
 </body>

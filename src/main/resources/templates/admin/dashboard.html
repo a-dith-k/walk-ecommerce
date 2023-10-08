@@ -10,45 +10,86 @@
 </head>
 <body>
 <section id="content" class="container-fluid">
-    <div class="row  mx-2 py-3 " style="--bs-gutter-x: 0">
-        <div class="col-xl-9 container-fluid">
+    <div class="row  mx-2 py-3 justify-content-center" style="--bs-gutter-x: 0">
+        <div class="col-12 ">
             <div class="row justify-content-center ">
                 <div class="mb-2 me-md-2 col-md-6  card col-3">
                     <h1 class="card-heading">TODAY'S SALE</h1>
-                    <div class="card-data">
-                        <span>2</span>
+                    <div>
+                        <span th:text="${'&#8377;'+saleToday}" class="card-data"></span>
                     </div>
                 </div>
                 <div class="mb-2 me-md-2 col-md-6  card col-3">
                     <h1 class="card-heading">TODAY'S ORDERS</h1>
-                    <div class="card-data">
-                        <span>2</span>
+                    <div>
+                        <span th:text="${orderToday}" class="card-data"></span>
                     </div>
                 </div>
                 <div class="mb-2 me-md-2 col-md-6  card col-3">
-                    <h1 class="card-heading">NEW REVIEWS</h1>
+                    <h1 class="card-heading">PENDING REVIEWS</h1>
                     <div class="card-data">
-                        <span>2</span>
+                        <span th:text="${pendingReview}" class="card-data"></span>
                     </div>
                 </div>
                 <div class="mb-2 me-md-2 col-md-6  card col-3">
-                    <h1 class="card-heading">NEW USERS</h1>
+                    <h1 class="card-heading">STOCK OUT PRODUCTS</h1>
                     <div class="card-data">
-                        <span>2</span>
+                        <span th:text="${stockOutCount}" class="card-data"></span>
                     </div>
                 </div>
+                <div class="col-3 ">
+
+
+                </div>
+            </div>
+        </div>
+        <div class=" p-5 col-md-8">
+            <h1 class="text-center m-2 bg-dark text-white">Recent Orders</h1>
+
+            <table class="table table-bordered mb-0 fs-3" style="transition: height 4s">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Tax Rate</th>
+                    <th>Total Amount</th>
+
+                </tr>
+                </thead>
+                <tbody id="orderTable">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3 mt-5 p-5 bg-common">
+            <div class="">
+                <h2>Download Sales Report </h2>
+
+                <form class="w-100" th:action="@{/admin/sales/export}" method="get">
+                    <label class="fs-3" for="startDate">Start Date</label>
+                    <input required id="startDate" type="date" class="form-control fs-2" name="startDate">
+                    <label class="fs-3" for="endDate">End Date</label>
+                    <input required id="endDate" type="date" class="form-control fs-2" name="endDate">
+                    <label class="fs-3" for="reportType">Report Type</label>
+                    <select class="form-select fs-2" name="reportType" id="reportType">
+                        <option value="pdf">PDF</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-success fs-3 mt-2 form-control">download</button>
+                </form>
+
+            </div>
+            <div class="d-flex mx-3">
+        
 
             </div>
 
-
         </div>
-        <div class="col-xl-3 p-2 bg-common">
-            <div class="notifications m-2 shadow">
 
-            </div>
-
-        </div>
     </div>
+    <!--    <script th:src="@{/js/admin/dashboard.js}"></script>-->
+    <script src="/js/admin/dashboard.js"></script>
 </section>
 
 </body>

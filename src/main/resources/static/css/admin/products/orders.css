@@ -1,0 +1,24 @@
+
+.card {
+    border: none;
+    width: 80em;
+    height: 10em;
+    margin: 2em;
+    -webkit-box-shadow: 7px 7px 18px -4px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 7px 7px 18px -4px rgba(0, 0, 0, 0.75);
+    box-shadow: 7px 7px 18px -4px rgba(0, 0, 0, 0.75);
+    background: rgb(239, 239, 244);
+    background: linear-gradient(90deg, rgba(239, 239, 244, 1) 0%, rgba(193, 193, 209, 1) 35%, rgba(204, 204, 204, 1) 100%);
+
+
+}
+
+.card img {
+
+    width: 40px;
+
+}
+
+.card span {
+    font-size: 2em;
+}

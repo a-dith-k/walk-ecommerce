@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -33,5 +34,9 @@ public class Coupon implements Serializable {
     private Long minOrderValue;
 
     private Long maxOrderValue;
+
+    private LocalDate expirationDate;
+
+    private Long couponCount;
 
 }

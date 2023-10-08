@@ -30,7 +30,7 @@ public interface OrderService {
 
     Orders createOrder(Cart cartByPrincipal, Principal principal, HttpSession session);
 
-    Orders buyNow(Integer productId, Principal principal, HttpSession session);
+    Orders buyNow(Integer productId, Long sizeId, Principal principal, HttpSession session);
 
 
     Boolean isProductExistsInOrder(Principal principal, Integer productId);
@@ -40,4 +40,8 @@ public interface OrderService {
     void returnOrder(Long orderId);
 
     void save(Orders order);
+
+    Long getSaleToday();
+
+    Long getTotalOrderToday();
 }

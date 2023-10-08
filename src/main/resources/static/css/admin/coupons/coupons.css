@@ -1,0 +1,10 @@
+.card {
+    width: 33em;
+    height: auto;
+    padding: 1em;
+    margin: 1em;
+    border: none;
+    background: rgb(115, 112, 168);
+    background: linear-gradient(90deg, rgba(115, 112, 168, 1) 0%, rgba(193, 193, 209, 1) 35%, rgba(118, 133, 136, 1) 100%);
+    box-shadow: 0 1em 1em 1em rgba(0, 0, 0, 0.2), 0 1em 1em 1em rgba(255, 245, 245, 0.2);
+}

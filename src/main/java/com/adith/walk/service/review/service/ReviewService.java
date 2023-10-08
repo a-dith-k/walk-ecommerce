@@ -31,4 +31,6 @@ public interface ReviewService {
 
 
     Long getAggregate(Integer productId);
+
+    Long getCountOfPendingReviews();
 }

@@ -8,11 +8,15 @@ import com.adith.walk.exceptions.CouponNotFoundException;
 import com.adith.walk.exceptions.InvalidCouponException;
 import com.adith.walk.repositories.CouponRepository;
 import com.adith.walk.service.CustomerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
+
+@Slf4j
 @Service
 public class CouponServiceImplementation implements CouponService {
 
@@ -52,15 +56,23 @@ public class CouponServiceImplementation implements CouponService {
     }
 
     @Override
-    public Long applyCoupon(Long amount, Coupon coupon) {
+    public Long applyCoupon(Long amount, Coupon coupon, Principal principal) throws CouponNotFoundException {
 
-        if (coupon.getDiscountType().equals(DiscountType.PERCENTAGE)) {
-            return amount - ((amount * coupon.getDiscountValue()) / 100);
-        } else if (coupon.getDiscountType().equals(DiscountType.FIXED_AMOUNT)) {
-            return amount - coupon.getDiscountValue();
+        Customer customer =
+                customerService.getCustomerByMobile(principal.getName());
+
+        if (customer.getCoupons().contains(coupon)) {
+            if (coupon.getDiscountType().equals(DiscountType.PERCENTAGE)) {
+                return amount - ((amount * coupon.getDiscountValue()) / 100);
+            } else if (coupon.getDiscountType().equals(DiscountType.FIXED_AMOUNT)) {
+                return amount - coupon.getDiscountValue();
+            }
+
         } else {
-            return 0L;
+            throw new CouponNotFoundException("Coupon is not Available");
         }
+
+        return 0L;
 
     }
 
@@ -101,14 +113,26 @@ public class CouponServiceImplementation implements CouponService {
 
     @Override
     public void provideCoupon(Principal principal, Long totalPrice) {
+        Customer customer = customerService.getCustomerByMobile(principal.getName());
+        List<Coupon> coupons =
+                new ArrayList<>();
+
         couponRepository.findAll().forEach(coupon -> {
             if (totalPrice < coupon.getMaxOrderValue() && totalPrice > coupon.getMinOrderValue()) {
-                Customer customer = customerService.getCustomerByMobile(principal.getName());
-                customer.setCoupons(List.of(coupon));
-                customerService.saveCustomer(customer);
+                if (customer.getCoupons() != null) {
+                    customer.getCoupons().add(coupon);
+
+                } else {
+                    coupons.add(coupon);
+                    customer.setCoupons(coupons);
+                }
+
             }
 
         });
+
+
+        customerService.saveCustomer(customer);
     }
 
 }

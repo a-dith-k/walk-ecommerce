@@ -20,7 +20,7 @@ public interface CouponService {
 
     void toggleCoupon(Integer couponId);
 
-    Long applyCoupon(Long amount, Coupon coupon);
+    Long applyCoupon(Long amount, Coupon coupon, Principal principal) throws CouponNotFoundException;
 
     Long removeCoupon(Long discountedAmount, Long originalAmount, Coupon coupon);
 

@@ -1,30 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="base/base::layout(~{::#style},~{::#content},~{::#script})">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link id="style" rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
-<body >
+<body>
 <section id="content">
     <section class="row  justify-content-center " style="--bs-gutter-x:0">
         <section class="col-md-8   row">
-            <section class="row  bg-common shadow mt-0 mb-3 " style="--bs-gutter-x:0" >
+            <section class="row  bg-common shadow mt-0 mb-3 " style="--bs-gutter-x:0">
                 <h1 class="fs-3 col-md-2 text-center">PRODUCT</h1>
                 <h1 class="fs-3 col-md-2 text-center">PRICE</h1>
                 <h1 class="fs-3 col-md-2 text-center">SIZE</h1>
                 <h1 class="fs-3 col-md-3 text-center">QUANTITY</h1>
                 <h1 class="fs-3 col-md-2 text-center">TOTAL</h1>
             </section>
-            <th:block   th:each="item : ${cart.items}" >
-                <div class=" row " style="background-color: #D9D9D9; --bs-gutter-x: 0"  >
+            <th:block th:each="item : ${cart.items}">
+                <div class=" row " style="background-color: #D9D9D9; --bs-gutter-x: 0">
 
                     <div class=" col-md-2 d-flex justify-content-center p-5 flex-column">
                         <img th:src="@{'/img/productImages/'+${item.product.list[0].name}}" class="img-fluid " alt="">
                     </div>
 
 
-                    <div class=" col-md-2  d-flex align-items-center justify-content-center fs-1" th:text="${item.product.offerPrice}">
+                    <div class=" col-md-2  d-flex align-items-center justify-content-center fs-1"
+                         th:text="${item.product.offerPrice}">
 
                     </div>
                     <div class="col-md-2  d-flex align-items-center justify-content-center fs-1">
@@ -46,48 +48,55 @@
 
                     <div class=" col-md-2 d-flex  justify-content-evenly ">
 
-                        <div class=" fs-2 d-flex justify-content-center align-items-center" th:text="${item.totalPrice}">
+                        <div class=" fs-2 d-flex justify-content-center align-items-center"
+                             th:text="${item.totalPrice}">
 
                         </div>
                     </div>
 
                     <div class="col-md-1 d-flex justify-content-center  align-items-center ">
 
-                        <button class="btn border-0 btn-danger " type="button" data-bs-toggle="modal" th:data-bs-target="'#'+${item.itemId}">
+                        <button class="btn border-0 btn-danger " type="button" data-bs-toggle="modal"
+                                th:data-bs-target="'#'+${item.itemId}">
                             remove
                         </button>
-                            <div class="modal fade" th:id="${item.itemId}"  aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-2 text-danger" id="exampleModalLabel">Warning</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            do you really want to Update the details?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-warning fs-2" data-bs-dismiss="modal">Cancel</button>
-                                            <form th:action="@{'/user/cart/delete/'+${item.itemId}}" th:method="delete">
-                                            <button type="submit" class="btn btn-danger border-0 fs-2"  >
+                        <div class="modal fade" th:id="${item.itemId}" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-2 text-danger" id="exampleModalLabel">Warning</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        do you really want to Update the details?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning fs-2" data-bs-dismiss="modal">
+                                            Cancel
+                                        </button>
+                                        <form th:action="@{'/user/cart/delete/'+${item.itemId}}" th:method="delete">
+                                            <button type="submit" class="btn btn-danger border-0 fs-2">
                                                 remove
                                             </button>
-                                            </form>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                     </div>
                 </div>
-                <div class="row tb mb-3" style="background-color: #D9D9D9 ; --bs-gutter-x: 0"  >
+                <div class="row tb mb-3" style="background-color: #D9D9D9 ; --bs-gutter-x: 0">
 
                     <div class="col-md-10  p-2">
                         <h3><span class="fs-2 fw-normal" th:text="${item.product.productName}"></span>
-<!--                            <span  class=" fs-2 fw-normal" th:text="${item.product.productDescription}" ></span>-->
+                            <!--                            <span  class=" fs-2 fw-normal" th:text="${item.product.productDescription}" ></span>-->
                         </h3>
                     </div>
-                    <form th:action="@{'/user/checkout/'+${item.product.productId}}" method="post" class="col-md-2">
+                    <form th:action="@{'/user/checkout/'+${item.product.productId}+'/'+${item.productSize.sizeId}}"
+                          method="post" class="col-md-2">
                         <button class="col-md-12 btn btn-secondary btn-outline-dark fs-2 text-white rounded-start-5 p-3">
                             BUY NOW
                         </button>
@@ -97,193 +106,205 @@
                 </div>
             </th:block>
 
-            <div th:if="${cart.totalPrice}<=0" class="d-flex align-items-center justify-content-center bg-dark p-3 text-white">
+            <div th:if="${cart.totalPrice}<=0"
+                 class="d-flex align-items-center justify-content-center bg-dark p-3 text-white">
                 <h1>Your Cart is Empty</h1>
             </div>
         </section>
-        <article class="col-md-2 p-4 pt-0 bg-common  tb row h-75 display-6 fw-normal  mt-0 m-2"   style="--bs-gutter-x: 0 ;">
-                <article  class=" col-12   display-6 fw-normal ">PRICE DETAILS</article>
-                <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total MRP</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.totalMRP}"></h2>
-                <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Discount</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.totalDiscount}"></h2>
-                <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Quantity</h2><h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.quantity}"></h2>
-                <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Payable</h2><h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${cart.totalPrice}"></h2>
-                <div class="col-md-12">
-                    <form th:action="@{/user/checkout}" method="post">
-                        <button th:if="${cart.totalPrice}>0" type="submit" class="btn btn-secondary fs-3 w-100 pt-3 pb-3">PROCEED TO CHECKOUT</button>
-                    </form>
+        <article class="col-md-2 p-4 pt-0 bg-common  tb row h-75 display-6 fw-normal  mt-0 m-2"
+                 style="--bs-gutter-x: 0 ;">
+            <article class=" col-12   display-6 fw-normal ">PRICE DETAILS</article>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total MRP</h2>
+            <h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.totalMRP}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Discount</h2>
+            <h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.totalDiscount}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Quantity</h2>
+            <h2 class="text-end col-6 fs-3 mt-3 fw-normal " th:text="${cart.quantity}"></h2>
+            <h2 class="fs-3 mt-3 fw-normal  col-md-6">Total Payable</h2>
+            <h2 class="text-end col-6 fs-3 mt-3 fw-bold " th:text="${cart.totalPrice}"></h2>
+            <div class="col-md-12">
+                <form th:action="@{/user/checkout}" method="post">
+                    <button th:if="${cart.totalPrice}>0" type="submit" class="btn btn-secondary fs-3 w-100 pt-3 pb-3">
+                        PROCEED TO CHECKOUT
+                    </button>
+                </form>
 
-                    <a th:unless="${cart.totalPrice}>0" href="" class="btn btn-secondary fs-3 disabled w-100 pt-3 pb-3">PROCEED TO CHECKOUT</a>
-                </div>
+                <a th:unless="${cart.totalPrice}>0" href="" class="btn btn-secondary fs-3 disabled w-100 pt-3 pb-3">PROCEED
+                    TO CHECKOUT</a>
+            </div>
         </article>
 
     </section>
     <section class="row justify-content-center" style="--bs-gutter-x:0">
-            <div class="col-md-8 row flex-column ps-0 p-3 pt-0" >
-                <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Delivery Address</h3>
-                <div class="col-md-12 bg-common" >
-                    <h2 class="col-12 m-3" th:if="${defaultAddress}!=null">
-                        <span th:text="${defaultAddress.name}+', '"></span>
-                        <span th:text="${defaultAddress.mobile}+', '"></span>
-                        <span th:text="${defaultAddress.building}+', '"></span>
-                        <span th:text="${defaultAddress.street}+', '"></span>
-                        <span th:text="${defaultAddress.city}+', '"></span>
-                        <span th:text="${defaultAddress.zipCode}+',  '"></span>
-                        <span class="h3" th:text="${defaultAddress.state}"> </span>
-                    </h2>
-                    <div class="col-md-12 m-3 mt-0">
-                        <button th:if="${defaultAddress}!=null"
-                                class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                            change
-                        </button>
-                        <button th:unless="${defaultAddress}!=null"
-                                class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                            select
-                        </button>
+        <div class="col-md-8 row flex-column ps-0 p-3 pt-0">
+            <h3 class="fs-3 fw-normal col-12 bg-dark-subtle p-2 ">Delivery Address</h3>
+            <div class="col-md-12 bg-common">
+                <h2 class="col-12 m-3" th:if="${defaultAddress}!=null">
+                    <span th:text="${defaultAddress.name}+', '"></span>
+                    <span th:text="${defaultAddress.mobile}+', '"></span>
+                    <span th:text="${defaultAddress.building}+', '"></span>
+                    <span th:text="${defaultAddress.street}+', '"></span>
+                    <span th:text="${defaultAddress.city}+', '"></span>
+                    <span th:text="${defaultAddress.zipCode}+',  '"></span>
+                    <span class="h3" th:text="${defaultAddress.state}"> </span>
+                </h2>
+                <div class="col-md-12 m-3 mt-0">
+                    <button th:if="${defaultAddress}!=null"
+                            class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                        change
+                    </button>
+                    <button th:unless="${defaultAddress}!=null"
+                            class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                        select
+                    </button>
 
-                        <a th:if="${defaultAddress}!=null"
-                                th:href="@{'/user/address/update/'+${defaultAddress.id}}"
-                                class="btn btn-secondary rounded-5 fs-3 m-2 ps-5 pe-5">
-                            edit
-                        </a>
-                        <button
-                                data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop"
-                                class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4">
-                           add new address
-                        </button>
+                    <a th:if="${defaultAddress}!=null"
+                       th:href="@{'/user/address/update/'+${defaultAddress.id}}"
+                       class="btn btn-secondary rounded-5 fs-3 m-2 ps-5 pe-5">
+                        edit
+                    </a>
+                    <button
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"
+                            class="btn btn-secondary rounded-5 fs-3 m-2 ps-4 pe-4">
+                        add new address
+                    </button>
 
-                    </div>
                 </div>
-
-            </div>
-            <div class="col-md-2" >
-
-
             </div>
 
+        </div>
+        <div class="col-md-2">
+
+
+        </div>
 
 
     </section>
 
-        <!-- Modal for adding new address -->
-        <div class="modal fade modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="addressForm" class="modal-body  row g-3 bg-secondary-subtle m-3 p-3 " th:object="${newAddress}" method="post" th:action="@{/user/cart/address/add}">
-
-                        <div class="col-md-5 m-3">
-                            <label for="inputName" class="form-label">Full Name</label>
-                            <input
-                                    type="text"
-                                    class="fs-3 form-control"
-                                    id="inputName"
-                                    name="name"
-                                    th:value="${newAddress.name}" required>
-                        </div>
-                        <div class="col-md-5 m-3">
-                            <label for="mobile" class="form-label">Mobile</label>
-                            <input
-                                    type="text"
-                                    class="fs-3 form-control"
-                                    id="mobile"
-                                    name="mobile"
-                                    th:value="${newAddress.mobile}" required>
-                        </div>
-                        <div class="col-md-5 m-3">
-                            <label for="building" class="form-label">Building Name</label>
-                            <input
-                                    type="text"
-                                    class="fs-3 form-control"
-                                    id="building"
-                                    name="building"
-                                    th:value="${newAddress.building}" required>
-                        </div>
-                        <div class="col-5 m-3">
-                            <label for="alterPhone" class="form-label">Alternative Phone</label>
-                            <input
-                                    type="text"
-                                    class="form-control fs-3"
-                                    id="alterPhone"
-                                    name="alternativeMobile"
-                                    placeholder="1234 Main St"
-                                    th:value="${newAddress.alternativeMobile}" >
-                        </div>
-                        <div class="col-md-5 m-3 ">
-                            <label for="street" class="form-label">Street</label>
-                            <input
-                                    type="text"
-                                    class="form-control fs-3 "
-                                    id="street"
-                                    name="street"
-                                    th:value="${newAddress.street}" required>
-                        </div>
-
-                        <div class="col-5  m-3">
-                            <label for="landMark" class="form-label">LandMark</label>
-                            <input
-                                    type="text"
-                                    class="form-control fs-3"
-                                    id="landMark"
-                                    name="landmark"
-                                    placeholder="Apartment, studio, or floor"
-                                    th:value="${newAddress.landmark}">
-                        </div>
-                        <div class="col-md-5  m-3">
-                            <label for="inputCity" class="form-label">City</label>
-                            <input
-                                    type="text"
-                                    class="form-control fs-3"
-                                    id="inputCity"
-                                    name="city"
-                                    th:value="${newAddress.city}" required>
-                        </div>
-                        <div class="col-md-3  m-3 me-1">
-                            <label for="inputState" class="form-label">State</label>
-                            <select
-                                    id="inputState"
-                                    name="state"
-                                    class="form-select fs-3"required
-                            >
-                                <option selected th:value="${newAddress.state}" th:text="${newAddress.state}"></option>
-                                <option value="Kerala">Kerala</option>
-                                <option value="Delhi">Delhi</option>
-                                <option value="Kerala">Goa</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 m-3 ms-0  ">
-                            <label for="inputZip" class="form-label">Zip</label>
-                            <input
-                                    type="text"
-                                    class="form-control fs-3"
-                                    id="inputZip"
-                                    name="zipCode"
-                                    th:value="${newAddress.zipCode}"
-                                    required>
-                        </div>
-                        <div class="col-md-12 row justify-content-end">
-                            <button type="button" class="btn btn-secondary fs-3 col-md-4 m-2 " data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-dark fs-3 col-md-4 m-2">Save</button>
-                        </div>
-
-
-                  </form>
+    <!-- Modal for adding new address -->
+    <div class="modal fade modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form id="addressForm" class="modal-body  row g-3 bg-secondary-subtle m-3 p-3 "
+                      th:object="${newAddress}" method="post" th:action="@{/user/cart/address/add}">
+
+                    <div class="col-md-5 m-3">
+                        <label for="inputName" class="form-label">Full Name</label>
+                        <input
+                                type="text"
+                                class="fs-3 form-control"
+                                id="inputName"
+                                name="name"
+                                th:value="${newAddress.name}" required>
+                    </div>
+                    <div class="col-md-5 m-3">
+                        <label for="mobile" class="form-label">Mobile</label>
+                        <input
+                                type="text"
+                                class="fs-3 form-control"
+                                id="mobile"
+                                name="mobile"
+                                th:value="${newAddress.mobile}" required>
+                    </div>
+                    <div class="col-md-5 m-3">
+                        <label for="building" class="form-label">Building Name</label>
+                        <input
+                                type="text"
+                                class="fs-3 form-control"
+                                id="building"
+                                name="building"
+                                th:value="${newAddress.building}" required>
+                    </div>
+                    <div class="col-5 m-3">
+                        <label for="alterPhone" class="form-label">Alternative Phone</label>
+                        <input
+                                type="text"
+                                class="form-control fs-3"
+                                id="alterPhone"
+                                name="alternativeMobile"
+                                placeholder="1234 Main St"
+                                th:value="${newAddress.alternativeMobile}">
+                    </div>
+                    <div class="col-md-5 m-3 ">
+                        <label for="street" class="form-label">Street</label>
+                        <input
+                                type="text"
+                                class="form-control fs-3 "
+                                id="street"
+                                name="street"
+                                th:value="${newAddress.street}" required>
+                    </div>
+
+                    <div class="col-5  m-3">
+                        <label for="landMark" class="form-label">LandMark</label>
+                        <input
+                                type="text"
+                                class="form-control fs-3"
+                                id="landMark"
+                                name="landmark"
+                                placeholder="Apartment, studio, or floor"
+                                th:value="${newAddress.landmark}">
+                    </div>
+                    <div class="col-md-5  m-3">
+                        <label for="inputCity" class="form-label">City</label>
+                        <input
+                                type="text"
+                                class="form-control fs-3"
+                                id="inputCity"
+                                name="city"
+                                th:value="${newAddress.city}" required>
+                    </div>
+                    <div class="col-md-3  m-3 me-1">
+                        <label for="inputState" class="form-label">State</label>
+                        <select
+                                id="inputState"
+                                name="state"
+                                class="form-select fs-3" required
+                        >
+                            <option selected th:value="${newAddress.state}" th:text="${newAddress.state}"></option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Kerala">Goa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 m-3 ms-0  ">
+                        <label for="inputZip" class="form-label">Zip</label>
+                        <input
+                                type="text"
+                                class="form-control fs-3"
+                                id="inputZip"
+                                name="zipCode"
+                                th:value="${newAddress.zipCode}"
+                                required>
+                    </div>
+                    <div class="col-md-12 row justify-content-end">
+                        <button type="button" class="btn btn-secondary fs-3 col-md-4 m-2 " data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-dark fs-3 col-md-4 m-2">Save</button>
+                    </div>
+
+
+                </form>
             </div>
         </div>
+    </div>
     <!--modal ends here---------------------------------->
 
 
-
     <!-- Modal  FOR SELECTING THE ADDRESS------------------------------------>
-    <div class="modal  fade modal-lg " id="exampleModal" tabindex="-1" aria-labelledby="addressModal" aria-hidden="true">
+    <div class="modal  fade modal-lg " id="exampleModal" tabindex="-1" aria-labelledby="addressModal"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -293,12 +314,17 @@
                 <form th:action="@{/user/address/set-default}" method="post">
                     <div class="modal-body">
                         <div class="form-check border-black p-3" th:each="address: ${addressList}">
-                            <input class="btn-check" type="radio" name="addressId" th:id="${address.id}" th:value="${address.id}" th:checked="${address.isDefault}">
+                            <input class="btn-check" type="radio" name="addressId" th:id="${address.id}"
+                                   th:value="${address.id}" th:checked="${address.isDefault}">
                             <label class="btn btn-outline-secondary text-dark w-100" th:for="${address.id}">
                                 <h2 class=" mt-3" th:text="${address.name}+', '+${address.mobile}"></h2>
-                                <h3 class=" mt-3" th:text="${address.building}+', '+${address.street}  +' '+${address.city}"> <span ></span></h3>
+                                <h3 class=" mt-3"
+                                    th:text="${address.building}+', '+${address.street}  +' '+${address.city}">
+                                    <span></span></h3>
 
-                                <h2 class=" mt-3"><span th:text="${address.zipCode}+',  '"></span> <span class="h3" th:text="${address.state}"> </span></h2>
+                                <h2 class=" mt-3"><span th:text="${address.zipCode}+',  '"></span> <span class="h3"
+                                                                                                         th:text="${address.state}"> </span>
+                                </h2>
 
                             </label>
                         </div>

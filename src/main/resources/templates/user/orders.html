@@ -16,20 +16,26 @@
 
     <th:block th:each="order: ${orders}">
         <a class="text-decoration-none text-dark" th:href="@{'/user/orders/'+${order.id}}">
-            <div class="order-card my-3 ">
-                <h5 class=""><span class="text-primary-emphasis fs-2"
-                                   th:text="${order.id}"> </span></h5>
-                <div class="card-body">
-                    <h4 class="display-6 ">Order is <span class="text-lowercase" th:text="${order.orderStatus}"></span>
+            <div class="order-card my-3 d-flex">
+                <div>
+
+                    <span><img class="order-img" src="/img/user/order.png" alt=""></span>
+                </div>
+
+                <div class="card-body d-flex align-items-center">
+                   <span class="text-primary-emphasis fs-2 "
+                         th:text="${order.id}"> </span>
+                    <h4 class="fs-3 ms-5">Order is <span class="text-lowercase"
+                                                         th:text="${order.orderStatus}"></span>
                         now
                     </h4>
-                    <h3 class=""><span>Total Amount :</span><span
-                            th:text="${order.payment.totalAmount}"></span></h3>
+                    <span class="text-primary-emphasis fs-2 mx-5"
+                          th:text="${'&#8377;   '+order.payment.totalAmount}"></span>
 
-                    <form th:if="${order.orderStatus.name()}!='CANCELLED'"
-                          th:action="@{'/user/orders/'+${order.id}+'/cancel'}" th:method="put">
-                        <button class="btn btn-danger" type="submit"> cancel</button>
-                    </form>
+                    <!--                    <form th:if="${order.orderStatus.name()}!='CANCELLED'"-->
+                    <!--                          th:action="@{'/user/orders/'+${order.id}+'/cancel'}" th:method="put">-->
+                    <!--                        <button class="btn btn-danger" type="submit"> cancel</button>-->
+                    <!--                    </form>-->
 
 
                 </div>

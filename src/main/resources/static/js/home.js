@@ -1,30 +1,29 @@
-const search=()=>{
+const search = () => {
     console.log("searching");
 
-    let query=$("#search-input").val();
+    let query = $("#search-input").val();
 
-    if(query==''){
+    if (query === '') {
         $("#search-result").hide()
-    }else{
+    } else {
         console.log(query);
 
         //sending request to backend
-        let url=`http://localhost:2021/search/${query}`;
+        let url = `http://localhost:2021/search/${query}`;
 
-        fetch(url).then((response)=>{
+        fetch(url).then((response) => {
             return response.json()
-        }).then((data)=>{
+        }).then((data) => {
 
             console.log(data);
-            let resultDiv='';
-            if(data.length==0){
-                resultDiv=`<div class='m-3 p-2 fs-3'>No results found</div>`
+            let resultDiv = '';
+            if (data.length === 0) {
+                resultDiv = `<div class='m-3 p-2 fs-3'>No results found</div>`
             }
 
 
-
-            data.forEach((product)=>{
-                resultDiv+=`<a href='/products/${product.productId}' class='text-decoration-none  text-dark row p-2'>
+            data.forEach((product) => {
+                resultDiv += `<a href='/products/${product.productId}' class='text-decoration-none  text-dark row p-2'>
                             <div class='fs-3 mt-1 ms-1  col-md-1  d-flex justify-content-end'>
                                 <img src="../img/productImages/${product.list[0].name}" class="img-fluid w-50">
                             </div>
@@ -43,38 +42,39 @@ const search=()=>{
 };
 
 
-let pageNumber=0;
-let totalPages=0;
+let pageNumber = 0;
+let totalPages = 0;
 
-window.onload = function() {
+window.onload = function () {
     request();
 
 
 };
 
-function loadPage(i){
-    pageNumber=i;
+function loadPage(i) {
+    pageNumber = i;
     request();
 }
 
-function previousPage(){
-    if(pageNumber>0){
+function previousPage() {
+    if (pageNumber > 0) {
         pageNumber--;
         request();
     }
 
 }
-let numberOfProducts=5;
 
-function productCount(count){
+let numberOfProducts = 5;
 
-        numberOfProducts=count;
-        request();
+function productCount(count) {
+
+    numberOfProducts = count;
+    request();
 }
 
 
-function nextPage(){
-    if(pageNumber<totalPages-1){
+function nextPage() {
+    if (pageNumber < totalPages - 1) {
         pageNumber++;
         request();
     }
@@ -83,25 +83,23 @@ function nextPage(){
 }
 
 
+function request() {
 
-
-function request(){
-
-    let url=`http://localhost:2021/rest/${pageNumber}/${numberOfProducts}`;
+    let url = `http://localhost:2021/rest/${pageNumber}/${numberOfProducts}`;
     fetch(url)
-        .then(res=>{
+        .then(res => {
             return res.json()
 
         })
-        .then (data=>{
-            totalPages=data.totalPages;
+        .then(data => {
+            totalPages = data.totalPages;
             console.log(data)
 
-            let result='';
+            let result = '';
 
-            data.products.content.forEach(product=>{
+            data.products.content.forEach(product => {
 
-                result+=
+                result +=
                     `<div class="col-sm-12 col-md-3 product position-relative" >
                     <div class="product-img">
                     <a href="/products/${product.productId}"><img
@@ -128,24 +126,24 @@ function request(){
 
             })
 
-            let pages='';
+            let pages = '';
 
-            for(let i=data.currentPageNumber-2; i<data.currentPageNumber+5; i++){
-                let active='';
-                if(i==data.currentPageNumber){
-                    active="active";
+            for (let i = data.currentPageNumber - 2; i < data.currentPageNumber + 5; i++) {
+                let active = '';
+                if (i == data.currentPageNumber) {
+                    active = "active";
                 }
 
-                if(i<totalPages &&i>=0){
-                    pages+=`      <li class="page-item"  >
-                            <button  class="page-link ${active}"    onclick="loadPage(${i})" ><span>${i+1}</span></button>
+                if (i < totalPages && i >= 0) {
+                    pages += `      <li class="page-item"  >
+                            <button  class="page-link ${active}"    onclick="loadPage(${i})" ><span>${i + 1}</span></button>
        
                     </li>`;
                 }
             }
 
-            pageNumber=data.currentPageNumber;
-            let pagination= `<nav aria-label="...">
+            pageNumber = data.currentPageNumber;
+            let pagination = `<nav aria-label="...">
                 <ul class="pagination" >
                     <li class="page-item " >
                       <button class="page-link"  onclick="previousPage()" tabindex="-1" aria-disabled="true">Previous</button>
@@ -160,8 +158,7 @@ function request(){
             </nav>`
 
 
-
-           let productCount=`<div class="w-50">
+            let productCount = `<div class="w-50">
                     
                 
                    <button class="btn btn-primary fs-2"  onclick="productCount(2)" >2</button>
@@ -177,7 +174,6 @@ function request(){
 
             $("#paginationDiv").html(pagination);
             $("#productList").html(result);
-
 
 
         })

@@ -1,16 +1,12 @@
 package com.adith.walk.controllers;
 
-import com.adith.walk.dto.CustomerDTO;
-import com.adith.walk.dto.CustomerRegistrationRequest;
-import com.adith.walk.dto.CustomerRegistrationRequestAdmin;
-import com.adith.walk.dto.ProductDTO;
-import com.adith.walk.entities.Banner;
-import com.adith.walk.entities.Product;
-import com.adith.walk.entities.ProductCategory;
-import com.adith.walk.entities.Stock;
+import com.adith.walk.dto.*;
+import com.adith.walk.entities.*;
 import com.adith.walk.enums.OrderStatus;
 import com.adith.walk.exceptions.SizeAlreadyExistsException;
+import com.adith.walk.exporters.OrderPDFExporter;
 import com.adith.walk.helper.Message;
+import com.adith.walk.mappers.EntityMapper;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.service.BannerService;
 import com.adith.walk.service.CategoryService;
@@ -19,15 +15,18 @@ import com.adith.walk.service.ProductService;
 import com.adith.walk.service.coupon.service.CouponService;
 import com.adith.walk.service.file.service.FileService;
 import com.adith.walk.service.order.service.OrderService;
+import com.adith.walk.service.orderitem.service.OrderItemService;
 import com.adith.walk.service.review.service.ReviewService;
 import com.adith.walk.service.stock.service.StockService;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -36,10 +35,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @SessionAttributes({"product"})
@@ -60,6 +68,7 @@ public class AdminController {
 
     final
     ModelMapper modelMapper;
+    final EntityMapper entityMapper;
 
     final
     ImageRepo imageRepo;
@@ -67,30 +76,35 @@ public class AdminController {
     final
     BannerService bannerService;
 
-
     final
     CategoryService categoryService;
 
     final OrderService orderService;
+
     final StockService stockService;
 
     final ReviewService reviewService;
 
+    final OrderItemService orderItemService;
+
     final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    public AdminController(FileService fileService, CustomerService customerService, ProductService productService, CouponService couponService, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper, ImageRepo imageRepo, BannerService bannerService, CategoryService categoryService, OrderService orderService, StockService stockService, ReviewService reviewService) {
+    public AdminController(FileService fileService, CustomerService customerService, ProductService productService, CouponService couponService, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper, EntityMapper entityMapper, ImageRepo imageRepo, BannerService bannerService, CategoryService categoryService, OrderService orderService, StockService stockService, ReviewService reviewService, OrderItemService orderItemService) {
         this.fileService = fileService;
         this.customerService = customerService;
         this.productService = productService;
         this.couponService = couponService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
+        this.entityMapper = entityMapper;
+
         this.imageRepo = imageRepo;
         this.bannerService = bannerService;
         this.categoryService = categoryService;
         this.orderService = orderService;
         this.stockService = stockService;
         this.reviewService = reviewService;
+        this.orderItemService = orderItemService;
     }
 
 
@@ -106,9 +120,13 @@ public class AdminController {
 
 
     @GetMapping("dashboard")
-    public String getAdminDashboard(Principal principal, HttpSession session) {
+    public String getAdminDashboard(Principal principal, HttpSession session, Model model) {
 
         session.setAttribute("admin", principal);
+        model.addAttribute("saleToday", orderService.getSaleToday());
+        model.addAttribute("orderToday", orderService.getTotalOrderToday());
+        model.addAttribute("pendingReview", reviewService.getCountOfPendingReviews());
+        model.addAttribute("stockOutCount", stockService.getStockOutProductCount());
 
         return "admin/dashboard";
     }
@@ -246,7 +264,8 @@ public class AdminController {
 
     //-------------------------------adding  the product-----------------------------------------------
     @GetMapping("products/add")
-    public String addProduct(ProductDTO productDTO, Model model, @ModelAttribute("newCategory") ProductCategory productCategory) {
+    public String addProduct(ProductDTO productDTO, Model model,
+                             @ModelAttribute("newCategory") ProductCategory productCategory) {
 
         model
                 .addAttribute("product", productDTO);
@@ -266,6 +285,15 @@ public class AdminController {
         categoryService.save(productCategory);
 
         return "redirect:/admin/products/add";
+    }
+
+
+    @PutMapping("/products/category/update/{id}")
+    public String updateCategory(@PathVariable("id") Long productId, @ModelAttribute("newCategory") ProductCategory productCategory) {
+
+        categoryService.save(productCategory);
+
+        return "redirect:/admin/products/update/".concat(String.valueOf(productId));
     }
 
 
@@ -377,7 +405,8 @@ public class AdminController {
 //--------------------------Updating  the product-----------------------------------------------
 
     @GetMapping("products/update/{productId}")
-    public String getUpdateProduct(@PathVariable Integer productId, Model model) {
+    public String getUpdateProduct(@PathVariable Integer productId, Model model,
+                                   @ModelAttribute("newCategory") ProductCategory productCategory) {
 
 
         ProductDTO productUpdateRequest =
@@ -387,6 +416,9 @@ public class AdminController {
 
         model
                 .addAttribute("productUpdateRequest", productUpdateRequest);
+
+        model
+                .addAttribute("productCategories", categoryService.getAllCategories());
 
         model
                 .addAttribute("stock", productUpdateRequest.getStock());
@@ -518,6 +550,24 @@ public class AdminController {
         return "admin/orders/all";
     }
 
+
+    @ResponseBody
+    @CrossOrigin(originPatterns = "*")
+    @GetMapping("rest/orders")
+    public ResponseEntity<List<OrderResponseEntity>> getAllOrders() {
+        List<OrderResponseEntity> orders = new ArrayList<OrderResponseEntity>();
+        orderService.getAllOrders().forEach(order -> {
+            Customer customer = new Customer();
+            customer.setUserId(order.getCustomer().getUserId());
+            order.setCustomer(customer);
+
+            orders.add(modelMapper.map(order, OrderResponseEntity.class));
+        });
+
+
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("orders/{orderId}")
     public String getAllOrders(@PathVariable Long orderId, Model model) {
 
@@ -552,6 +602,86 @@ public class AdminController {
 
         return "redirect:/admin/products/reviews";
     }
+
+
+    @GetMapping("/sales/export")
+    public void exportToCSV(@RequestParam("startDate") LocalDate startDate, @RequestParam("endDate") LocalDate endDate, @RequestParam("reportType") String reportType, HttpServletResponse response) throws IOException {
+
+
+        List<SalesReportDto> salesReportDtoList =
+                new ArrayList<>();
+        orderItemService.getAllOrderItems()
+                .stream()
+                .filter(orderItem -> {
+                    return orderItem.getOrder().getOrderDate().isAfter(startDate) &&
+                            orderItem.getOrder().getOrderDate().isBefore(endDate);
+                }).forEach(orderItem -> {
+                    SalesReportDto salesReportDto = entityMapper.OrderItemToSalesReportDtoMapper(orderItem);
+                    salesReportDtoList.add(salesReportDto);
+                });
+
+
+        if (reportType.equals("csv")) {
+            response.setContentType("text/csv");
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+            String currentDateTime = dateFormatter.format(new Date());
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=sales_" + currentDateTime + ".csv";
+            response.setHeader(headerKey, headerValue);
+
+
+            ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+            String[] csvHeader = {"id", "name", "size", "quantity", "totalPrice", "taxRate", "finalPrice"};
+            String[] nameMapping = {"id", "name", "size", "quantity", "totalPrice", "taxRate", "finalPrice"};
+
+            csvWriter.writeHeader(csvHeader);
+
+            for (SalesReportDto item : salesReportDtoList) {
+                csvWriter.write(item, nameMapping);
+            }
+
+            csvWriter.close();
+
+        } else if (reportType.equals("pdf")) {
+            response.setContentType("application/pdf");
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            String currentDateTime = dateFormatter.format(new Date());
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+            response.setHeader(headerKey, headerValue);
+
+
+            OrderPDFExporter exporter = new OrderPDFExporter(salesReportDtoList);
+            exporter.export(response);
+
+        }
+
+
+    }
+
+
+//    @GetMapping("/sales/export/pdf")
+//    public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
+//        response.setContentType("application/pdf");
+//        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+//        String currentDateTime = dateFormatter.format(new Date());
+//
+//        String headerKey = "Content-Disposition";
+//        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+//        response.setHeader(headerKey, headerValue);
+//
+//        List<SalesReportDto> salesReportDtoList = new ArrayList<>();
+//        orderItemService.getAllOrderItems().forEach(orderItem -> {
+//            SalesReportDto salesReportDto = entityMapper.OrderItemToSalesReportDtoMapper(orderItem);
+//            salesReportDtoList.add(salesReportDto);
+//        });
+//
+//        OrderPDFExporter exporter = new OrderPDFExporter(salesReportDtoList);
+//        exporter.export(response);
+//
+//    }
 
 
 }

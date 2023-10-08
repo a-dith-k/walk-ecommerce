@@ -1,6 +1,7 @@
 package com.adith.walk.entities;
 
 import com.adith.walk.enums.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -27,6 +28,8 @@ public class Payment implements Serializable {
 
     LocalDateTime dateTime;
 
+
+    @JsonBackReference
     @OneToOne(mappedBy = "payment")
     Orders orders;
 }

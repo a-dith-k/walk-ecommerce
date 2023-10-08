@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +133,7 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public Orders buyNow(Integer productId, Principal principal, HttpSession session) {
+    public Orders buyNow(Integer productId, Long sizeId, Principal principal, HttpSession session) {
 
         Orders order = new Orders();
 
@@ -144,6 +145,7 @@ public class OrderServiceImplementation implements OrderService {
         orderItem.setProduct(product);
         orderItem.setOrder(order);
         orderItem.setQuantity(1L);
+        orderItem.setProductSize(sizeService.getSizeBySizeId(sizeId));
         orderItem.setTotalPrice(product.getOfferPrice());
         orderItem.setTotalMRP(product.getProductMrp());
         orderItemList.add(orderItem);
@@ -174,6 +176,7 @@ public class OrderServiceImplementation implements OrderService {
         payment.setDateTime(LocalDateTime.now());
         payment.setTotalAmount(orders.getTotalPrice());
         orders.setPayment(payment);
+        orders.setOrderDate(LocalDate.now());
         orders.setOrderStatus(OrderStatus.PLACED);
         OrderHistory orderHistory = new OrderHistory();
         orderHistory.setOrderTime(LocalDateTime.now());
@@ -195,18 +198,19 @@ public class OrderServiceImplementation implements OrderService {
 
 
         if (principal == null) {
+            logger.error("Hetrereteetret");
             return false;
         }
         List<Orders> orders = getAllOrderByPrincipal(principal);
+        var result = false;
 
-        for (Orders order : orders) {
-            for (OrderItem orderItem : order.getItems()) {
-                return orderItem.getProduct().equals(productService.getProductById(productId));
-            }
-
+        for (Orders orders1 : orders) {
+            return orders1.getItems().stream().anyMatch(orderItem -> orderItem.getProduct().getProductId().equals(productId));
         }
 
-        return false;
+        logger.error("here");
+
+        return result;
     }
 
     @Override
@@ -238,5 +242,15 @@ public class OrderServiceImplementation implements OrderService {
     @Override
     public void save(Orders order) {
         orderRepo.save(order);
+    }
+
+    @Override
+    public Long getSaleToday() {
+        return orderRepo.findSumOfOrderPrice(LocalDate.now());
+    }
+
+    @Override
+    public Long getTotalOrderToday() {
+        return orderRepo.findOrderCountOfTheDay(LocalDate.now());
     }
 }

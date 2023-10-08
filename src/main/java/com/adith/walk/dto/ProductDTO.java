@@ -38,6 +38,8 @@ public class ProductDTO implements Serializable {
     private String productDescription;
 
     private ProductCategory productCategory;
-
+    private Long taxRate;
     private Stock stock;
+
+
 }

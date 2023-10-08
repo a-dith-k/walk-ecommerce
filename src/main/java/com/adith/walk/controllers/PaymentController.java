@@ -58,8 +58,9 @@ public class PaymentController {
                             @SessionAttribute("order") Orders orders) {
 
         if (paymentMethod.equals("cod")) {
-            Payment payment = paymentService.doPayment(orders.getTotalPrice(), paymentMethod, PaymentStatus.PAID);
+            Payment payment = paymentService.doPayment(orders.getTotalPrice(), paymentMethod, PaymentStatus.SUCCESSFUL);
             orderService.placeOrder(orders, payment, principal);
+            couponService.provideCoupon(principal, orders.getTotalPrice());
             cartService.deleteCart(principal);
             return "/user/success";
         } else if (paymentMethod.equals("razorpay")) {
@@ -142,7 +143,7 @@ public class PaymentController {
         RazorPayDetails razorPayDetails = new RazorPayDetails(razorpayPaymentId, razorpayOrderId, razorpaySignature, amount, contactCount, companyName, currency, order);
         razorPayService.saveDetails(razorPayDetails);
         session.setAttribute("order", order);
-        paymentService.updatePaymentStatus(order, PaymentStatus.PAID);
+        paymentService.updatePaymentStatus(order, PaymentStatus.SUCCESSFUL);
         couponService.provideCoupon(principal, order.getTotalPrice());
         cartService.deleteCart(principal);
 

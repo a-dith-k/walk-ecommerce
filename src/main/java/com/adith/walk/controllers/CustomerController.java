@@ -254,21 +254,21 @@ public class CustomerController {
         return "user/checkout";
     }
 
-    @PostMapping("checkout/{id}")
-    public String buyNowProduct(@PathVariable Integer id, Principal principal, HttpSession session, Model model) {
+    @PostMapping("checkout/{id}/{sizeId}")
+    public String buyNowProduct(@PathVariable Integer id, Principal principal, HttpSession session, Model model, @PathVariable long sizeId) {
 
 
         model.addAttribute("addressList", addressServiceImpl.getAllAddress(principal));
-        orderService.buyNow(id, principal, session);
+        orderService.buyNow(id, sizeId, principal, session);
         return "/user/checkout";
     }
 
     @PutMapping("checkout/applyCoupon")
-    public String applyCoupon(@SessionAttribute("order") Orders order, @RequestParam String couponName, HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+    public String applyCoupon(@SessionAttribute("order") Orders order, @RequestParam String couponName, HttpSession session, RedirectAttributes redirectAttributes, Principal principal) {
 
 
         try {
-            order.setDiscountedPrice(couponService.applyCoupon(order.getTotalPrice(), couponService.getCouponByName(couponName)));
+            order.setDiscountedPrice(couponService.applyCoupon(order.getTotalPrice(), couponService.getCouponByName(couponName), principal));
             order.setCoupon(couponService.getCouponByName(couponName));
             redirectAttributes.addFlashAttribute("message", new Message("Coupon Applied SuccessFully", "alert-success"));
         } catch (CouponNotFoundException | InvalidCouponException e) {

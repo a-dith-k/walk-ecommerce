@@ -33,6 +33,8 @@ public class CartItem implements Serializable {
 
     private Long totalPrice;
 
+    private Long taxAmount;
+
     @ManyToOne()
     @JoinColumn(name = "cart_id")
     private Cart cart;

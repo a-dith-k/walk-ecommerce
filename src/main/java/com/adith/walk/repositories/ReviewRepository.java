@@ -32,4 +32,8 @@ public interface ReviewRepository extends JpaRepository<ProductReview, Long> {
     @Transactional
     @Query("select avg(pr.rating) from ProductReview pr where pr.product=:product and pr.isApproved=true ")
     Optional<Long> findReviewAggregate(@Param("product") Product product);
+
+    @Transactional
+    @Query("select count(*) from ProductReview pr where pr.isApproved=false")
+    Long findCountOfPendingReviews();
 }

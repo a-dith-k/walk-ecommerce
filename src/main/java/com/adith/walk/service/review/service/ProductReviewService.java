@@ -34,17 +34,6 @@ public class ProductReviewService implements ReviewService {
 
         List<ProductReview> productReviewsByProduct = reviewRepository.getProductReviewsByProduct(productService.getProductById(productId));
 
-        boolean isAlreadyReviewed = productReviewsByProduct
-                .stream()
-                .anyMatch(pReview -> pReview
-                        .getCustomer()
-                        .equals(customerService
-                                .getCustomerByMobile(principal
-                                        .getName())));
-
-        if (isAlreadyReviewed) {
-            throw new AlreadyUsedException("You have Already Reviewed");
-        }
 
         productReview.setProduct(productService.getProductById(productId));
         productReview.setCustomer(customerService.getActiveCustomer(principal));
@@ -71,7 +60,7 @@ public class ProductReviewService implements ReviewService {
 
     @Override
     public void updateReview(ProductReview productReview) {
-        System.out.println("re-----------------------------------------------------------------------");
+        productReview.setIsApproved(false);
         reviewRepository.save(productReview);
     }
 
@@ -93,8 +82,12 @@ public class ProductReviewService implements ReviewService {
 
     @Override
     public Long getAggregate(Integer productId) {
-        System.out.println("here in service--------------------------------------");
         return reviewRepository.findReviewAggregate(productService.getProductById(productId)).orElse(0L);
+    }
+
+    @Override
+    public Long getCountOfPendingReviews() {
+        return reviewRepository.findCountOfPendingReviews();
     }
 
 

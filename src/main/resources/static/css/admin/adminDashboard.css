@@ -30,6 +30,8 @@ H1 {
     border: none;
     font-size: 40px;
     position: relative;
+    display: flex;
+    justify-content: center;
 }
 
 .card-heading {
@@ -38,16 +40,11 @@ H1 {
 }
 
 .card-data {
-    position: absolute;
-    bottom: 9%;
-    left: 34%;
-    width: 2em;
-    height: 2em;
-    background-color: #b9b1b1;
-    border-radius: 50%;
-    display: flex;
     justify-content: center;
-    align-items: center;
+    display: flex;
+    background-color: #b9b1b1;
+
+
 }
 
 .card-data span {

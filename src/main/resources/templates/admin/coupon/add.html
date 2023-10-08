@@ -11,28 +11,59 @@
 <body>
 <section id="content">
     <div class="row">
-        <div class="col-md-2 menu-bar d-flex justify-content-center mt-0  m-4 shadow">
-            <a th:href="@{/admin/coupons/add}">
-                <button type="button" class="btn  btn-secondary fs-2">CREATE COUPON</button>
-            </a>
 
+        <div class="col-md-2 mt-5">
+            <div class="menu-bar d-flex flex-column shadow  m-4 pb-2">
+
+                <a th:href="@{/admin/coupons}" class="btn  btn-secondary fs-2  m-2 mb-0">ALL COUPONS</a>
+            </div>
+            <div class="menu-bar d-flex flex-column shadow  m-4 pb-2">
+
+                <a th:href="@{/admin/coupons/create-new}" class="btn  btn-secondary fs-2  m-2 mb-0">CREATE COUPON</a>
+            </div>
         </div>
         <div class="col-md-3 p-5 fs-3 ">
-            <form th:action="@{/admin/coupons/create-new}" method="post" th:object="${coupon}" class="d-flex flex-column">
+            <form th:action="@{/admin/coupons/create-new}" method="post" th:object="${coupon}"
+                  class="d-flex flex-column">
                 <div th:if="${message}" th:text="${message.content}" th:classappend="${message.type}" class="alert">
 
                 </div>
                 <label for="couponName">Name of Coupon</label>
-                <input id="couponName" class="form-group mb-3 " type="text" th:field="*{couponName}">
-                <label for="discountType">Discount type</label>
-                <select id="discountType" class="form-group mb-3 " type="text" th:field="*{discountType}">
-                    <option th:value="${T(com.adith.walk.enums.DiscountType).PERCENTAGE}" >Percentage</option>
-                    <option th:value="${T(com.adith.walk.enums.DiscountType).FIXED_AMOUNT}" >Fixed Amount</option>
-                </select>
-                <label for="couponValue">Discount Value</label><input id="couponValue" class="form-group mb-3 " type="text" th:field="*{discountValue}">
-                <label for="couponDescription">Coupon Description</label><input id="couponDescription" class=" mb-3 form-group" type="text" th:field="*{couponDescription}">
+                <input required id="couponName" class="form-group mb-3 "
+                       type="text" th:field="*{couponName}">
 
-                <button class="btn btn-danger my-2 fs-2"  >create coupon</button>
+                <label for="discountType">Discount type</label>
+                <select required id="discountType" class="form-group mb-3 " th:field="*{discountType}">
+                    <option th:value="${T(com.adith.walk.enums.DiscountType).PERCENTAGE}">Percentage</option>
+                    <option th:value="${T(com.adith.walk.enums.DiscountType).FIXED_AMOUNT}">Fixed Amount</option>
+                </select>
+
+                <label for="couponValue">Discount Value</label>
+                <input required id="couponValue" class="form-group mb-3 "
+                       type="text" th:field="*{discountValue}">
+
+                <label for="couponDescription">Coupon Description</label>
+                <input required id="couponDescription"
+                       class=" mb-3 form-group" type="text"
+                       th:field="*{couponDescription}">
+
+                <label for="minOrderValue">Minimum Order Value</label>
+                <input required id="minOrderValue" class=" mb-3 form-group"
+                       type="text" th:field="*{minOrderValue}">
+
+                <label for="maxOrderValue">Maximum Order Value</label>
+                <input required id="maxOrderValue" class=" mb-3 form-group"
+                       type="text" th:field="*{maxOrderValue}">
+
+                <label for="expiryDate">Expiry Date</label>
+                <input required id="expiryDate" class=" mb-3 form-group"
+                       type="date" th:field="*{expirationDate}">
+
+                <label for="couponCount">Count of the Coupon</label>
+                <input required id="couponCount" class=" mb-3 form-group"
+                       type="number" th:field="*{couponCount}">
+
+                <button class="btn btn-danger my-2 fs-2">create coupon</button>
             </form>
 
         </div>
@@ -40,7 +71,6 @@
     </div>
 
 </section>
-
 
 
 </body>

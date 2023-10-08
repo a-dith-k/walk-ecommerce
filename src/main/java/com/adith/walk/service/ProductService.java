@@ -67,11 +67,6 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-//    public List<Product> getAllProductsByCategory(String category) {
-//
-//        return productRepository.findByCategoryId(category);
-//
-//    }
 
     public Product getProductById(Integer id) {
 
@@ -303,5 +298,11 @@ public class ProductService {
             size.setStock(stock);
         });
         stockService.save(stock);
+    }
+
+
+    public Long getProductTax(long totalAmount, int taxPercent) {
+
+        return totalAmount * taxPercent / 100;
     }
 }

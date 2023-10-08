@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +58,8 @@ public class Orders implements Serializable {
     boolean isCurrentOrder;
 
     Boolean isPaymentDone;
+
+    LocalDate orderDate;
 
     @OneToOne
     private Coupon coupon;

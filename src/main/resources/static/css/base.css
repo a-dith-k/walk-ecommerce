@@ -1,47 +1,45 @@
 
-html{
+html {
     font-size: 10px;
 
-}
-
-body{
-   background:  /*url("../img/user-login.png")  107% 280%  no-repeat fixed,url("../img/user-login2.png")  0% 0%  no-repeat fixed*/ white;
 
 }
 
-.bg-common{
-  background:rgb(235,238,239);;
+body {
+    background: /*url("../img/user-login.png")  107% 280%  no-repeat fixed,url("../img/user-login2.png")  0% 0%  no-repeat fixed*/ white;
+    font-family: 'Poppins', sans-serif;
 }
 
-.shadow .btn{
-    margin:2% 2% 2% 2%;
+.bg-common {
+    background: rgb(235, 238, 239);;
+}
+
+.shadow .btn {
+    margin: 2% 2% 2% 2%;
     height: 50px;
     width: 100%;
     border-radius: 25px;
 }
-.header a,footer a{
+
+.header a, footer a {
     width: 10%;
-    margin:2% 2% 2% 2%;
+    margin: 2% 2% 2% 2%;
     font-family: 'Poppins', sans-serif;
 
 }
 
-footer .col-12{
+footer .col-12 {
     height: 300px;
 }
 
-.default-size{
+.default-size {
     min-height: 50vh;
     max-height: 100%;
     font-family: 'Poppins', sans-serif;
 }
 
 
-
-
-
 /*-----------------------------------------------------------custom-colours-------------------------------------------------------------------------------*/
-
 
 
 /*------------------------------classes of custom heights-------------------------------------*/
@@ -50,23 +48,21 @@ footer .col-12{
 /*------------------------------classes of custom width-------------------------------------*/
 
 
-
 /*------------------------------classes of custom font-size-------------------------------------*/
-
-
-
 
 
 /*------------------------------------test-border------------------------------------------------*/
 
-.tb{
-    border:1px solid black;
+.tb {
+    border: 1px solid black;
 }
-.tb-red{
-    border:1px solid red;
+
+.tb-red {
+    border: 1px solid red;
 }
-.tb-blue{
-    border:1px solid blue;
+
+.tb-blue {
+    border: 1px solid blue;
 }
 
 

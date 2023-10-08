@@ -52,5 +52,10 @@ public class StockServiceImplementation implements StockService {
         return stockRepository.findById(stockId).orElse(new Stock());
     }
 
+    @Override
+    public Long getStockOutProductCount() {
+        return stockRepository.findStockOutProductCount();
+    }
+
 
 }

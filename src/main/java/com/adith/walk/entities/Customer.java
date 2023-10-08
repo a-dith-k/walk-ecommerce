@@ -43,6 +43,8 @@ public class Customer implements Serializable {
     @Email
     private String email;
 
+    private String referralEmail;
+
 
     private String firstName;
 
@@ -66,19 +68,16 @@ public class Customer implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     ConfirmToken confirmToken;
 
-
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     List<Address> addresses = new ArrayList<>();
-
 
     @OneToOne(cascade = CascadeType.PERSIST)
     private Cart cart;
 
-
     @OneToMany(mappedBy = "customer")
     List<Orders> orders = new ArrayList<>();
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL)
     List<Coupon> coupons = new ArrayList<>();
 
 

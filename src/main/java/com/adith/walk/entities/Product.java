@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Product implements Serializable {
 
     @Id
@@ -49,6 +51,8 @@ public class Product implements Serializable {
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     private ProductCategory productCategory;
+
+    private Integer taxRate;
 
 
     @JsonBackReference
