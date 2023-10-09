@@ -2,6 +2,7 @@ package com.adith.walk.controllers;
 
 import com.adith.walk.dto.AddressRequest;
 import com.adith.walk.entities.Customer;
+import com.adith.walk.exceptions.AddressNotFoundException;
 import com.adith.walk.helper.Message;
 import com.adith.walk.service.CartItemService;
 import com.adith.walk.service.CustomerService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -22,14 +24,14 @@ import java.security.Principal;
 public class CartController {
 
 
-    ProductService productService;
-    CartService cartService;
-    CustomerService customerService;
+    final ProductService productService;
+    final CartService cartService;
+    final CustomerService customerService;
 
-    CartItemService cartItemService;
+    final CartItemService cartItemService;
 
 
-    AddressServiceImpl addressServiceImpl;
+    final AddressServiceImpl addressServiceImpl;
 
     public CartController(AddressServiceImpl addressServiceImpl,
                           ProductService productService,
@@ -57,12 +59,18 @@ public class CartController {
     }
 
     @PostMapping("address/add")
-    public String addNewAddress(@Valid @ModelAttribute("newAddress") AddressRequest address, BindingResult validationResult, Model model, Principal principal) {
+    public String addNewAddress(@Valid @ModelAttribute("newAddress") AddressRequest address, BindingResult validationResult, RedirectAttributes redirectAttributes, Principal principal) {
         if (validationResult.hasErrors()) {
             return "redirect:/user/cart";
         }
 
-        addressServiceImpl.save(address, principal);
+        try {
+            addressServiceImpl.save(address, principal);
+        } catch (AddressNotFoundException e) {
+            redirectAttributes
+                    .addFlashAttribute("message", new Message(e.getMessage(), "alert-danger"));
+            return "redirect:/user/cart";
+        }
 
         return "redirect:/user/cart";
     }

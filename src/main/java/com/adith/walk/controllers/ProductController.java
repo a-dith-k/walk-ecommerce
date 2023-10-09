@@ -11,7 +11,6 @@ import com.adith.walk.service.WishlistService;
 import com.adith.walk.service.cart.service.CartService;
 import com.adith.walk.service.order.service.OrderService;
 import com.adith.walk.service.review.service.ReviewService;
-import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -71,8 +70,6 @@ public class ProductController {
         Product product = productService.getProductById(id);
 
 
-//      Integer stock = stockRepository.findStock(5001);
-//      Integer stock2 = stockRepository.findStock(productById.getStock().getId());
         if (principal != null) {
             model.addAttribute("isProductExists", cartService.isProductAlreadyExistsInCart(principal, product));
             model.addAttribute("activeCustomer", customerService.getCustomerByMobile(principal.getName()));
@@ -126,11 +123,8 @@ public class ProductController {
     public String addReview(@ModelAttribute("productReview") ProductReview productReview, @PathVariable Integer productId, Principal principal) {
 
 
-        try {
-            reviewService.addReview(productReview, productId, principal);
-        } catch (AlreadyUsedException e) {
-            return "redirect:/products/" + productId;
-        }
+        reviewService.addReview(productReview, productId, principal);
+
 
         return "redirect:/products/" + productId;
 

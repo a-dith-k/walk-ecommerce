@@ -3,6 +3,7 @@ package com.adith.walk.controllers;
 import com.adith.walk.dto.*;
 import com.adith.walk.entities.*;
 import com.adith.walk.enums.OrderStatus;
+import com.adith.walk.exceptions.BannerNotFoundException;
 import com.adith.walk.exceptions.SizeAlreadyExistsException;
 import com.adith.walk.exporters.OrderPDFExporter;
 import com.adith.walk.helper.Message;
@@ -318,7 +319,7 @@ public class AdminController {
             return "admin/products/add";
         }
 
-        Product product = null;
+        Product product;
 
 
         try {
@@ -503,25 +504,6 @@ public class AdminController {
         }
 
 
-//        if(imageFile.isEmpty()){
-//            model.addAttribute("message","image can not be empty");
-//            return "admin/banner/add";
-//        }
-//
-//
-//
-//        try{
-//            bannerService.createNewBanner(fileService.uploadBanner(imageFile),banner);
-//        }catch (FileAlreadyExistsException e){
-//            model.addAttribute("message","file exists");
-//            return "admin/banner/add";
-//        }catch (MultipartException | IOException e){
-//            model.addAttribute("message",e.getMessage());
-//            return "admin/banner/add";
-//        }
-//
-//
-//        model.addAttribute("message","uploaded successfully");
         return "admin/banner/add";
     }
 
@@ -533,6 +515,9 @@ public class AdminController {
             bannerService.delete(bannerId);
         } catch (IOException e) {
             model.addAttribute("message", new Message("cant delete", "alert-danger"));
+            return "redirect:/admin/banners";
+        } catch (BannerNotFoundException e) {
+            model.addAttribute("message", new Message(e.getMessage(), "alert-danger"));
             return "redirect:/admin/banners";
         }
         return "redirect:/admin/banners";
@@ -555,7 +540,7 @@ public class AdminController {
     @CrossOrigin(originPatterns = "*")
     @GetMapping("rest/orders")
     public ResponseEntity<List<OrderResponseEntity>> getAllOrders() {
-        List<OrderResponseEntity> orders = new ArrayList<OrderResponseEntity>();
+        List<OrderResponseEntity> orders = new ArrayList<>();
         orderService.getAllOrders().forEach(order -> {
             Customer customer = new Customer();
             customer.setUserId(order.getCustomer().getUserId());
@@ -660,28 +645,5 @@ public class AdminController {
 
 
     }
-
-
-//    @GetMapping("/sales/export/pdf")
-//    public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
-//        response.setContentType("application/pdf");
-//        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-//        String currentDateTime = dateFormatter.format(new Date());
-//
-//        String headerKey = "Content-Disposition";
-//        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
-//        response.setHeader(headerKey, headerValue);
-//
-//        List<SalesReportDto> salesReportDtoList = new ArrayList<>();
-//        orderItemService.getAllOrderItems().forEach(orderItem -> {
-//            SalesReportDto salesReportDto = entityMapper.OrderItemToSalesReportDtoMapper(orderItem);
-//            salesReportDtoList.add(salesReportDto);
-//        });
-//
-//        OrderPDFExporter exporter = new OrderPDFExporter(salesReportDtoList);
-//        exporter.export(response);
-//
-//    }
-
 
 }

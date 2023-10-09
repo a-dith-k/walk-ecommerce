@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
@@ -20,14 +18,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Customer findCustomerByMobileNumber(String mobile);
 
 
-    List<Customer> findCustomerByUserIdBetween(Integer start, Integer end);
-
-
     @Transactional
     @Modifying
     @Query("UPDATE Customer c " +
             "SET c.enabled = TRUE WHERE c.mobileNumber = ?1")
-    int enableCustomer(String mobile);
+    void enableCustomer(String mobile);
 
 
     @Transactional

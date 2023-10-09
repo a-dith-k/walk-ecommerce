@@ -6,7 +6,6 @@ import com.adith.walk.dto.CustomerRegistrationRequest;
 import com.adith.walk.helper.Message;
 import com.adith.walk.service.CustomerService;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
-import jakarta.servlet.http.PushBuilder;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +13,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class RegistrationController {
 
-    CustomerService customerService;
-    Logger logger;
+    final CustomerService customerService;
+    final Logger logger;
 
     RegistrationController(CustomerService customerService) {
         this.customerService = customerService;
@@ -37,7 +38,7 @@ public class RegistrationController {
     }
 
     @PostMapping("register")
-    public String registerCustomer(@Valid @ModelAttribute("request") CustomerRegistrationRequest request, BindingResult bindingResult, Model model) throws AlreadyUsedException {
+    public String registerCustomer(@Valid @ModelAttribute("request") CustomerRegistrationRequest request, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("request", request);
@@ -57,12 +58,12 @@ public class RegistrationController {
 
 
     @GetMapping("register/confirm")
-    public String registerConfirmation(@ModelAttribute("token")ConfirmTokenRequest token ,@ModelAttribute("request")CustomerRegistrationRequest registrationRequest){
+    public String registerConfirmation(@ModelAttribute("token") ConfirmTokenRequest token, @ModelAttribute("request") CustomerRegistrationRequest registrationRequest) {
         return "registration/confirm";
     }
 
     @PostMapping("register/confirm")
-    public String registerConfirmation(@ModelAttribute("token")ConfirmTokenRequest token,Model model){
+    public String registerConfirmation(@ModelAttribute("token") ConfirmTokenRequest token, Model model) {
         logger.info(token.getToken());
         logger.info(token.getMobile());
         try {
@@ -72,9 +73,6 @@ public class RegistrationController {
             } else {
                 return "registration/confirm";
             }
-        } catch (IllegalStateException ile) {
-            model.addAttribute("message", new Message(ile.getMessage(), "alert-danger"));
-            return "registration/confirm";
         } catch (Exception e) {
             model.addAttribute("message", new Message(e.getMessage(), "alert-danger"));
             return "registration/confirm";
@@ -82,19 +80,10 @@ public class RegistrationController {
     }
 
 
-
-
-
-
-
-
-
-
-
     @GetMapping("confirm-token")
-    public String confirmToken(@ModelAttribute("token")ConfirmTokenRequest confirmTokenRequest) {
+    public String confirmToken(@ModelAttribute("token") ConfirmTokenRequest confirmTokenRequest) {
 
-        logger.info("Customer 2nd stage Mobile:{}",confirmTokenRequest.getMobile());
+        logger.info("Customer 2nd stage Mobile:{}", confirmTokenRequest.getMobile());
 
 
         return "registration/confirm-token";
@@ -113,9 +102,6 @@ public class RegistrationController {
             } else {
                 return "registration/confirm-token";
             }
-        } catch (IllegalStateException ile) {
-            model.addAttribute("message", new Message(ile.getMessage(), "alert-danger"));
-            return "registration/confirm-token";
         } catch (Exception e) {
             model.addAttribute("message", new Message(e.getMessage(), "alert-danger"));
             return "registration/confirm-token";
@@ -125,18 +111,18 @@ public class RegistrationController {
 
 
     @GetMapping("/send-otp")
-    public String resendOTP(@ModelAttribute("token")ConfirmTokenRequest tokenRequest){
+    public String resendOTP(@ModelAttribute("token") ConfirmTokenRequest tokenRequest) {
 
         return "registration/send-otp";
     }
 
     @PostMapping("/send-otp")
-    public String resendOTP(@ModelAttribute("token")ConfirmTokenRequest tokenRequest,Model model){
-        logger.info("Customer Mobile:{}",tokenRequest.getMobile());
+    public String resendOTP(@ModelAttribute("token") ConfirmTokenRequest tokenRequest, Model model) {
+        logger.info("Customer Mobile:{}", tokenRequest.getMobile());
 //
-        try{
+        try {
             customerService.sendNewToken(tokenRequest.getMobile());
-        }catch (UsernameNotFoundException e){
+        } catch (UsernameNotFoundException e) {
             model.addAttribute("message", new Message(e.getMessage(), "alert-danger"));
             return "registration/send-otp";
         }

@@ -1,9 +1,9 @@
-const regexP=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+const regexP = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     console.log("called");
-    let passwordInput=document.querySelector("input[name=password]")
-    let confirmPassword=document.querySelector("input[name=confirmPassword]")
+    let passwordInput = document.querySelector("input[name=password]")
+    let confirmPassword = document.querySelector("input[name=confirmPassword]")
 
 
     let form = document.getElementById("password-form")
@@ -22,7 +22,7 @@ window.addEventListener("load", function() {
             }
 
 
-            if (passwordInput.value != confirmPassword.value) {
+            if (passwordInput.value !== confirmPassword.value) {
                 confirmPassword.classList.add("is-invalid");
                 event.preventDefault();
             }

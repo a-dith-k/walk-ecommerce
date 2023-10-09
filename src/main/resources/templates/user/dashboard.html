@@ -1,45 +1,48 @@
-    <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="user/base::layout(~{::#style},~{::#content},~{::#script})">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="user/base::layout(~{::#style},~{::#content},~{::#script})">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title th:text="loginpage"></title>
-    <link id="style"  rel="stylesheet" >
+    <link id="style" rel="stylesheet">
 </head>
 <body class="">
-
 
 
 <!---------------------------------dynamic content passed to the fragment will be displayed-------------------------->
 
 <!------------------------------------------------------signup  section---------------------------------------->
 <section id="content" class="justify-content-center col-md-10 row">
-<style>
-    .form-floating > .form-control,
-    .form-floating > .form-control-plaintext,
-    .form-floating > .form-select {
-        height: calc(5.5rem + calc(var(--bs-border-width) * 2));
-        min-height: calc(5.5rem + calc(var(--bs-border-width) * 2));
-        line-height: 1.25;
-        font-size: 2rem;
-    }
-</style>
+    <style>
+        .form-floating > .form-control,
+        .form-floating > .form-control-plaintext,
+        .form-floating > .form-select {
+            height: calc(5.5rem + calc(2));
+            min-height: calc(5.5rem + calc(2));
+            line-height: 1.25;
+            font-size: 2rem;
+        }
+    </style>
 
     <div th:if="${message}" th:text="${message.content}" class="alert text-center " th:classappend="${message.type}">
 
     </div>
-    <form th:action="@{/user/update-profile}" class="form-floating col-12 row mt-3 m-5" th:object="${activeUserDetails}" method="post">
+    <form th:action="@{/user/update-profile}" class="form-floating col-12 row mt-3 m-5" th:object="${activeUserDetails}"
+          method="post">
 
         <div class="col-md-5  col-xl-4">
             <div class="form-floating mb-3 ">
-                <input  type="text" class="form-control " name="firstName" id="firstName" th:value="${activeUserDetails.firstName}">
+                <input type="text" class="form-control " name="firstName" id="firstName"
+                       th:value="${activeUserDetails.firstName}">
                 <label for="firstName">Firstname</label>
             </div>
 
             <div class="form-floating my-5">
-                <input type="text" class="form-control" id="lastName" name="lastName" th:value="${activeUserDetails.lastName}">
+                <input type="text" class="form-control" id="lastName" name="lastName"
+                       th:value="${activeUserDetails.lastName}">
                 <label for="lastName">Lastname</label>
             </div>
             <div class="form-floating my-5">
@@ -49,16 +52,19 @@
         </div>
         <div class="col-md-5 col-xl-4">
             <div class="form-floating mb-5">
-                <input type="text" class="form-control" id="floatingInput4" name="mobileNumber" th:value="${activeUserDetails.mobileNumber}">
+                <input type="text" class="form-control" id="floatingInput4" name="mobileNumber"
+                       th:value="${activeUserDetails.mobileNumber}">
                 <label for="floatingInput4">Mobile</label>
             </div>
             <div class="form-floating my-5">
-                <input type="date" class="form-control" id="dob"  name="dob" th:value="${activeUserDetails.dob}">
+                <input type="date" class="form-control" id="dob" name="dob" th:value="${activeUserDetails.dob}">
                 <label for="dob">DOB</label>
             </div>
             <div class="form-floating my-5">
-                <select class="form-select" id="gender" name="gender" aria-label="Floating label disabled select example" >
-                    <option selected th:value="${activeUserDetails.gender}" th:text="${activeUserDetails.gender}"></option>
+                <select class="form-select" id="gender" name="gender"
+                        aria-label="Floating label disabled select example">
+                    <option selected th:value="${activeUserDetails.gender}"
+                            th:text="${activeUserDetails.gender}"></option>
                     <option th:if="${activeUserDetails.gender}!='Male'" value="Male">Male</option>
                     <option th:if="${activeUserDetails.gender}!='Female'" value="Female">Female</option>
                     <option th:if="${activeUserDetails.gender}!='Others'" value="Others">Others</option>
@@ -68,7 +74,9 @@
 
         </div>
         <div class="col-md-2">
-            <button type="button" class="btn btn-dark w fs-2" data-bs-toggle="modal" data-bs-target="#exampleModal" >Update</button>
+            <button type="button" class="btn btn-dark w fs-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Update
+            </button>
         </div>
         <!--modal------------------------------------------------------------------>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -83,9 +91,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning fs-2" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger border-0 fs-2"  >
-                                Update
-                            </button>
+                        <button type="submit" class="btn btn-danger border-0 fs-2">
+                            Update
+                        </button>
                     </div>
                 </div>
             </div>
@@ -100,6 +108,6 @@
 
 <footer id="footer"></footer>
 
-<script  id="script"></script>
+<script id="script"></script>
 </body>
 </html>

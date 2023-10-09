@@ -8,7 +8,7 @@ import lombok.Data;
 public class ProductReview {
 
 
-    @SequenceGenerator(initialValue = 1,
+    @SequenceGenerator(
             allocationSize = 1,
             name = "reviewIdGenerator",
             sequenceName = "reviewIdGenerator")

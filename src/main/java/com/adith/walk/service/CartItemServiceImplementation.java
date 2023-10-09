@@ -20,7 +20,7 @@ public class CartItemServiceImplementation implements CartItemService {
 
     @Override
     public void addQuantity(Long id) {
-        CartItem cartItem = cartItemRepository.findById(id).get();
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow();
 
         Cart cart = cartItem.getCart();
 
@@ -40,7 +40,7 @@ public class CartItemServiceImplementation implements CartItemService {
     @Override
     public void removeQuantity(Long id) {
 
-        CartItem cartItem = cartItemRepository.findById(id).get();
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow();
 
 
         if (cartItem.getQuantity() > 1) {

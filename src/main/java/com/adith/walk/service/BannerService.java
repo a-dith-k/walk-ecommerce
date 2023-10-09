@@ -1,6 +1,7 @@
 package com.adith.walk.service;
 
 import com.adith.walk.entities.Banner;
+import com.adith.walk.exceptions.BannerNotFoundException;
 import com.adith.walk.repositories.BannerRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,9 @@ public class BannerService {
         return bannerRepo.findAll();
     }
 
-    public void delete(Integer bannerId) throws IOException {
+    public void delete(Integer bannerId) throws IOException, BannerNotFoundException {
 
-        Banner banner = bannerRepo.findById(bannerId).get();
+        Banner banner = bannerRepo.findById(bannerId).orElseThrow(() -> new BannerNotFoundException("Not found"));
 
         Path path = Path.of("src/main/resources/static/img/banner/" + banner.getName());
 

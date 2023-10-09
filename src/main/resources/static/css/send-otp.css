@@ -1,44 +1,44 @@
-body{
-    background: url("../img/user-login.png")  107% 280%  no-repeat fixed,url("../img/user-login2.png")  0% 0%  no-repeat fixed rgb(235,238,239);
+body {
+    background: url("../img/user-login.png") 107% 280% no-repeat fixed, url("../img/user-login.png") 0% 0% no-repeat fixed rgb(235, 238, 239);
 
 
-    height:100vh;
+    height: 100vh;
 }
 
 
-.vh-80{
+.vh-80 {
     height: 80vh;
 }
 
-.h1{
+.h1 {
     font-size: 4em;
 }
 
 
-.p1{
+.p1 {
     font-size: 2em;
 }
 
-.signup-section input{
+.signup-section input {
     width: 80%;
     height: 50%;
     background: transparent;
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom-color:black;
+    border-bottom-color: black;
     outline: none;
-    margin:30px;
+    margin: 30px;
     font-size: 2rem;
 
 }
 
 
-.signup-section button{
+.signup-section button {
     width: 80%;
     height: 50%;
-    background: linear-gradient(to left  ,rgba(235,246,247,0.3), rgba(240,255,255,0.3));
-    border:none;
+    background: linear-gradient(to left, rgba(235, 246, 247, 0.3), rgba(240, 255, 255, 0.3));
+    border: none;
     outline: none;
     font-size: 3rem;
 }

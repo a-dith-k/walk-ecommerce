@@ -19,7 +19,7 @@ public interface ReviewRepository extends JpaRepository<ProductReview, Long> {
 
     List<ProductReview> getProductReviewsByProductAndIsApprovedTrue(Product product);
 
-    Optional<ProductReview> findProductReviewByProductAndAndCustomer(Product product, Customer customer);
+    Optional<ProductReview> findProductReviewByProductAndCustomer(Product product, Customer customer);
 
     List<ProductReview> findProductReviewByIsApprovedFalse();
 

@@ -26,11 +26,10 @@ public interface OrderService {
 
     String getOrderStatus(Long orderId);
 
-    Orders getCurrentOrder(Principal principal);
 
-    Orders createOrder(Cart cartByPrincipal, Principal principal, HttpSession session);
+    void createOrder(Cart cartByPrincipal, Principal principal, HttpSession session);
 
-    Orders buyNow(Integer productId, Long sizeId, Principal principal, HttpSession session);
+    void buyNow(Integer productId, Long sizeId, Principal principal, HttpSession session);
 
 
     Boolean isProductExistsInOrder(Principal principal, Integer productId);

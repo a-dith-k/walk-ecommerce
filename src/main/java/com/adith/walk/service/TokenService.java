@@ -28,8 +28,8 @@ public class TokenService {
         return tokenRepo.getConfirmTokenByCustomer(customer);
     }
 
-    public int setConfirmedAt(String token) {
-        return tokenRepo.updateConfirmedAt(
+    public void setConfirmedAt(String token) {
+        tokenRepo.updateConfirmedAt(
                 token, LocalDateTime.now());
     }
 

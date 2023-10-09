@@ -1,6 +1,9 @@
 package com.adith.walk.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +14,8 @@ import lombok.NoArgsConstructor;
 public class CustomerRegistrationRequestAdmin {
 
 
-    @Size(min = 10, max = 10,message = "enter 10 digits")
-    @Digits(integer = 10, fraction = 0,message = "only digits")
+    @Size(min = 10, max = 10, message = "enter 10 digits")
+    @Digits(integer = 10, fraction = 0, message = "only digits")
     private String mobileNumber;
 
 
@@ -23,7 +26,7 @@ public class CustomerRegistrationRequestAdmin {
     private String email;
 
     @NotBlank(message = "required")
-    @Size(min =4 ,message = "enter at least 4 characters")
+    @Size(min = 4, message = "enter at least 4 characters")
     private String firstName;
 
     @NotBlank

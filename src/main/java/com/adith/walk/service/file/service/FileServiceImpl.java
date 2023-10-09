@@ -18,7 +18,7 @@ public class FileServiceImpl implements FileService {
     public String fileUpload(MultipartFile file) throws IOException {
         //filename
 
-        String name = file.getOriginalFilename();
+        String name = getOriginalName(file);
 
 
         String filePath = path + File.separator + name;
@@ -37,12 +37,13 @@ public class FileServiceImpl implements FileService {
         return name;
     }
 
+
     @Value("${admin.banner}")
     String bannerPath;
 
     public String uploadBanner(MultipartFile file) throws IOException {
 
-        String originalFilename = file.getOriginalFilename();
+        String originalFilename = getOriginalName(file);
 
         String s = bannerPath + File.separator + originalFilename;
 
@@ -54,5 +55,10 @@ public class FileServiceImpl implements FileService {
         Files.copy(file.getInputStream(), Paths.get(s));
 
         return originalFilename;
+    }
+
+    private String getOriginalName(MultipartFile file) {
+
+        return file.getOriginalFilename();
     }
 }

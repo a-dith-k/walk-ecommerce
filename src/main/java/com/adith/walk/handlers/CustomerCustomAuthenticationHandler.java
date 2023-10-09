@@ -18,7 +18,7 @@ public class CustomerCustomAuthenticationHandler implements AuthenticationSucces
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
     }
 }

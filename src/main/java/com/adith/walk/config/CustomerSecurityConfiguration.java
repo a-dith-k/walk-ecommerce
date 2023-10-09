@@ -9,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,19 +24,17 @@ public class CustomerSecurityConfiguration {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-
-
     @Bean
-    UserDetailsService userDetailsServiceCustomer(){
+    UserDetailsService userDetailsServiceCustomer() {
 
         return new CustomerCustomUserDetailsService();
     }
 
 
     @Bean
-    AuthenticationProvider authenticationProviderCustomer(){
+    AuthenticationProvider authenticationProviderCustomer() {
 
-        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsServiceCustomer());
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return daoAuthenticationProvider;
@@ -44,16 +44,13 @@ public class CustomerSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterUser(HttpSecurity http) throws Exception {
-//
-//        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
-//        requestCache.setMatchingRequestParameterName("c");
 
         http
                 .authenticationProvider(authenticationProviderCustomer());
 
-        http    .csrf(c->c.disable())
-                .cors(cors->cors.disable())
-                .securityMatcher("/user/**","/","/products/**")
+        http.csrf(CsrfConfigurer::disable)
+                .cors(CorsConfigurer::disable)
+                .securityMatcher("/user/**", "/", "/products/**")
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/products/**").permitAll()
@@ -61,7 +58,7 @@ public class CustomerSecurityConfiguration {
                         .hasRole("USER")
                         .anyRequest().authenticated()
                 )
-                .formLogin(form->form
+                .formLogin(form -> form
                         .loginPage("/user/login").permitAll()
                         .defaultSuccessUrl("/").permitAll()
                         .successHandler(new CustomerCustomAuthenticationSuccessHandler()).permitAll())
@@ -71,8 +68,6 @@ public class CustomerSecurityConfiguration {
                         .logoutSuccessUrl("/user/login?logout"));
         return http.build();
     }
-
-
 
 
 }

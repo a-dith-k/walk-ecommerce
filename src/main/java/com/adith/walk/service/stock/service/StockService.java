@@ -1,7 +1,6 @@
 package com.adith.walk.service.stock.service;
 
 
-import com.adith.walk.entities.Product;
 import com.adith.walk.entities.Stock;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +11,7 @@ public interface StockService {
     List<Stock> getAllStock();
 
 
-    Stock save(Stock stock);
-
-    Stock getStockByProduct(Product product);
+    void save(Stock stock);
 
     Stock getStockById(long stockId);
 

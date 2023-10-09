@@ -9,7 +9,7 @@
         let orderID = [[${orderId}]];
         let contactCounts = 200;
         let description = '1500 INR - 200 Contacts';
-        var xhttp = new XMLHttpRequest();
+        let xhttp = new XMLHttpRequest();
 
 
         CreateOrderID(amount, contactCounts, description);
@@ -18,7 +18,7 @@
             totalAmount = amount * 100;
             xhttp.open("GET", "/user/payment/razorpay/createOrderId/" + totalAmount, false);
             xhttp.send();
-            var razorpayOrderId = xhttp.responseText;
+            let razorpayOrderId = xhttp.responseText;
             console.log("razorpayOrderId" + razorpayOrderId);
             OpenCheckout(amount, contactCounts, razorpayOrderId, description, orderID);
         }
@@ -34,7 +34,7 @@
 <script>
 
     function OpenCheckout(amount, contactCounts, razorpayOrderId, description, orderID) {
-        var options = {
+        let options = {
             "key": "[[${rzp_key_id}]]", // Enter the Key ID generated from the Dashboard
             "amount": amount.toString(), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "[[${rzp_currency}]]",
@@ -51,7 +51,7 @@
                 "color": "#004A55"
             }
         };
-        var rzp1 = new Razorpay(options);
+        let rzp1 = new Razorpay(options);
         rzp1.on('payment.failed', function (response) {
             console.log(response.error.code);
             console.log(response.error.description);

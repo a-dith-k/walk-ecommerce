@@ -55,12 +55,6 @@ public class HomeController {
     }
 
 
-//    @ApiIgnore
-//    @RequestMapping(value="/swagger")
-//    public void redirect(HttpServletResponse response) throws IOException {
-//        response.sendRedirect("/swagger-ui.html");
-//    }
-
     @GetMapping()
     public String getHome(Principal principal, Model model, HttpSession session) {
 
@@ -72,17 +66,6 @@ public class HomeController {
 
         return "public/home";
     }
-
-
-//    @GetMapping("page/{pageNumber}")
-//    public String  getHomePage(@PathVariable Integer pageNumber, Model model ,HttpSession session,Principal principal){
-//
-//        session.setAttribute("activeUser",customerService.getActiveCustomer(principal));
-//        model.addAttribute("productPageResponseDTO",productService.getPageOfProducts(pageNumber,2));
-//        model.addAttribute("banners",bannerService.getAllBanner());
-//
-//        return "public/home";
-//    }
 
 
     @ResponseBody()

@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class OrderServiceImplementation implements OrderService {
 
-    Logger logger = LoggerFactory.getLogger(OrderServiceImplementation.class);
+    final Logger logger = LoggerFactory.getLogger(OrderServiceImplementation.class);
 
     final OrderRepo orderRepo;
 
@@ -83,18 +83,9 @@ public class OrderServiceImplementation implements OrderService {
 
     }
 
-    @Override
-    public Orders getCurrentOrder(Principal principal) {
-        List<Orders> orders = getAllOrderByPrincipal(principal);
-
-
-        return orders.stream().filter(Orders::isCurrentOrder).findFirst().orElse(null);
-
-
-    }
 
     @Override
-    public Orders createOrder(Cart cart, Principal principal, HttpSession session) {
+    public void createOrder(Cart cart, Principal principal, HttpSession session) {
 
         Orders orders = new Orders();
 
@@ -128,12 +119,10 @@ public class OrderServiceImplementation implements OrderService {
 
         session.setAttribute("order", orders);
 
-        return orders;
-
     }
 
     @Override
-    public Orders buyNow(Integer productId, Long sizeId, Principal principal, HttpSession session) {
+    public void buyNow(Integer productId, Long sizeId, Principal principal, HttpSession session) {
 
         Orders order = new Orders();
 
@@ -166,7 +155,6 @@ public class OrderServiceImplementation implements OrderService {
 
         session.setAttribute("order", order);
 
-        return order;
     }
 
 

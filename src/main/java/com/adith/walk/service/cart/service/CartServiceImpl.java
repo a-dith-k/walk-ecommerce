@@ -66,7 +66,7 @@ public class CartServiceImpl implements CartService {
         cartItem.setTotalMRP(product.getProductMrp());
         cartItem.setProductSize(sizeService.getSizeBySizeId(sizeId));
         cartItem.setTaxAmount(productService
-                .getProductTax(product.getOfferPrice(), product.getTaxRate().intValue()));
+                .getProductTax(product.getOfferPrice(), product.getTaxRate()));
 
         items.add(cartItem);
 
@@ -114,16 +114,6 @@ public class CartServiceImpl implements CartService {
         return false;
     }
 
-    @Override
-    public void deleteProduct(Integer productId, Principal principal) {
-//        Cart cart = getCartByPrincipal(principal);
-//        for(CartItem item :cart.getItems()){
-//            if(item.getProduct().getProductId().equals(productId)){
-//
-//                cartItemRepository.delete(item);
-//            }
-//        }
-    }
 
     @Override
     public Cart getCartByPrincipal(Principal principal) {
@@ -134,7 +124,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteItem(Long itemId) {
 
-        CartItem cartItem = cartItemRepository.findById(itemId).get();
+        CartItem cartItem = cartItemRepository.findById(itemId).orElseThrow();
         Cart cart = cartItem.getCart();
         if (cart.getQuantity() != null && cart.getQuantity() > 0) {
             cart.setTotalMRP(cart.getTotalMRP() - cartItem.getProduct().getProductMrp());
@@ -159,18 +149,9 @@ public class CartServiceImpl implements CartService {
         Cart cart = getCartByPrincipal(principal);
 
         Customer customer = customerService.getCustomerByMobile(principal.getName());
-        Cart newCart = new Cart().builder().quantity(0).totalDiscount(0L).totalPrice(0L).totalMRP(0L).build();
+        Cart newCart = Cart.builder().quantity(0).totalDiscount(0L).totalPrice(0L).totalMRP(0L).build();
         customer.setCart(newCart);
         customerService.saveCustomer(customer);
-
-
-//        cart.getItems().forEach(product->cartItemRepository.delete(product));
-//        cart.setItems(null);
-//
-//        cart.setTotalPrice(0l);
-//        cart.setTotalMRP(0l);
-//        cart.setTotalDiscount(0l);
-//        cartRepo.save(cart);
 
 
     }

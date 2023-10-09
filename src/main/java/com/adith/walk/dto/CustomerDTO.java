@@ -2,7 +2,6 @@ package com.adith.walk.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -12,8 +11,8 @@ public class CustomerDTO {
 
     private Long userId;
 
-    @Size(min = 10, max = 10,message = "enter 10 digits")
-    @Digits(integer = 10, fraction = 0,message = "only digits")
+    @Size(min = 10, max = 10, message = "enter 10 digits")
+    @Digits(integer = 10, fraction = 0, message = "only digits")
     private String mobileNumber;
 
 
@@ -22,7 +21,7 @@ public class CustomerDTO {
     private String email;
 
     @NotBlank
-    @Size(min =4 ,message = "enter at least 4 characters")
+    @Size(min = 4, message = "enter at least 4 characters")
     private String firstName;
 
     @NotBlank

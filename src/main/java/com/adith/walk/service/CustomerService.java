@@ -66,8 +66,8 @@ public class CustomerService {
 
     }
 
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public void saveCustomer(Customer customer) {
+        customerRepository.save(customer);
     }
 
     public Customer getCustomerByMobile(String mobile) {
@@ -76,18 +76,7 @@ public class CustomerService {
 
     }
 
-    public List<Customer> getCustomerBetween(Integer start, Integer end) {
 
-        return customerRepository.findCustomerByUserIdBetween(start, end);
-    }
-
-
-    //    public List<Customer>getPageOfCustomer(Integer page,Integer count){
-//        Page<Customer> all = customerRepository.findAll(PageRequest.of(page, count));
-//        List<Customer>CustomerPage=new ArrayList<>();
-//        all.stream().forEach(customer -> CustomerPage.add(customer));
-//       return CustomerPage;
-//    }
     public CustomerPageDTO getPageOfCustomer(Integer pageNumber, Integer pageSize) {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -114,7 +103,7 @@ public class CustomerService {
         return customerRepository.findCustomerByUserId(userId);
     }
 
-    public Customer registerCustomer(CustomerRegistrationRequest request) throws AlreadyUsedException {
+    public void registerCustomer(CustomerRegistrationRequest request) throws AlreadyUsedException {
 
 
         if (isMobileNumberExists(request.getMobileNumber())) {
@@ -155,7 +144,7 @@ public class CustomerService {
         tokenService
                 .saveConfirmationToken(confirmToken);
 
-        return customer;
+
     }
 
 
@@ -203,8 +192,8 @@ public class CustomerService {
 
     }
 
-    public int enableAppUser(String mobile) {
-        return customerRepository.enableCustomer(mobile);
+    public void enableAppUser(String mobile) {
+        customerRepository.enableCustomer(mobile);
     }
 
     public void sendNewToken(String mobile) {
@@ -241,7 +230,7 @@ public class CustomerService {
     }
 
 
-    public Customer updateProfileData(CustomerProfileUpdateRequest request, Principal principal) throws AlreadyUsedException {
+    public void updateProfileData(CustomerProfileUpdateRequest request, Principal principal) throws AlreadyUsedException {
 
         Customer customer = customerRepository.findCustomerByMobileNumber(request.getMobileNumber());
         if (isMobileNumberExists(request.getMobileNumber()) && !request.getMobileNumber().equals(principal.getName())) {
@@ -250,7 +239,7 @@ public class CustomerService {
 
         modelMapper.map(request, customer);
 
-        return customerRepository.save(customer);
+        customerRepository.save(customer);
 
     }
 

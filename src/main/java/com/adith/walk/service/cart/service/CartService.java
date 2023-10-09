@@ -16,8 +16,6 @@ public interface CartService {
 
     Boolean isProductAlreadyExistsInCart(Principal principal, Product product);
 
-    void deleteProduct(Integer productId, Principal principal);
-
 
     Cart getCartByPrincipal(Principal principal);
 

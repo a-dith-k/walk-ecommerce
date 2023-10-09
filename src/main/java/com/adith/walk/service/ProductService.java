@@ -29,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -71,14 +72,14 @@ public class ProductService {
     public Product getProductById(Integer id) {
 
         Optional<Product> byId = productRepository.findById(id);
-        Product product = byId.get();
-        return product;
+
+        return byId.orElse(new Product());
     }
 
     public List<Product> getProductByPage(Integer pageNumber, Integer count) {
         Page<Product> all = productRepository.findAll(PageRequest.of(pageNumber, count));
         List<Product> list = new ArrayList<>();
-        all.stream().forEach(product -> list.add(product));
+        all.stream().forEach(list::add);
         Pageable pageable = all.nextPageable();
         return list;
     }
@@ -130,7 +131,7 @@ public class ProductService {
 
 
         for (MultipartFile image : images) {
-            if (!image.getContentType().equals("image/jpeg")) {
+            if (!Objects.equals(image.getContentType(), "image/jpeg")) {
                 throw new IllegalArgumentException("Only JPEG images are Allowed");
             }
         }
@@ -153,7 +154,7 @@ public class ProductService {
 
         Product product =
                 productRepository
-                        .findById(productDTO.getProductId()).get();
+                        .findById(productDTO.getProductId()).orElseThrow();
 
 
         if (!product.getProductName().equals(productDTO.getProductName())
@@ -214,10 +215,6 @@ public class ProductService {
         return productRepository.findByProductName(name);
     }
 
-    public List<Product> getMenProducts() {
-
-        return productRepo.findMenProducts();
-    }
 
     public ProductPageDTO getPageOfProducts(Integer pageNumber, Integer noOfProducts) {
 

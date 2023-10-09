@@ -3,10 +3,10 @@ package com.adith.walk.service.address.service;
 import com.adith.walk.dto.AddressRequest;
 import com.adith.walk.entities.Address;
 import com.adith.walk.entities.Orders;
+import com.adith.walk.exceptions.AddressNotFoundException;
 import com.adith.walk.repositories.AddressRepository;
 import com.adith.walk.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +14,20 @@ import java.security.Principal;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+
 public class AddressServiceImpl implements AddressService {
 
-    AddressRepository addressRepository;
+    final AddressRepository addressRepository;
 
-    CustomerService customerService;
+    final CustomerService customerService;
 
-    ModelMapper mapper;
+    final ModelMapper mapper;
+
+    public AddressServiceImpl(AddressRepository addressRepository, CustomerService customerService, ModelMapper mapper) {
+        this.addressRepository = addressRepository;
+        this.customerService = customerService;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<Address> getAllAddress(Principal principal) {
@@ -35,12 +41,12 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address addressById(Long addressId) {
 
-        return addressRepository.findById(addressId).get();
+        return addressRepository.findById(addressId).orElse(new Address());
 
     }
 
     @Override
-    public Address save(AddressRequest addressRequest, Principal principal) {
+    public Address save(AddressRequest addressRequest, Principal principal) throws AddressNotFoundException {
 
         Address address = new Address();
         mapper.map(addressRequest, address);
@@ -61,9 +67,9 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void update(AddressRequest addressUpdate) {
+    public void update(AddressRequest addressUpdate) throws AddressNotFoundException {
 
-        Address address = addressRepository.findById(addressUpdate.getId()).get();
+        Address address = addressRepository.findById(addressUpdate.getId()).orElseThrow(() -> new AddressNotFoundException("Address not found"));
         mapper.map(addressUpdate, address);
 
 
@@ -82,14 +88,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void setDefault(Long addressId, Principal principal) {
+    public void setDefault(Long addressId, Principal principal) throws AddressNotFoundException {
 
         List<Address> allAddress = getAllAddress(principal);
         allAddress.forEach(address -> {
             address.setIsDefault(false);
             addressRepository.save(address);
         });
-        Address address = addressRepository.findById(addressId).get();
+        Address address = addressRepository.findById(addressId).orElseThrow(() -> new AddressNotFoundException("Address not found"));
         address.setIsDefault(true);
         addressRepository.save(address);
 

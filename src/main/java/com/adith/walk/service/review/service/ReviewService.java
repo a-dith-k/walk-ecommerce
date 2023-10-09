@@ -3,7 +3,6 @@ package com.adith.walk.service.review.service;
 
 import com.adith.walk.entities.Product;
 import com.adith.walk.entities.ProductReview;
-import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -12,7 +11,7 @@ import java.util.List;
 @Service
 public interface ReviewService {
 
-    void addReview(ProductReview productReview, Integer productId, Principal principal) throws AlreadyUsedException;
+    void addReview(ProductReview productReview, Integer productId, Principal principal);
 
     List<ProductReview> getAllReviewsOfProduct(Product product);
 

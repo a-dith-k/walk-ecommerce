@@ -6,6 +6,7 @@ import com.adith.walk.dto.PasswordResetRequest;
 import com.adith.walk.entities.Address;
 import com.adith.walk.entities.Customer;
 import com.adith.walk.entities.Orders;
+import com.adith.walk.exceptions.AddressNotFoundException;
 import com.adith.walk.exceptions.CouponNotFoundException;
 import com.adith.walk.exceptions.InvalidCouponException;
 import com.adith.walk.helper.Message;
@@ -23,7 +24,6 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,12 +55,20 @@ public class CustomerController {
 
     final CouponService couponService;
 
-    final private Environment env;
 
-    CustomerController(OrderService orderService, PaymentService paymentService, CustomerService customerService, WishlistService wishlistService, ModelMapper modelMapper, CartService cartService, AddressServiceImpl addressServiceImpl, ProductService productService, CouponService couponService, Environment env) {
+    CustomerController(OrderService orderService,
+                       PaymentService paymentService,
+                       CustomerService customerService,
+                       WishlistService wishlistService,
+                       ModelMapper modelMapper,
+                       CartService cartService,
+                       AddressServiceImpl addressServiceImpl,
+                       ProductService productService,
+                       CouponService couponService
+    ) {
         this.productService = productService;
         this.couponService = couponService;
-        this.env = env;
+
         logger = LoggerFactory.getLogger(CustomerController.class);
         this.customerService = customerService;
         this.wishlistService = wishlistService;
@@ -123,14 +131,20 @@ public class CustomerController {
     }
 
     @PostMapping("addresses/add")
-    public String addAddressResponse(@Valid @ModelAttribute("newAddress") AddressRequest addressRequest, BindingResult result, Model model, Principal principal) {
+    public String addAddressResponse(@Valid @ModelAttribute("newAddress") AddressRequest addressRequest, BindingResult result, Model model, Principal principal, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("message", new Message("Enter valid data", "alert-danger"));
             return "user/addAddress";
         }
 
-        addressServiceImpl.save(addressRequest, principal);
+        try {
+            addressServiceImpl.save(addressRequest, principal);
+        } catch (AddressNotFoundException e) {
+            redirectAttributes
+                    .addFlashAttribute("message", new Message(e.getMessage(), "alert-danger"));
+            return "redirect:/user/addresses";
+        }
         model.addAttribute("message", new Message("Address Successfully Added", "alert-success"));
         return "redirect:/user/addresses";
     }
@@ -145,9 +159,13 @@ public class CustomerController {
     }
 
     @PutMapping("address/set-default/{addressId}")
-    public String setDefaultAddress(@PathVariable Long addressId, Principal principal) {
+    public String setDefaultAddress(@PathVariable Long addressId, Principal principal, RedirectAttributes redirectAttributes) {
 
-        addressServiceImpl.setDefault(addressId, principal);
+        try {
+            addressServiceImpl.setDefault(addressId, principal);
+        } catch (AddressNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", new Message(e.getMessage(), "alert-danger"));
+        }
 
         return "redirect:/user/addresses";
 
@@ -155,9 +173,13 @@ public class CustomerController {
 
 
     @PostMapping("address/set-default")
-    public String setDeliveryAddress(@RequestParam Long addressId, Principal principal) {
+    public String setDeliveryAddress(@RequestParam Long addressId, Principal principal, RedirectAttributes redirectAttributes) {
 
-        addressServiceImpl.setDefault(addressId, principal);
+        try {
+            addressServiceImpl.setDefault(addressId, principal);
+        } catch (AddressNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", new Message(e.getMessage(), "alert-danger"));
+        }
 
         return "redirect:/user/cart";
 
@@ -178,14 +200,20 @@ public class CustomerController {
     }
 
     @PostMapping("address/update/{addressId}")
-    public String updateAddress(@Valid @ModelAttribute("addressUpdate") AddressRequest address, BindingResult result, Model model, Principal principal, @PathVariable Long addressId) {
+    public String updateAddress(@Valid @ModelAttribute("addressUpdate") AddressRequest address, BindingResult result, Model model, @PathVariable Long addressId, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("message", new Message("Enter valid data", "alert-danger"));
             return "user/editAddress";
         }
 
-        addressServiceImpl.update(address);
+        try {
+            addressServiceImpl.update(address);
+        } catch (AddressNotFoundException e) {
+            redirectAttributes
+                    .addFlashAttribute("message", new Message(e.getMessage(), "alert-danger"));
+            return "redirect:/user/addresses";
+        }
 
         return "redirect:/user/addresses";
 
@@ -299,10 +327,15 @@ public class CustomerController {
     }
 
     @PutMapping("/checkout/deliveryAddress/update")
-    public String updateCheckoutDeliveryAddress(@RequestParam Long addressId, Principal principal, HttpSession session) {
+    public String updateCheckoutDeliveryAddress(@RequestParam Long addressId, Principal principal, RedirectAttributes redirectAttributes) {
+        try {
+            addressServiceImpl.setDefault(addressId, principal);
 
-        addressServiceImpl.setDefault(addressId, principal);
-
+        } catch (AddressNotFoundException e) {
+            redirectAttributes
+                    .addFlashAttribute("message", new Message(e.getMessage(), "alert-danger"));
+            return "redirect:/user/checkout";
+        }
 
         return "redirect:/user/checkout";
     }

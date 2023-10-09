@@ -130,7 +130,7 @@ function request() {
 
             for (let i = data.currentPageNumber - 2; i < data.currentPageNumber + 5; i++) {
                 let active = '';
-                if (i == data.currentPageNumber) {
+                if (i === data.currentPageNumber) {
                     active = "active";
                 }
 

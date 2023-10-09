@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(style,content)"
-      xmlns:a="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/admin-base.css}">
 
-    <link th:replace="${style}" >
+    <link th:replace="${style}">
 </head>
 <body class="">
 
@@ -22,12 +22,12 @@
 <!-- Start Header Area -->
 <header class="header container-fluid m-0 p-0 bg-transparent">
     <!-------------------------------------navbar--------------------------------------------------->
-    <div  class="d-flex  justify-content-center shadow m-4 bg-common">
+    <div class="d-flex  justify-content-center shadow m-4 bg-common">
         <a th:href="@{/admin/dashboard}">
-            <button  type="button" class="btn  btn-secondary fs-2" ><span  sec:authentication="name" ></span></button>
+            <button type="button" class="btn  btn-secondary fs-2"><span sec:authentication="name"></span></button>
         </a>
-        <a  onclick="clicked()" th:href="@{/admin/orders}" >
-            <button id="orders"  type="button" class="btn  btn-secondary fs-2 ">ORDERS</button>
+        <a onclick="clicked()" th:href="@{/admin/orders}">
+            <button id="orders" type="button" class="btn  btn-secondary fs-2 ">ORDERS</button>
         </a>
         <a th:href="@{/admin/users/page/0}">
             <button type="button" class="btn  btn-secondary fs-2">USERS</button>
@@ -38,26 +38,25 @@
         <a th:href="@{/admin/coupons}">
             <button type="button" class="btn  btn-secondary fs-2">COUPONS</button>
         </a>
-        <a th:href="@{/admin/banners}" >
+        <a th:href="@{/admin/banners}">
             <button type="button" class="btn  btn-secondary fs-2">BANNER</button>
         </a>
-        <a th:href="@{/admin/products/stock}" >
+        <a th:href="@{/admin/products/stock}">
             <button type="button" class="btn  btn-secondary fs-2">STOCK</button>
         </a>
 
 
         <a>
             <form th:action="@{/admin/logout}" method="post">
-                <button type="submit" class="btn  btn-danger fs-2" >LOGOUT</button>
+                <button type="submit" class="btn  btn-danger fs-2">LOGOUT</button>
             </form>
         </a>
 
 
-
-<!--        <button type="button" class="btn  btn-secondary fs-2">HOME</button>-->
-<!--        <button type="button" class="btn  btn-secondary fs-2">SIGN IN</button>-->
-<!--        <button type="button" class="btn  btn-secondary fs-2">WISHLIST</button>-->
-<!--        <button type="button" class="btn  btn-secondary fs-2">CART</button>-->
+        <!--        <button type="button" class="btn  btn-secondary fs-2">HOME</button>-->
+        <!--        <button type="button" class="btn  btn-secondary fs-2">SIGN IN</button>-->
+        <!--        <button type="button" class="btn  btn-secondary fs-2">WISHLIST</button>-->
+        <!--        <button type="button" class="btn  btn-secondary fs-2">CART</button>-->
 
     </div>
     <!------------------------------------------------------navbar end ------------------------------------------->
@@ -70,15 +69,16 @@
 
 <script>
 
-    function clicked(){
+    function clicked() {
 
         console.log("Called")
-        document.getElementById('orders').style.backgroundColor='red';
-    };
-
+        document.getElementById('orders').style.backgroundColor = 'red';
+    }
 
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
 </body>
 </html>

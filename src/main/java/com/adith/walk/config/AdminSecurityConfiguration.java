@@ -9,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,17 +21,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class AdminSecurityConfiguration {
 
 
-
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Bean
-    UserDetailsService userDetailsServiceAdmin(){
-        return  new AdminCustomUserDetailsService();
+    UserDetailsService userDetailsServiceAdmin() {
+        return new AdminCustomUserDetailsService();
     }
 
     @Bean
-    AuthenticationProvider authenticationProviderAdmin(){
-        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+    AuthenticationProvider authenticationProviderAdmin() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 
         daoAuthenticationProvider.setUserDetailsService(userDetailsServiceAdmin());
         daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
@@ -37,29 +38,29 @@ public class AdminSecurityConfiguration {
     }
 
 
-      @Bean
-      public SecurityFilterChain securityFilterAdmin(HttpSecurity http) throws Exception {
-          http
-                  .authenticationProvider(authenticationProviderAdmin());
+    @Bean
+    public SecurityFilterChain securityFilterAdmin(HttpSecurity http) throws Exception {
+        http
+                .authenticationProvider(authenticationProviderAdmin());
 
-           http.
-                    securityMatcher("/admin/**")
-                    .   csrf(c->c.disable())
-                    .cors(cors->cors.disable())
-                    .authorizeHttpRequests(auth->auth
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated())
+        http.
+                securityMatcher("/admin/**")
+                .csrf(CsrfConfigurer::disable)
+                .cors(CorsConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
 
-                    .formLogin((form) -> form
-                            .loginPage("/admin/login").permitAll().
-                            defaultSuccessUrl("/admin/dashboard")
-                    )
-                    .logout((logout) -> logout
-                            .logoutUrl("/admin/logout").permitAll()
-                            .logoutSuccessUrl("/admin/login?logout"));
+                .formLogin((form) -> form
+                        .loginPage("/admin/login").permitAll().
+                        defaultSuccessUrl("/admin/dashboard")
+                )
+                .logout((logout) -> logout
+                        .logoutUrl("/admin/logout").permitAll()
+                        .logoutSuccessUrl("/admin/login?logout"));
 
 
-            return http.build();
-      }
+        return http.build();
+    }
 
 }

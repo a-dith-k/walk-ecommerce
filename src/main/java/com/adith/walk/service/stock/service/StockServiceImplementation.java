@@ -1,6 +1,5 @@
 package com.adith.walk.service.stock.service;
 
-import com.adith.walk.entities.Product;
 import com.adith.walk.entities.Stock;
 import com.adith.walk.repositories.StockRepository;
 import org.springframework.stereotype.Service;
@@ -25,14 +24,10 @@ public class StockServiceImplementation implements StockService {
     }
 
     @Override
-    public Stock save(Stock stock) {
-        return stockRepository.save(stock);
+    public void save(Stock stock) {
+        stockRepository.save(stock);
     }
 
-    @Override
-    public Stock getStockByProduct(Product product) {
-        return stockRepository.findStockByProduct(product);
-    }
 
     @Override
     public Stock getStockById(long stockId) {

@@ -4,5 +4,5 @@ import java.io.Serializable;
 
 public enum CustomerCategory implements Serializable {
 
-    MALE,FEMALE,UNISEX;
+    MALE, FEMALE, UNISEX
 }

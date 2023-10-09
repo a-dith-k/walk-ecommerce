@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Wishlist implements Serializable {
 
-    @SequenceGenerator(initialValue = 1,
+    @SequenceGenerator(
             allocationSize = 2,
             sequenceName = "wishlistIdGenerator",
             name = "wishlistIdGenerator")

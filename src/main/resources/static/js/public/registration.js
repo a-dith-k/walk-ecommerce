@@ -1,23 +1,20 @@
-const regexM=/^[6-9][0-9]{9}$/;
-const regexP=/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-const regexE=/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const regexM = /^[6-9][0-9]{9}$/;
+const regexP = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+const regexE = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 
     let mobileInput = document.querySelector("input[name=mobileNumber]");
-    let passwordInput=document.querySelector("input[name=password]")
-    let emailInput=document.querySelector('input[name=email]');
-    let confirmPassword=document.querySelector("input[name=confirmPassword]")
-    let firstNameInput=document.querySelector("input[name=firstName]")
-    let lastNameInput=document.querySelector("input[name=lastName]")
-
-
-
+    let passwordInput = document.querySelector("input[name=password]")
+    let emailInput = document.querySelector('input[name=email]');
+    let confirmPassword = document.querySelector("input[name=confirmPassword]")
+    let firstNameInput = document.querySelector("input[name=firstName]")
+    let lastNameInput = document.querySelector("input[name=lastName]")
 
 
     let form = document.querySelector("form");
-    form.addEventListener("submit", function(event) {
+    form.addEventListener("submit", function (event) {
         mobileInput.classList.remove("is-invalid");
         mobileInput.classList.add("was-validated");
         firstNameInput.classList.remove("is-invalid");
@@ -31,41 +28,40 @@ window.addEventListener("load", function() {
         confirmPassword.classList.remove("is-invalid");
         confirmPassword.classList.add("was-validated");
 
-        if(firstNameInput.value.length<3){
+        if (firstNameInput.value.length < 3) {
             firstNameInput.classList.add("is-invalid");
             event.preventDefault();
         }
 
-        if(lastNameInput.value.length<1){
+        if (lastNameInput.value.length < 1) {
             lastNameInput.classList.add("is-invalid");
             event.preventDefault();
         }
 
-        if(!regexE.test(emailInput.value)){
+        if (!regexE.test(emailInput.value)) {
             emailInput.classList.add("is-invalid");
             event.preventDefault();
         }
 
-        if(!regexM.test(mobileInput.value)){
-             mobileInput.classList.add("is-invalid");
+        if (!regexM.test(mobileInput.value)) {
+            mobileInput.classList.add("is-invalid");
             event.preventDefault();
         }
 
-        if(!regexP.test(passwordInput.value)){
+        if (!regexP.test(passwordInput.value)) {
             passwordInput.classList.add("is-invalid");
             event.preventDefault();
         }
 
 
-        if(passwordInput.value!=confirmPassword.value){
+        if (passwordInput.value !== confirmPassword.value) {
             confirmPassword.classList.add("is-invalid");
             event.preventDefault();
         }
 
 
+    });
 });
-});
-
 
 
 // let mobileNumber=document.getElementById("mobileNumber");

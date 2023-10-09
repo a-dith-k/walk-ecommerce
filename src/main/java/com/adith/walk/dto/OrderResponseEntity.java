@@ -19,17 +19,6 @@ public class OrderResponseEntity {
 
     private Customer customer;
 
-
-//    private Address billingAddress;
-//
-//
-//    private Address deliveryAddress;
-
-
-//    private Payment payment;
-
-//    RazorPayDetails razorPayDetails;
-
     private Integer quantity;
 
     private Long totalPrice;
@@ -42,11 +31,6 @@ public class OrderResponseEntity {
 
     private OrderStatus orderStatus;
 
-
-//    private OrderHistory orderHistory;
-
-
     Boolean isPaymentDone;
-//
-//    private Coupon coupon;
+
 }

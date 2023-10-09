@@ -6,7 +6,6 @@ import com.adith.walk.entities.ProductReview;
 import com.adith.walk.repositories.ReviewRepository;
 import com.adith.walk.service.CustomerService;
 import com.adith.walk.service.ProductService;
-import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -30,7 +29,7 @@ public class ProductReviewService implements ReviewService {
 
 
     @Override
-    public void addReview(ProductReview productReview, Integer productId, Principal principal) throws AlreadyUsedException {
+    public void addReview(ProductReview productReview, Integer productId, Principal principal) {
 
         List<ProductReview> productReviewsByProduct = reviewRepository.getProductReviewsByProduct(productService.getProductById(productId));
 
@@ -49,13 +48,13 @@ public class ProductReviewService implements ReviewService {
 
     @Override
     public ProductReview getProductReviewByProductAndCustomer(Integer productId, Principal principal) {
-        return reviewRepository.findProductReviewByProductAndAndCustomer(productService.getProductById(productId), getCustomer(principal)).orElseThrow();
+        return reviewRepository.findProductReviewByProductAndCustomer(productService.getProductById(productId), getCustomer(principal)).orElseThrow();
 
     }
 
     @Override
     public boolean isProductAlreadyReviewed(Principal principal, Product product) {
-        return reviewRepository.findProductReviewByProductAndAndCustomer(product, getCustomer(principal)).isPresent();
+        return reviewRepository.findProductReviewByProductAndCustomer(product, getCustomer(principal)).isPresent();
     }
 
     @Override
