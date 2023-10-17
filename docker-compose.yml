@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: walk
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  # redis:
+  #  image: redis
+  #  ports:
+  #   - "6379:6379"
+  app:
+    image: adithk1308/walk-ecom-app:1.0.0
+    ports:
+      - "2021:2021"
+    depends_on:
+      postgres:
+        condition: service_started
+      # - redis
+    # links:
+    #   - redis  
+    environment:
+      POSTGRES_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/walk
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+volumes:
+  postgres-data:
