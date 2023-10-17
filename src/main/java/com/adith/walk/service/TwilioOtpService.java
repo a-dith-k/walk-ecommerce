@@ -4,6 +4,7 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -15,8 +16,11 @@ public class TwilioOtpService {
     final Logger logger = LoggerFactory.getLogger(TwilioOtpService.class);
 
 
-    public static final String ACCOUNT_SID = "AC1ae4e5f1a786d672af76fc0596bc2092";
-    public static final String AUTH_TOKEN = "93c6718b0e7efc31d7347ec7072906a4";
+    @Value("${twilio.account_sid}")
+    private String ACCOUNT_SID;
+
+    @Value("${twilio.auth_token}")
+    private String AUTH_TOKEN;
     String OTP = null;
 
 

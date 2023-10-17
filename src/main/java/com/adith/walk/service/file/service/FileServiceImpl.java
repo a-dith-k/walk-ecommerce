@@ -14,11 +14,23 @@ public class FileServiceImpl implements FileService {
     @Value("${project.image}")
     String path;
 
+    public String randomName() {
+        final String lexicon="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12345674890";
+        StringBuilder builder=new StringBuilder();
+        for(int i=0; i<10; i++){
+            builder.append(lexicon.charAt((int)(Math.random()*60+1)));
+        }
+        builder.append(".jpg");
+        return builder.toString();
+    }
+
     @Override
     public String fileUpload(MultipartFile file) throws IOException {
         //filename
 
-        String name = getOriginalName(file);
+
+        String name = randomName();
+
 
 
         String filePath = path + File.separator + name;

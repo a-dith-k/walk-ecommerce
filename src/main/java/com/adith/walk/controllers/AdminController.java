@@ -36,6 +36,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -51,7 +52,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"product"})
+@SessionAttributes({})
 @RequestMapping("admin")
 public class AdminController {
 
@@ -265,11 +266,10 @@ public class AdminController {
 
     //-------------------------------adding  the product-----------------------------------------------
     @GetMapping("products/add")
-    public String addProduct(ProductDTO productDTO, Model model,
+    public String addProduct(@ModelAttribute("product")ProductDTO productDTO, Model model,
                              @ModelAttribute("newCategory") ProductCategory productCategory) {
 
-        model
-                .addAttribute("product", productDTO);
+
 
         model
                 .addAttribute("productCategories", categoryService.getAllCategories());
@@ -278,6 +278,86 @@ public class AdminController {
         return "admin/products/add";
 
     }
+
+    @PostMapping("products/add")
+    public String addProductPost(@Valid @ModelAttribute("product") ProductDTO addProductRequest, BindingResult result, @RequestParam("files") MultipartFile[] files, @RequestParam("productCategory") Integer categoryId, Model model, RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model
+                    .addAttribute("productCategories", categoryService.getAllCategories());
+            model.
+                    addAttribute("newCategory", new ProductCategory());
+
+            return "redirect:/admin/products/add";
+        }
+
+        if (files.length > 5 || files.length < 1) {
+            model
+                    .addAttribute("message",
+                            new Message("Maximum 4 Images are allowed", "alert-danger"));
+            model
+
+                    .addAttribute("productCategories", categoryService.getAllCategories());
+
+            model.
+                    addAttribute("newCategory", new ProductCategory());
+
+            return "admin/products/add";
+        }
+
+        Product product;
+
+
+        try {
+            addProductRequest.setProductCategory(categoryService.getCategoryById(categoryId));
+            product = productService.addProduct(addProductRequest, files);
+        } catch (FileAlreadyExistsException e) {
+            logger.error("error adding product{}", (Object) e.getStackTrace());
+
+            redirectAttributes
+                    .addFlashAttribute("message",
+                            new Message("Change the name of the file", "alert-danger"));
+            model
+                    .addAttribute("productCategories", categoryService.getAllCategories());
+
+            model.
+                    addAttribute("newCategory", new ProductCategory());
+
+            return "redirect:/admin/products/add";
+
+        } catch (AlreadyUsedException | IllegalArgumentException e) {
+            model
+                    .addAttribute("message",
+                            new Message(e.getMessage(), "alert-danger"));
+            model
+                    .addAttribute("productCategories", categoryService.getAllCategories());
+
+            model.
+                    addAttribute("newCategory", new ProductCategory());
+
+            return "admin/products/add";
+
+        } catch (Exception e) {
+            logger.error("exception{}", e.getMessage());
+            model.
+                    addAttribute("message",
+                            new Message("Something went wrong", "alert-danger"));
+            model
+                    .addAttribute("productCategories", categoryService.getAllCategories());
+            model.
+                    addAttribute("newCategory", new ProductCategory());
+            return "admin/products/add";
+        }
+
+        model.addAttribute("message", new Message("Successfully Uploaded", "alert-success"));
+        model
+                .addAttribute("product", modelMapper.map(product, ProductDTO.class));
+        model
+
+                .addAttribute("productCategories", categoryService.getAllCategories());
+        return "redirect:/admin/products/" + product.getProductId() + "/stock/add";
+    }
+
 
 
     @PostMapping("/products/category/add")
@@ -298,67 +378,6 @@ public class AdminController {
     }
 
 
-    @PostMapping("products/add")
-    public String addProductPost(@Valid @ModelAttribute("product") ProductDTO addProductRequest, BindingResult result, @RequestParam("files") MultipartFile[] files, @RequestParam("productCategory") Integer categoryId, Model model) {
-
-        if (result.hasErrors()) {
-            model
-                    .addAttribute("productCategories", categoryService.getAllCategories());
-            System.out.println("helooooooo--------------------");
-
-            return "admin/products/add";
-        }
-
-        if (files.length > 5 || files.length < 1) {
-            model
-                    .addAttribute("message",
-                            new Message("Maximum 4 Images are allowed", "alert-danger"));
-            model
-
-                    .addAttribute("productCategories", categoryService.getAllCategories());
-            return "admin/products/add";
-        }
-
-        Product product;
-
-
-        try {
-            addProductRequest.setProductCategory(categoryService.getCategoryById(categoryId));
-            product = productService.addProduct(addProductRequest, files);
-        } catch (FileAlreadyExistsException e) {
-            model
-                    .addAttribute("message",
-                            new Message("Change the name of the file", "alert-danger"));
-            model
-                    .addAttribute("productCategories", categoryService.getAllCategories());
-            return "admin/products/add";
-
-        } catch (AlreadyUsedException | IllegalArgumentException e) {
-            model
-                    .addAttribute("message",
-                            new Message(e.getMessage(), "alert-danger"));
-            model
-                    .addAttribute("productCategories", categoryService.getAllCategories());
-            return "admin/products/add";
-
-        } catch (Exception e) {
-            logger.error("exception{}", e.getMessage());
-            model.
-                    addAttribute("message",
-                            new Message("Something went wrong", "alert-danger"));
-            model
-                    .addAttribute("productCategories", categoryService.getAllCategories());
-            return "admin/products/add";
-        }
-
-        model.addAttribute("message", new Message("Successfully Uploaded", "alert-success"));
-        model
-                .addAttribute("product", modelMapper.map(product, ProductDTO.class));
-        model
-
-                .addAttribute("productCategories", categoryService.getAllCategories());
-        return "redirect:/admin/products/" + product.getProductId() + "/stock/add";
-    }
 
 
     @GetMapping("products/stock")
