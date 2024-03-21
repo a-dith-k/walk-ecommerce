@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>this is for adding user</title>
     <link th:href="@{/css/}"  type="text/css" rel="stylesheet">
-    <link id="style" th:href="@{/js/node_modules/cropperjs/dist/cropper.min.css}"  type="text/css" rel="stylesheet">
+    <link id="style" th:href="@{/js/cropperjs/cropper.css}"  type="text/css" rel="stylesheet">
 </head>
 <body>
 <section id="content" class="container-fluid vh-85 ">
-    <div class="row  d-flex   justify-content-center align-items-center    h-100">
+    <div class="row  d-flex ">
         <div class="col-md-4 bg-common  m-5 ">
             <h1 class="text-center">ADD BANNER</h1>
 
@@ -17,7 +17,7 @@
                     method="post"
                     class="d-flex bg-common flex-column align-items-center fs-3"
                     enctype="multipart/form-data"
-                    >
+            >
 
 
                 <!------------------------------- image upload- field----------------------------------------------------->
@@ -28,7 +28,7 @@
                         type="file"
                         placeholder="file"
                         accept="image/*"
-                        >
+                >
 
 
                 <!------------------------------- heading- field----------------------------------------------------->
@@ -38,7 +38,7 @@
                         class=" fs-3 form-control  mb-3 "
                         type="text"
                         placeholder="Heading"
-                        >
+                >
 
                 <!------------------------------- description-field----------------------------------------------------->
                 <label  for="bannerDescription">Banner Description</label>
@@ -47,7 +47,7 @@
                         class=" fs-3 form-control  mb-3  "
                         type="text"
                         placeholder="Description"
-                        >
+                >
                 <!------------------------------- status-field----------------------------------------------------->
                 <label for="bannerStatus">Banner Status</label>
                 <select
@@ -75,25 +75,25 @@
                 <button  class="btn  btn-dark input-group-text form-control  mb-3 fs-2" type="submit">Submit</button>
             </form>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4 d-flex align-items-center flex-column">
+
+
+            <div class="w-100" id="inputImageDiv">
+
+            </div>
+            <button  id="imgCropBtn" class="btn btn-primary form-control fs-2 w-100">crop image</button>
+
+
+        </div>
+        <div class="col-md-3 d-flex justify-content-center align-items-center">
             <img src="" alt="" id="imageOutput" class="img-fluid">
         </div>
-        <div class="d-flex align-items-center flex-column">
-
-
-                <div class="w-50" id="inputImageDiv">
-
-                </div>
-            <button  id="imgCropBtn" class="btn btn-primary form-control fs-2 w-50">crop image</button>
-
-
-        </div>
-
     </div>
 
 
-    <script th:src="@{/node_modules/cropperjs/dist/cropper.min.js}"></script>
-    <script th:src="@{/js/admin/addBanner.js}"></script>
+    <script  th:src="@{/js/cropperjs/cropper.min.js}"></script>
+    <script  th:src="@{/js/admin/addBanner.js}" defer></script>
 </section>
 
 </body>

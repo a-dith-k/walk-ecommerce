@@ -16,6 +16,8 @@ window.onload=(e)=>{
     imageCropButton.hidden=true;
 }
 
+let cropped=false;
+
 bannerImage.addEventListener('change',(e)=>{
 
     let fileReader=new FileReader();
@@ -46,6 +48,7 @@ bannerImage.addEventListener('change',(e)=>{
                 cropper.getCroppedCanvas().toBlob((blob)=>{
                      formData=new FormData();
                         formData.append("imageFile",blob,name);
+                        cropped=true;
                 })
             }
 
@@ -57,25 +60,34 @@ bannerImage.addEventListener('change',(e)=>{
 
 
 bannerForm.addEventListener('submit',(e)=>{
-    e.preventDefault()
+    if(!cropped){
+        alert("crop the image")
+        e.preventDefault()
+    }
 
-    formData.append('bannerHeading'   ,bannerHeading.value)
-    formData.append('bannerStatus'  ,   bannerStatus.value)
-    formData.append('bannerPosition'  ,bannerPosition.value)
-    formData.append('bannerDescription', bannerDescription.value )
-
-
-    let endpoint='/admin/banners/add';
+    else{
+        e.preventDefault()
 
 
-    fetch(endpoint,{
-        method:'post',
-        body:formData
+        formData.append('bannerHeading'   ,bannerHeading.value)
+        formData.append('bannerStatus'  ,   bannerStatus.value)
+        formData.append('bannerPosition'  ,bannerPosition.value)
+        formData.append('bannerDescription', bannerDescription.value )
 
-    }).catch(console.error)
 
-    alert("banner created successfully");
-    window.location='/admin/banners';
+        let endpoint='/admin/banners/add';
+
+
+        fetch(endpoint,{
+            method:'post',
+            body:formData
+
+        }).catch(console.error)
+
+        alert("banner created successfully");
+        window.location='/admin/banners';
+    }
+
 
 })
 

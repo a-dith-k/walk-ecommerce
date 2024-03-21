@@ -1,0 +1,22 @@
+{
+  "name": "walk-ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-dith-k/walk-ecommerce.git"
+  },
+  "author": "adith",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a-dith-k/walk-ecommerce/issues"
+  },
+  "homepage": "https://github.com/a-dith-k/walk-ecommerce#readme",
+  "dependencies": {
+    "cropperjs": "^1.6.1"
+  }
+}

@@ -510,7 +510,7 @@ public class AdminController {
                                 @RequestParam String bannerDescription
     ) {
 
-        logger.info("Request came for banner update");
+
 
         Banner banner = new Banner();
         banner.setBannerPosition(bannerPosition);

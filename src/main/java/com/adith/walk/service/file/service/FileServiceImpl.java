@@ -35,6 +35,7 @@ public class FileServiceImpl implements FileService {
 
         String filePath = path + File.separator + name;
         //create path
+        System.out.println("File Name: "+name);
 
         File f = new File(path);
 
@@ -55,7 +56,8 @@ public class FileServiceImpl implements FileService {
 
     public String uploadBanner(MultipartFile file) throws IOException {
 
-        String originalFilename = getOriginalName(file);
+        String originalFilename = getOriginalName(file).concat(".jpg");
+
 
         String s = bannerPath + File.separator + originalFilename;
 
@@ -63,7 +65,7 @@ public class FileServiceImpl implements FileService {
         if (!f.exists()) {
             f.mkdir();
         }
-
+        System.out.println("path of :"+Paths.get(s));
         Files.copy(file.getInputStream(), Paths.get(s));
 
         return originalFilename;
