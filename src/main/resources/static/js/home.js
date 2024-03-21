@@ -85,7 +85,7 @@ function nextPage() {
 
 function request() {
 
-    let url = `http://localhost:2021/rest/${pageNumber}/${numberOfProducts}`;
+    let url = `/rest/${pageNumber}/${numberOfProducts}`;
     fetch(url)
         .then(res => {
             return res.json()
