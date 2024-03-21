@@ -13,6 +13,6 @@ public interface FileService {
 
     Map<String,String> fileUpload(MultipartFile file) throws IOException, IncompatibleImageException;
 
-    public void deleteImage(String publicId) throws IOException;
+    void deleteImage(String publicId) throws IOException;
     Map<String,String> uploadBanner(MultipartFile file) throws IOException;
 }
