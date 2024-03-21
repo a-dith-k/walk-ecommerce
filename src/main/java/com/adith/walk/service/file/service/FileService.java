@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 public interface FileService {
 
-    String fileUpload(MultipartFile file) throws IOException, IncompatibleImageException;
+    Map<String,String> fileUpload(MultipartFile file) throws IOException, IncompatibleImageException;
 
-
-    String uploadBanner(MultipartFile file) throws IOException;
+    public void deleteImage(String publicId) throws IOException;
+    Map<String,String> uploadBanner(MultipartFile file) throws IOException;
 }

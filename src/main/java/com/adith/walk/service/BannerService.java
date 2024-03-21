@@ -3,6 +3,7 @@ package com.adith.walk.service;
 import com.adith.walk.entities.Banner;
 import com.adith.walk.exceptions.BannerNotFoundException;
 import com.adith.walk.repositories.BannerRepo;
+import com.adith.walk.service.file.service.FileServiceImpl;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +11,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BannerService {
 
 
     final BannerRepo bannerRepo;
+    final FileServiceImpl fileService;
 
-    public BannerService(BannerRepo bannerRepo) {
+    public BannerService(BannerRepo bannerRepo, FileServiceImpl fileService) {
         this.bannerRepo = bannerRepo;
+        this.fileService = fileService;
     }
 
     @Transactional
@@ -35,10 +39,11 @@ public class BannerService {
 
         Banner banner = bannerRepo.findById(bannerId).orElseThrow(() -> new BannerNotFoundException("Not found"));
 
-        Path path = Path.of("src/main/resources/static/img/banner/" + banner.getName());
+//        Path path = Path.of("src/main/resources/static/img/banner/" + banner.getImageUrl());
+//
+//        Files.deleteIfExists(path);
 
-        Files.deleteIfExists(path);
-
+        fileService.deleteImage(banner.getPublicId());
 
         bannerRepo.delete(banner);
 
@@ -51,9 +56,10 @@ public class BannerService {
     }
 
     @Transactional
-    public void createNewBanner(String s, Banner banner) {
+    public void createNewBanner(Map<String,String> values, Banner banner) {
 
-        banner.setName(s);
+        banner.setImageUrl(values.get("secureUrl"));
+        banner.setPublicId(values.get("publicId"));
 
         bannerRepo.save(banner);
     }

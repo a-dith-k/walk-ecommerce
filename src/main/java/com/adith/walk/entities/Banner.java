@@ -20,7 +20,9 @@ public class Banner {
     Integer id;
 
     @NotBlank
-    String name;
+    String imageUrl;
+
+    String publicId;
 
     @NotBlank
     String heading;
@@ -34,7 +36,6 @@ public class Banner {
 
     String bannerPosition;
 
-    String bannerImageSrc;
 
     public Banner() {
 

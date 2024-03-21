@@ -10,6 +10,7 @@ import com.adith.walk.enums.UserRole;
 import com.adith.walk.repositories.AddressRepository;
 import com.adith.walk.repositories.CustomerRepository;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
+import com.twilio.exception.ApiException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -103,7 +104,7 @@ public class CustomerService {
         return customerRepository.findCustomerByUserId(userId);
     }
 
-    public void registerCustomer(CustomerRegistrationRequest request) throws AlreadyUsedException {
+    public void registerCustomer(CustomerRegistrationRequest request) throws AlreadyUsedException, ApiException {
 
 
         if (isMobileNumberExists(request.getMobileNumber())) {
@@ -262,7 +263,7 @@ public class CustomerService {
     }
 
 
-    public void registerCustomerAdmin(CustomerRegistrationRequestAdmin registrationRequest) throws AlreadyUsedException {
+    public void registerCustomerAdmin(CustomerRegistrationRequestAdmin registrationRequest) throws AlreadyUsedException,ApiException {
 
         registrationRequest.setPassword(encoder.encode(registrationRequest.getFirstName().substring(0, 3) + "@" + registrationRequest.getMobileNumber().substring(0, 3)));
 

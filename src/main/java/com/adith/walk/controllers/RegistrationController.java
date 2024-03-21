@@ -6,6 +6,7 @@ import com.adith.walk.dto.CustomerRegistrationRequest;
 import com.adith.walk.helper.Message;
 import com.adith.walk.service.CustomerService;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
+import com.twilio.exception.ApiException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,9 @@ public class RegistrationController {
         } catch (AlreadyUsedException e) {
             model.addAttribute("message", new Message(e.getMessage(), "alert-danger"));
             return "registration/user-registration";
+        }catch (ApiException e){
+            logger.error(e.getMessage());
+            return "error/errorPage";
         }
 
 

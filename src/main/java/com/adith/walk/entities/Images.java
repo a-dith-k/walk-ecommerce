@@ -25,6 +25,9 @@ public class Images implements Serializable {
 
     String name;
 
+    private String publicId;
+
+
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JsonBackReference
     Product product;

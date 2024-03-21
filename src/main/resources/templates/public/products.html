@@ -21,7 +21,7 @@
                     <div>
                         <div class="pr-img ">
                             <a th:href="@{'/products/'+${product.productId}}"><img
-                                    th:src="@{'/img/productImages/'+${product.list[0].name}}" alt=""
+                                    th:src="@{${product.list[0].name}}" alt=""
                                     class="img-fluid img-thumbnail  ">
                             </a>
                         </div>

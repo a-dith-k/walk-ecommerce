@@ -2,6 +2,7 @@ package com.adith.walk.helper;
 import com.adith.walk.exceptions.IncompatibleImageException;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -13,7 +14,7 @@ public class ImageCropper {
 
 
         // Main driver method
-        public  void cropImage(File f,File output) throws IncompatibleImageException {
+        public byte[] cropImage(File f) throws IncompatibleImageException {
 
             try {
 
@@ -34,10 +35,14 @@ public class ImageCropper {
                 // Creating a cropped Image of given dimensions
                 BufferedImage SubImg
                         = originalImg.getSubimage(0, 0, 800, 600 );
-
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
                 // Writing image in new file created
-                ImageIO.write(SubImg, "jpg", output);
+                ImageIO.write(SubImg, "jpg", baos);
+                byte[] bytes=baos.toByteArray();
+                baos.flush();
+                return bytes;
+
 
             }
 
@@ -46,6 +51,7 @@ public class ImageCropper {
 
                 e.printStackTrace();
             }
+            return new byte[0];
         }
 
 

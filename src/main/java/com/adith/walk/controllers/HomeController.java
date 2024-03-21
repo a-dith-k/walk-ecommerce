@@ -55,6 +55,7 @@ public class HomeController {
     }
 
 
+
     @GetMapping()
     public String getHome(Principal principal, Model model, HttpSession session) {
 

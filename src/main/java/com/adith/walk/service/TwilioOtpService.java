@@ -1,6 +1,7 @@
 package com.adith.walk.service;
 
 import com.twilio.Twilio;
+import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 @Service
-public class TwilioOtpService {
+public class TwilioOtpService  {
 
     final Logger logger = LoggerFactory.getLogger(TwilioOtpService.class);
 
@@ -24,7 +25,7 @@ public class TwilioOtpService {
     String OTP = null;
 
 
-    public String sendOTP() {
+    public String sendOTP() throws ApiException {
 
         OTP = generateOTP();
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);

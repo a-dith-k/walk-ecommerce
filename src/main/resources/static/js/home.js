@@ -9,7 +9,7 @@ const search = () => {
         console.log(query);
 
         //sending request to backend
-        let url = `http://localhost:2021/search/${query}`;
+        let url = `/search/${query}`;
 
         fetch(url).then((response) => {
             return response.json()
@@ -25,7 +25,7 @@ const search = () => {
             data.forEach((product) => {
                 resultDiv += `<a href='/products/${product.productId}' class='text-decoration-none  text-dark row p-2'>
                             <div class='fs-3 mt-1 ms-1  col-md-1  d-flex justify-content-end'>
-                                <img src="../img/productImages/${product.list[0].name}" class="img-fluid w-50">
+                                <img src="${product.list[0].name}" class="img-fluid w-50">
                             </div>
                                     <div class='d-flex align-items-center mt-1 fs-3 col-md-6'>
                                     ${product.productName}
@@ -103,7 +103,7 @@ function request() {
                     `<div class="col-sm-12 col-md-3 product position-relative" >
                     <div class="product-img">
                     <a href="/products/${product.productId}"><img
-                               src="../img/productImages/${product.list[0].name}" alt=""
+                               src="${product.list[0].name}" alt=""
                                 class="img-fluid img-thumbnail  ">
                     </a>
                 </div>

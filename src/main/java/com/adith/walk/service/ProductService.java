@@ -16,6 +16,7 @@ import com.adith.walk.repositories.ProductRepository;
 import com.adith.walk.repositories.SizeRepository;
 import com.adith.walk.service.file.service.FileService;
 import com.adith.walk.service.stock.service.StockService;
+import com.cloudinary.Cloudinary;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -141,7 +142,8 @@ public class ProductService {
 
         for (MultipartFile image : images) {
             Images imageNew = new Images();
-            imageNew.setName(fileService.fileUpload(image));
+            imageNew.setName(fileService.fileUpload(image).get("secureUrl"));
+            imageNew.setPublicId(fileService.fileUpload(image).get("publicId"));
             imageNew.setProduct(product);
             imageList.add(imageNew);
         }
@@ -176,25 +178,19 @@ public class ProductService {
 
 
         stock.setProduct(product);
-        stockService.save(stock);
 
         productRepository.save(product);
+        stockService.save(stock);
     }
 
 
-    public void deleteProduct(Integer productId) {
+    public void deleteProduct(Integer productId) throws IOException {
 
         if (productRepository.findById(productId).isPresent()) {
             Product product = productRepository.findById(productId).get();
-            List<Images> images = product.getList();
-            images.forEach(i -> {
-                Path path = Paths.get("src/main/resources/static/img/productImages/" + i.getName());
-                try {
-                    Files.delete(path);
-                } catch (IOException e) {
-                    throw new RuntimeException("images were not deleted");
-                }
-            });
+            for(Images image : product.getList()){
+            fileService.deleteImage(image.getPublicId());
+            }
             productRepository.delete(product);
         }
 

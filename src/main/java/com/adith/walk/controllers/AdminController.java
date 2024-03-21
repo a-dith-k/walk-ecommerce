@@ -21,6 +21,7 @@ import com.adith.walk.service.orderitem.service.OrderItemService;
 import com.adith.walk.service.review.service.ReviewService;
 import com.adith.walk.service.stock.service.StockService;
 import com.nimbusds.oauth2.sdk.util.singleuse.AlreadyUsedException;
+import com.twilio.exception.ApiException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
@@ -172,6 +173,9 @@ public class AdminController {
                     .addAttribute("message",
                             new Message(usedException.getMessage(), "alert-danger"));
             return "admin/users/add";
+        }catch (ApiException e){
+        logger.error(e.getMessage());
+        return "error/errorPageAdmin";
         }
 
         model
@@ -476,7 +480,11 @@ public class AdminController {
     @DeleteMapping("products/delete/{productId}")
     public String deleteProduct(@PathVariable Integer productId) {
 
-        productService.deleteProduct(productId);
+        try {
+            productService.deleteProduct(productId);
+        } catch (IOException e) {
+            return "redirect:/admin/products/page/0";
+        }
         return "redirect:/admin/products/page/0";
 
     }
