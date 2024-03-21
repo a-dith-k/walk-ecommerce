@@ -4,6 +4,7 @@ import com.adith.walk.dto.*;
 import com.adith.walk.entities.*;
 import com.adith.walk.enums.OrderStatus;
 import com.adith.walk.exceptions.BannerNotFoundException;
+import com.adith.walk.exceptions.IncompatibleImageException;
 import com.adith.walk.exceptions.SizeAlreadyExistsException;
 import com.adith.walk.exporters.OrderPDFExporter;
 import com.adith.walk.helper.Message;
@@ -325,7 +326,7 @@ public class AdminController {
 
             return "redirect:/admin/products/add";
 
-        } catch (AlreadyUsedException | IllegalArgumentException e) {
+        } catch (AlreadyUsedException | IllegalArgumentException | IncompatibleImageException e) {
             model
                     .addAttribute("message",
                             new Message(e.getMessage(), "alert-danger"));

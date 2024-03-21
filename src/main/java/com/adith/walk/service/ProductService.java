@@ -8,6 +8,7 @@ import com.adith.walk.entities.Product;
 import com.adith.walk.entities.Size;
 import com.adith.walk.entities.Stock;
 import com.adith.walk.enums.CustomerCategory;
+import com.adith.walk.exceptions.IncompatibleImageException;
 import com.adith.walk.exceptions.SizeAlreadyExistsException;
 import com.adith.walk.repositories.ImageRepo;
 import com.adith.walk.repositories.ProductRepo;
@@ -110,7 +111,7 @@ public class ProductService {
     }
 
 
-    public Product addProduct(ProductDTO addProductRequest, MultipartFile[] images) throws IOException, AlreadyUsedException {
+    public Product addProduct(ProductDTO addProductRequest, MultipartFile[] images) throws IOException, AlreadyUsedException, IncompatibleImageException {
         Product product
                 = modelMapper
                 .map(addProductRequest, Product.class);
