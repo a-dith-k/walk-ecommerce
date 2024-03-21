@@ -3,7 +3,6 @@ package com.adith.walk.service.file.service;
 import com.adith.walk.exceptions.IncompatibleImageException;
 import com.adith.walk.helper.ImageCropper;
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,9 +38,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Map<String,String> fileUpload(MultipartFile file) throws IOException, IncompatibleImageException {
-
-        File newFile = new File("Temp.tmp");
-
+        File newFile=null;
+        if(file.getOriginalFilename()!=null)
+            newFile= new File(file.getOriginalFilename());
+        else{
+            newFile=new File("temp.tmp");
+        }
         try (OutputStream os = new FileOutputStream(newFile)) {
             os.write(file.getBytes());
         }
@@ -48,7 +51,7 @@ public class FileServiceImpl implements FileService {
         //cropping image
         ImageCropper cropper=new ImageCropper();
         byte[] bytes=cropper.cropImage(newFile);
-
+        newFile.delete();
 
         //cloudinary
         return uploadToCloudinary(bytes);

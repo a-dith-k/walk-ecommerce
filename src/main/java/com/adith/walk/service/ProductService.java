@@ -216,7 +216,6 @@ public class ProductService {
     public ProductPageDTO getPageOfProducts(Integer pageNumber, Integer noOfProducts) {
 
 
-        System.out.println("here----------------------");
 
         Pageable pageable = PageRequest.of(pageNumber, noOfProducts);
 
