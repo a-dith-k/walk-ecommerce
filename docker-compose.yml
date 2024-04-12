@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -16,7 +16,7 @@ services:
   #  ports:
   #   - "6379:6379"
   app:
-    image: adithk1308/walk-ecom-app:1.0.0
+    image: adithk1308/walk-ecom-app:latest
     ports:
       - "2021:2021"
     depends_on:
@@ -24,7 +24,7 @@ services:
         condition: service_started
       # - redis
     # links:
-    #   - redis  
+    #   - redis
     environment:
       POSTGRES_PASSWORD: password
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/walk
